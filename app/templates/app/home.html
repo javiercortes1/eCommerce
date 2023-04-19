@@ -1,28 +1,11 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Conejo Furioso</title>
-</head>
-<body>
-    <header>
-      <img src="ruta/al/archivo/logo.png" alt="Logotipo de la empresa">
-      <nav>
-        <ul>
-          <li><a href="#">Productos</a></li>
-          <li><a href="#">Carrito</a></li>
-          <li><a href="#">Inicio de sesión</a></li>
-          <li><a href="#">Registro</a></li>
-        </ul>
-      </nav>
-    </header>
-<main>
-    <!-- Aquí puedes agregar el resto del contenido de tu página -->
-</main>
-<footer>
-    <!-- Aquí puedes agregar el pie de página de tu sitio web -->
-</footer>
-</body>
-</html>
+{% extends 'app/base.html' %}
+{% load static %}
+
+{% block tittle_css %}
+<title>Conejo Furioso</title>
+<link href="/static/css/style.css" rel="stylesheet" type="text/css">
+{% endblock %}
+
+{% block content %} 
+
+{% endblock %}
