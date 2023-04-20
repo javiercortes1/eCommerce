@@ -5,31 +5,46 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    {% block tittle_css %}
-    
-    {% endblock %}
+    {% load static %}
+    {% block css %}
+    {% endblock %} 
+    <link rel="stylesheet" href="{% static 'app/css/styles.css' %}">
 </head>
 <body>
+  <div class="header">
     <header>
       <!--img src="ruta/al/archivo/logo.png" alt="Logotipo de la empresa"> -->
       <nav>
         <ul>
-          <li><a href="#">Inicio</a></li>
-          <li><a href="#">Catalogo</a></li>
-          <li><a href="#">Servicios</a></li>
+          <li><a href="{% url 'home' %}">Inicio</a></li>
+          <li><a href="{% url 'catalogue' %}">Catalogo</a></li>
+          <li><a href="{% url 'services' %}">Servicios</a></li>
           <li><a href="#">Carrito</a></li>
           <li><a href="#">Inicio de sesión</a></li>
           <li><a href="#">Registro</a></li>
         </ul>
       </nav>
     </header>
+  </div>
+    
 <main>
+  <div class="content">
     {% block content %}
     {% endblock %}
+  </div>
+    
     <!-- Aquí puedes agregar el resto del contenido de tu página -->
 </main>
-<footer>
-    <!-- Aquí puedes agregar el pie de página de tu sitio web -->
+<footer class="bg-secondary text-white mt-auto">
+  <div class="container">
+    <div class="row py-2">
+      <div class="col">
+        &copy; 2023 - Conejo Furioso. Todos los derechos reservados.
+      </div>
+    </div>
+  </div>
 </footer>
+{% block js %}
+{% endblock %}
 </body>
 </html>
