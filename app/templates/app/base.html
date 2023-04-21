@@ -13,11 +13,12 @@
   <link rel="stylesheet" href="{% static 'app/css/styles.css' %}">
 </head>
 
+
 <body>
   <div class="header">
     <header>
       <nav class="navbar navbar-expand-lg bg-body-tertiary fixed-top">
-        <div class="container-fluid">
+        <div class="container">
           <a class="navbar-brand" href="{% url 'home' %}">
             <img src="{% static 'app/img/logo.png' %}" alt="Bootstrap" width="75" height="60">
           </a>
@@ -37,25 +38,8 @@
               <li class="nav-item">
                 <a class="nav-link" href="{% url 'services' %}">Servicios</a>
               </li>
-              <!-- por si necesitamos desactivar un item -->
-              <!-- <li class="nav-item">
-                <a class="nav-link disabled">Disabled</a>
-              </li> -->
-
-              <!-- por si necesitamos hacer uso de dropdown -->
-              <!-- <li class="nav-item dropdown">
-                <a class="nav-link dropdown-toggle" href="{% url 'services' %}" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                  Servicios
-                </a>
-                <ul class="dropdown-menu">
-                  <li><a class="dropdown-item" href="#">Arrendar Barriles</a></li>
-                  <li><a class="dropdown-item" href="#">Arreglo Especial</a></li>
-                  <li><hr class="dropdown-divider"></li>
-                  <li><a class="dropdown-item" href="#">Información</a></li>
-                </ul>
-              </li> -->
             </ul>
-            <form class="d-flex" role="search">
+            <form class="d-flex mx-auto" role="search">
               <input class="form-control me-3" type="search" placeholder="Buscar" aria-label="Search">
               <button class="btn btn-outline-success" type="submit">Buscar</button>
             </form>
