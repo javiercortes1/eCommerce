@@ -1,9 +1,73 @@
 {% extends 'app/base.html' %}
-
+{% load static %}
 {% block tittle_css %}
 <title>Catalogo | Conejo Furioso</title>
 {% endblock %}
 
 {% block content %}
+<div class="container mt-5"> 
+<!-- section para las categorias/servicios -->
+    <section class="mt-5">
+        <br>
+        <br>
+        <br>
+        <h2 class="text-center pb-4">Nuestro Catálogo</h2>
+        <br>
+        <div class="row"> 
+          <!-- categoria 1 -->
+          <div class="col-xxl-3 col-xl-3 col-lg-4 col-md-6">
+            <a href="#">
+              <div class="card">               
+                <img src="{% static 'app/img/logo.png'%}" class="card-img-top" alt="...">             
+                <div class="card-body">
+                  <br>
+                  <h5 class="card-title">Card1 </h5> 
+                  <p class="card-text">Descripcion para el card 1</p>
+                </div>
+              </div>
+            </a>
+          </div>
+          <!-- categoria 2 -->
+          <div class="col-xxl-3 col-xl-3 col-lg-4 col-md-6">
+            <a href="#">
+              <div class="card">        
+                <img src="{% static 'app/img/logo.png'%}" class="card-img-top" alt="...">     
+                <div class="card-body">
+                  <br>
+                  <h5 class="card-title">Card2 </h5> 
+                  <p class="card-text">Descripcion para el card 2</p>
+                </div>
+              </div>
+            </a>
+          </div>
+          <!-- categoria 3 -->
+          <div class="col-xxl-3 col-xl-3 col-lg-4 col-md-6">
+            <a href="#">
+              <div class="card">
+                <img src="{% static 'app/img/logo.png'%}" class="card-img-top" alt="...">
+                <div class="card-body">
+                  <br>
+                  <h5 class="card-title">Card3 </h5> 
+                  <p class="card-text">Descripcion para el card 3</p>
+                </div>
+              </div>
+            </a>
+          </div>   
+          <!-- categoria 4 -->
+          <div class="col-xxl-3 col-xl-3 col-lg-4 col-md-6">
+            <a href="#">
+              <div class="card">              
+                <img src="{% static 'app/img/logo.png'%}" class="card-img-top" alt="...">               
+                <div class="card-body">
+                  <br>
+                  <h5 class="card-title">Card4 </h5>
+                  <p class="card-text">Descripcion para el card 4</p>
+                </div>
+              </div>
+            </a>
+          </div>  
+        </div>   
+      </section>
 
+</div>
 {% endblock %}
