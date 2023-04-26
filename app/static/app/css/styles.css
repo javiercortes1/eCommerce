@@ -105,7 +105,7 @@ a {
 }
 
 /* para darle el alto al body del card */
-.card-body {
+.card-body.featured {
     height: 305px;
 }
 
@@ -124,10 +124,18 @@ a {
     color: var(--color-secondary);
 }
 
-h5.noStock {
+h5.noStock{
     position: absolute;
     bottom: 0;
     margin-bottom: calc(8px*3);
     color: var(--color-primary);
-    margin-left: calc(8px*4);
+} 
+
+/* contact form */
+.contact_form button{
+    color: #ffffff;
+}
+
+.contact_form button:hover{
+    color: var(--color-secondary);
 }

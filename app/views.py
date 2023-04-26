@@ -1,5 +1,6 @@
 from django.shortcuts import render
 from .models import Product
+from .forms import ContactForm
 
 # Create your views here.
 def home(request):
@@ -14,3 +15,17 @@ def catalogue(request):
 
 def services(request):
     return render(request, 'app/services.html')
+
+def contact(request):
+    data = {
+        'form': ContactForm()
+    }
+
+    if request.method == 'POST':
+        form = ContactForm(data=request.POST)
+        if form.is_valid():
+            form.save()
+            data["message"] = "Enviado exitosamente"
+        else:
+            data["form"] = form
+    return render(request, 'app/contact.html', data)

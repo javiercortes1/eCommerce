@@ -1,0 +1,28 @@
+{% extends 'app/base.html' %}
+{% load static %}
+{% block tittle_css %}
+<title>Catalogo | Conejo Furioso</title>
+{% endblock %}
+
+{% block content %}
+{% load crispy_forms_tags %}
+<br>
+<br>
+<br>
+
+<div class="container form my-5">
+    <div style="display: flex; justify-content: center; align-items: center;">
+        <h2 class="my-5">Contactanos!</h2>
+      </div>
+    
+    <form action="" class="contact_form" method="post">
+
+        {% csrf_token %}
+
+        {{ form }}
+        <button type="submit" id="btnSend" class="btn bg-primary">Enviar</button>
+
+    </form>
+    {{message}}
+</div>
+{% endblock %}
