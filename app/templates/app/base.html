@@ -17,7 +17,7 @@
 <body>
   <div class="header">
     <header>
-      <nav class="navbar navbar-expand-lg bg-body-tertiary fixed-top">
+      <nav class="navbar navbar-expand-lg fixed-top bg-primary text-white">
         <div class="container">
           <a class="navbar-brand" href="{% url 'home' %}">
             <img src="{% static 'app/img/logo.png' %}" alt="Bootstrap" width="75" height="60">
@@ -30,7 +30,7 @@
           <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
               <li class="nav-item">
-                <a class="nav-link active" aria-current="page" href="{% url 'home' %}">Inicio</a>
+                <a class="nav-link" aria-current="page" href="{% url 'home' %}">Inicio</a>
               </li>
               <li class="nav-item">
                 <a class="nav-link" href="{% url 'catalogue' %}">Catalogo</a>
@@ -39,26 +39,26 @@
                 <a class="nav-link" href="{% url 'services' %}">Servicios</a>
               </li>
             </ul>
-            <form class="d-flex mx-auto" role="search">
-              <input class="form-control me-3" type="search" placeholder="Buscar" aria-label="Search">
-              <button class="btn btn-outline-success" type="submit">Buscar</button>
+            <form class="d-flex mx-auto search" role="search">
+              <input class="form-control me-3 input-search" type="search" placeholder="Buscar" aria-label="Search">
+              <button class="btn btn-outline-success btn-search" type="submit">Buscar</button>
             </form>
             <div class="nav-item">
-              <a class="nav-link active" aria-current="page" href="#">Iniciar Sesión</a>
+              <a class="nav-link" aria-current="page" href="#">Iniciar Sesión</a>
             </div>
           </div>
         </div>
       </nav>
     </header>
   </div>
-  <main>
+  <main class="bg-primary-2">
 
     {% block content %}
     {% endblock %}
 
     <!-- Aquí todo lo correspondiente al footer -->
   </main>
-  <footer class="bg-secondary text-white mt-auto">
+  <footer class="bg-primary text-white mt-auto">
     <div class="container">
       <div class="row py-2">
         <div class="col">

@@ -1,51 +1,92 @@
-/* header{
-    background-color: rgb(60, 111, 223);
+/* paleta de colores para el proyecto */
+:root{
+    --color-primary:rgb(27, 46, 41);
+    --color-primary-2:rgb(240, 236, 202);
+    --color-secondary: #ffd3a4;
+    /* --color-secondary-2:#fbeee9;
+    --color--secondary-3: #d1a8ca ;   */
+}
+
+/* color del background y body */
+.bg-primary{
+    background-color: var(--color-primary)!important;
+}
+
+body{
+    background-color: var(--color-primary-2)!important;
+    width: 100%;
+    height: auto;
+}
+
+/* tamanio y posicion footer */
+footer {
+    width: 100%;
+    height: calc(8px *12);
+    bottom: 0;
+}
+
+/* boton de busqueda */
+.btn-search{
+    width: calc(8px*10);
+    color: black;
+    background-color: var(--color-secondary);
+}
+.btn-search:hover{
+    width: calc(8px*10);
+    color: rgb(255, 255, 255);
+    background-color: #000000;
+}
+/* barra de busqueda */
+.input-search{
+    width: calc(8px*50);
+}
+
+/* tamanios del content */
+/* .content {
+    width: 100%;
+    height: auto;
 } */
 
-footer {
-    background-color: rgb(75, 219, 171);
-    width: 100%;
-    height: 96px;
-}
 
-.content {
-    width: 100%;
-    height: auto;
-    background-color: rgb(47, 218, 138);
-}
-
-body {
-    background-color: rgb(148, 143, 143);
-}
-
-.container img.image {
-    max-width: 100%;
-    height: auto;
-}
-
+/* caracteristicas de las cards */
 .card {
     margin-top: calc(8px *1.5);
-    margin-bottom: calc(8px *1.5); 
+    margin-bottom: calc(8px *1.5);
     /* margin: calc(8px *1.5) 0; */
     border: none;
     border-radius: 1rem;
     transition: all 100ms ease-in-out;
-    /* color: var(--color-primary); */
+    /* color: var(--color-primary-2); */
 }
-
-.card:hover{
+.card:hover {
     box-shadow: 0 0.4rem 1rem rgba(0, 0, 0, 0.26);
 }
-
-.card-img, .card-img-top {
+.card-img,
+.card-img-top {
     border-top-left-radius: 1rem;
     border-top-right-radius: 1rem;
 }
 
-a{
+/* decoracion para elementos de enlace */
+a {
     text-decoration: none;
 }
 
+/* items del navbar */
+.nav-item a{
+    color: #ffffff;
+    margin-right: calc(8px*2);
+}
+.nav-link:hover{
+    color: var(--color-secondary);
+}
+
+/* seccion carousel */
 .carrousel {
     padding-top: 96px;
-  }
+}
+
+/* aplica para todo el documento */
+*{
+    font-family: Georgia, 'Times New Roman', Times, serif;
+}
