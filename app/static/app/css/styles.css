@@ -1,19 +1,17 @@
 /* paleta de colores para el proyecto */
-:root{
-    --color-primary:rgb(27, 46, 41);
-    --color-primary-2:rgb(240, 236, 202);
+:root {
+    --color-primary: rgb(27, 46, 41);
+    --color-primary-2: rgb(240, 236, 202);
     --color-secondary: #ffd3a4;
-    /* --color-secondary-2:#fbeee9;
-    --color--secondary-3: #d1a8ca ;   */
 }
 
 /* color del background y body */
-.bg-primary{
-    background-color: var(--color-primary)!important;
+.bg-primary {
+    background-color: var(--color-primary) !important;
 }
 
-body{
-    background-color: var(--color-primary-2)!important;
+body {
+    background-color: var(--color-primary-2) !important;
     width: 100%;
     height: auto;
 }
@@ -26,18 +24,21 @@ footer {
 }
 
 /* boton de busqueda */
-.btn-search{
+.btn-search {
     width: calc(8px*10);
     color: black;
     background-color: var(--color-secondary);
+    margin-right: 24px;
 }
-.btn-search:hover{
+
+.btn-search:hover {
     width: calc(8px*10);
     color: rgb(255, 255, 255);
     background-color: #000000;
 }
+
 /* barra de busqueda */
-.input-search{
+.input-search {
     width: calc(8px*50);
 }
 
@@ -58,9 +59,11 @@ footer {
     transition: all 100ms ease-in-out;
     /* color: var(--color-primary-2); */
 }
+
 .card:hover {
     box-shadow: 0 0.4rem 1rem rgba(0, 0, 0, 0.26);
 }
+
 .card-img,
 .card-img-top {
     border-top-left-radius: 1rem;
@@ -73,12 +76,22 @@ a {
 }
 
 /* items del navbar */
-.nav-item a{
+.nav-item a {
     color: #ffffff;
     margin-right: calc(8px*2);
 }
-.nav-link:hover{
+
+.services a {
+    margin-right: 32px;
+}
+
+.nav-link:hover {
     color: var(--color-secondary);
+}
+
+/* toggler navbar */
+.navbar-toggler {
+    background-color: var(--color-secondary);
 }
 
 /* seccion carousel */
@@ -87,6 +100,34 @@ a {
 }
 
 /* aplica para todo el documento */
-*{
+* {
     font-family: Georgia, 'Times New Roman', Times, serif;
+}
+
+/* para darle el alto al body del card */
+.card-body {
+    height: 305px;
+}
+
+/* boton del card body */
+.card-body a {
+    position: absolute;
+    bottom: 0;
+    margin-bottom: calc(8px*2);
+    color: #ffffff;
+}
+
+.card-body a:hover {
+    position: absolute;
+    bottom: 0;
+    margin-bottom: calc(8px*2);
+    color: var(--color-secondary);
+}
+
+h5.noStock {
+    position: absolute;
+    bottom: 0;
+    margin-bottom: calc(8px*3);
+    color: var(--color-primary);
+    margin-left: calc(8px*4);
 }

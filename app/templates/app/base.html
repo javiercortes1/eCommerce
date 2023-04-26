@@ -35,17 +35,22 @@
               <li class="nav-item">
                 <a class="nav-link" href="{% url 'catalogue' %}">Catalogo</a>
               </li>
-              <li class="nav-item">
+              <li class="nav-item services">
                 <a class="nav-link" href="{% url 'services' %}">Servicios</a>
               </li>
+              <li>
+                <form class="d-flex mx-auto search" role="search">
+                  <input class="form-control me-3 input-search" type="search" placeholder="Buscar" aria-label="Search">
+                  <button class="btn btn-outline-success btn-search" type="submit">Buscar</button>
+                </form>
+              </li>
             </ul>
-            <form class="d-flex mx-auto search" role="search">
-              <input class="form-control me-3 input-search" type="search" placeholder="Buscar" aria-label="Search">
-              <button class="btn btn-outline-success btn-search" type="submit">Buscar</button>
-            </form>
-            <div class="nav-item">
-              <a class="nav-link" aria-current="page" href="#">Iniciar Sesión</a>
-            </div>
+              <div class="nav-item login">
+                <a class="nav-link" aria-current="page" href="#">Iniciar Sesión</a>
+              </div>
+            
+
+
           </div>
         </div>
       </nav>
@@ -73,4 +78,5 @@
     integrity="sha384-ENjdO4Dr2bkBIFxQpeoTz1HIcje39Wm4jDKdf19U8gI4ddQ3GYNS7NTKfAdVQSZe"
     crossorigin="anonymous"></script>
 </body>
+
 </html>
