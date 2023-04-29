@@ -10,6 +10,10 @@
     background-color: var(--color-primary) !important;
 }
 
+.bg-primary-2 {
+    background-color: var(--color-primary-2) !important;
+}
+
 body {
     background-color: var(--color-primary-2) !important;
     width: 100%;
@@ -132,11 +136,11 @@ h5.noStock{
 } 
 
 /* contact form */
-.contact_form button{
+.form button{
     color: #ffffff;
 }
 
-.contact_form button:hover{
+.form button:hover{
     color: var(--color-secondary);
 }
 
