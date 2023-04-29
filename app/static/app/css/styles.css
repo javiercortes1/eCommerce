@@ -139,3 +139,8 @@ h5.noStock{
 .contact_form button:hover{
     color: var(--color-secondary);
 }
+
+.card-form{
+    width: 600px;
+}
+
