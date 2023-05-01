@@ -52,7 +52,7 @@
       <h2 class="text-center pb-4 mb-5">Productos Destacados</h2>
       <div class="row">
         {% for p in products %}
-        {% if p.featured == True %}
+        {% if p.featured %}
         <div class="col-xxl-2 col-xl-3 col-lg-4 col-md-6">
           <div class="card">
             {% if p.image %}
@@ -128,7 +128,7 @@
       <h2 class="text-center pb-4 mb-5">Nuevos Productos(?)</h2>
       <div class="row">
         {% for p in products %}
-        {% if p.featured == True %}
+        {% if p.new %}
         <div class="col-xxl-2 col-xl-3 col-lg-4 col-md-6">
           <div class="card">
             {% if p.image %}
