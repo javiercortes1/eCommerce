@@ -46,13 +46,6 @@ footer {
     width: calc(8px*50);
 }
 
-/* tamanios del content */
-/* .content {
-    width: 100%;
-    height: auto;
-} */
-
-
 /* caracteristicas de las cards */
 .card {
     margin-top: calc(8px *1.5);
@@ -114,20 +107,20 @@ a {
 }
 
 /* boton del card body */
-.card-body a {
+.featured a {
     position: absolute;
     bottom: 0;
     margin-bottom: calc(8px*2);
     color: #ffffff;
 }
 
-.card-body a:hover {
+.featured a:hover {
     position: absolute;
     bottom: 0;
     margin-bottom: calc(8px*2);
     color: var(--color-secondary);
 }
-
+/* elemento nostock */
 h5.noStock{
     position: absolute;
     bottom: 0;
@@ -135,7 +128,7 @@ h5.noStock{
     color: var(--color-primary);
 } 
 
-/* contact form */
+/*  forms */
 .form button{
     color: #ffffff;
 }
@@ -148,3 +141,11 @@ h5.noStock{
     width: 600px;
 }
 
+/* buttons listado  */
+.list-buttons button.bg-primary {
+   color: #ffffff;
+}
+
+.list-buttons button.bg-primary:hover {
+    color: var(--color-secondary);
+ }

@@ -1,79 +1,122 @@
 {% extends 'app/base.html' %}
 
+{% block js %}
+<script>
+    function delete_Product(id){
+        Swal.fire({
+            "title": "Seguro?",
+            "text":"esta accion es permanente",
+            "icon":"question",
+            "showCancelButton":true,
+            "cancelButtonText":"No, Cancelar",
+            "confirmButtonText":"Si, Eliminar",
+            "reverseButtons":true,
+            "confirmButtonColor":"#dc3545"
+        })
+        .then(function(result){
+            if(result.isConfirmed){
+                window.location.href = "/delete-product/"+id+"/"
+            }
+        })
+    }
+</script>
+
+{% endblock %}
+
 {% load static %}
 
 {% block content %}
 {% load humanize %}
 
 <br><br><br>
-<div class="container">
-<div class="card">
-    <div class="card-body">       
-        <center><h2>Lista de Productos</h2></center>
-        <hr>
-        <table id="productTable" class="table table-striped table-hover table-responsive-sm" >
-            <thead>
-                <tr>
-                    <th>Nombre</th>
-                    <th>Descripcion</th>
-                    <th>Valor</th>
-                    <th>Categoria</th>
-                    <th>Destacado</th>
-                    <th>Cantidad(cc)</th>
-                    <th>Unidades</th>
-                    <th>Nuevo</th>
+<div class="container my-5">
+    <br><br>
+    <div class="card">
+        <div class="card-body">
+            <center>
+                <h2>Lista de Productos</h2>
+            </center>
+            <hr>
+            <div class="table-responsive">
+                <table id="productTable" class="table table-striped table-hover table-responsive-sm">
+                    <thead>
+                        <tr>
+                            <th>Nombre</th>
+                            <th>Descripcion</th>
+                            <th>Valor</th>
+                            <th>Categoria</th>
+                            <th>Destacado</th>
+                            <th>Cantidad(cc)</th>
+                            <th>Unidades</th>
+                            <th>Nuevo</th>
+                            <th>Modificar</th>
+                            <th>Eliminar</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
 
-                    <th>Modificar</th>
-                    <th>Eliminar</th>
-                </tr>
-            </thead>
+                    {% for p in products %}
 
-            <tbody>
-                
-            </tbody>
-            
-        
-             {% for p in products %}
-        
-            <tr>
-                <td>{{p.name}}</td>
-                <td>{{p.description}}</td>
-                <td>${{p.price | intcomma}}</td>   
-                <td>{{p.category}}</td> 
-                {% if p.featured %}
-                <td>Si</td>
-                {% else %}
-                <td>No</td>
-                {% endif %}
-                <td>{{p.cc}}</td>
-                <td>{{p.stock}}</td>
-                {% if p.new %}
-                <td>Si</td>
-                {% else %}
-                <td>No</td>
-                {% endif %}
+                    <tr>
+                        <td>{{p.name | title }}</td>
+                        <td>{{p.description }}</td>
+                        <td>${{p.price | intcomma }}</td>
+                        <td>{{p.category | title }}</td>
 
+                        {% if p.featured %}
+                        <td>Si</td>
+                        {% else %}
+                        <td>No</td>
+                        {% endif %}
 
-                </form></td>
+                        <td>{{p.cc}}</td>
+                        <td>{{p.stock}}</td>
 
-            </tr>
-        
-            {% endfor %} 
-        
-        </table>
-        
-        <hr>
-        <div>
-            <a href="{% url 'home' %}">
-                <button class="btn btn-primary" type="button">Volver al Inicio</button>
-            </a> 
-            <a href="{% url 'add_product' %}">
-                <button class="btn btn-primary" type="button">Agregar Nuevo</button>
-            </a> 
-            
+                        {% if p.new %}
+                        <td>Si</td>
+                        {% else %}
+                        <td>No</td>
+                        {% endif %}
+
+                        <td>
+                            <a href="{% url 'update_product' p.id %}" class="btn btn-info btn-sm">Modificar</a>
+                        </td>
+                        <td>
+                            <a href="#" onclick="delete_Product({{ p.id }})" class="btn btn-danger btn-sm">Eliminar</a>
+                        </td>
+                    </tr>
+
+                    {% endfor %}
+
+                </table>
+            </div>
+
+            <br><br>
+            <div class="row list-buttons">
+
+                <div class="col">
+                    <a href="{% url 'home' %}">
+                        <button class="btn bg-primary" type="button">Volver al Inicio</button>
+                    </a>
+                </div>
+
+                <div class="col">
+                    
+                </div>
+
+                <div class="col">
+
+                </div>
+
+                <div class="col">
+                    <a href="{% url 'add_product' %}">
+                        <button class="btn bg-primary" type="button">Agregar Nuevo</button>
+                    </a>
+                </div>
+            </div>
         </div>
     </div>
-</div>
 </div>
 
 <script src="{% static 'core/js/jquery-3.6.0.js'%}"></script>
