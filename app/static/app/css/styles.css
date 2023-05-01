@@ -149,3 +149,14 @@ h5.noStock{
 .list-buttons button.bg-primary:hover {
     color: var(--color-secondary);
  }
+
+/* buttons del catalogue */
+ .quantity-input {
+    width: 100px;
+    margin-left: 10px;
+  }
+  
+  .quantity-input input {
+    text-align: center;
+    width: 50px;
+  }
