@@ -28,6 +28,7 @@ DEBUG = True
 
 ALLOWED_HOSTS = ['127.0.0.1', 'darioveram.pythonanywhere.com']
 
+MESSAGE_STORAGE = "django.contrib.messages.storage.cookie.CookieStorage"
 
 # Application definition
 
