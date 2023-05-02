@@ -1,0 +1,38 @@
+{% extends 'app/base.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+{% block tittle_css %}
+<title>Catalogo | Conejo Furioso</title>
+{% endblock %}
+
+{% block content %}
+
+<br>
+<br>
+<br>
+
+<div class="container my-5" style="max-width: 600px;">
+    <div style="display: flex; justify-content: center; align-items: center;">
+        <h2 class="my-5">Contactanos!</h2>
+    </div>
+
+    <div class="card">
+        <div class="card-header card-header-form">
+            Envianos un mensaje y te contactaremos !
+        </div>
+        <div class="card-body">
+            <blockquote class="blockquote mb-0">
+                <form action="" class="form" method="post">
+
+                    {% csrf_token %}
+
+                    {{ form|crispy }}
+                    <center><button type="submit" class="btn bg-primary mt-3">Enviar</button></center>
+
+                </form>
+                {{message}}
+            </blockquote>
+        </div>
+    </div>
+</div>
+{% endblock %}
