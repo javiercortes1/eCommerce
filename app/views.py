@@ -8,6 +8,7 @@ from django.http import Http404
 from rest_framework import viewsets
 from .serializers import ProductSerializer, CategorySerializer
 import requests
+from django.contrib.auth.decorators import login_required, permission_required
 
 # Create your views here.
 class CategoryViewset(viewsets.ModelViewSet):
@@ -76,6 +77,7 @@ def contact(request):
             data["form"] = form
     return render(request, 'app/contact.html', data)
 
+@permission_required('app.add_product')
 def add_product(request):
 
     data = {
@@ -92,6 +94,7 @@ def add_product(request):
             data["form"] = form
     return render(request, 'app/product/add.html',data)
 
+@permission_required('app.view_product')
 def list_product(request):
     products = Product.objects.all()
     page = request.GET.get('page', 1)
@@ -109,6 +112,7 @@ def list_product(request):
     }
     return render(request, 'app/product/list.html', data)
 
+@permission_required('app.change_product')
 def update_product(request, id):
 
     product = get_object_or_404(Product, id=id)
@@ -128,6 +132,7 @@ def update_product(request, id):
 
     return render(request, 'app/product/update.html',data)
 
+@permission_required('app.delete_product')
 def delete_product(request, id):
     product = get_object_or_404(Product, id=id)
     product.delete()
