@@ -33,7 +33,7 @@
                 <a class="nav-link" aria-current="page" href="{% url 'home' %}">Inicio</a>
               </li>
               <li class="nav-item">
-                <a class="nav-link" href="{% url 'catalogue' %}">Catalogo</a>
+                <a class="nav-link" href="{% url 'catalogue' %}">Catálogo</a>
               </li>
               <li class="nav-item">
                 <a class="nav-link" href="{% url 'services' %}">Servicios</a>
@@ -44,7 +44,7 @@
               {% if user.is_authenticated %}
             </ul>
             <div class="nav-item admin">
-              <a class="nav-link" aria-current="page" href="{% url 'list_product' %}">Administracion</a>
+              <a class="nav-link" aria-current="page" href="{% url 'list_product' %}">Administración</a>
             </div>
               <li>
                   <a href="{% url 'logout' %}">Cerrar Sesión</a>
@@ -83,6 +83,13 @@
       <div class="row py-2">
         <div class="col">
           &copy; 2023 - Ⓡ Conejo Furioso. Todos los derechos reservados.
+          
+          <ul class="nav-item">
+            <a class="nav-link" href="https://www.instagram.com/cervezaconejofurioso/">Instagram</a>
+          </ul>
+          <ul class="nav-item">
+            <a class="nav-link" href="https://www.facebook.com/CervezaConejoFurioso">Facebook</a>
+          </ul>
         </div>
       </div>
     </div>

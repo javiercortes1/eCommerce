@@ -4,70 +4,69 @@
 <title>Catalogo | Conejo Furioso</title>
 {% endblock %}
 
-{% block content %}
-<div class="container mt-5"> 
-<!-- section para las categorias/servicios -->
-    <section class="mt-5">
-        <br>
-        <br>
-        <br>
-        <h2 class="text-center pb-4">Nuestro Catálogo</h2>
-        <br>
-        <div class="row"> 
-          <!-- categoria 1 -->
-          <div class="col-xxl-3 col-xl-3 col-lg-4 col-md-6">
-            <a href="#">
-              <div class="card">               
-                <img src="{% static 'app/img/logo.png'%}" class="card-img-top" alt="...">             
-                <div class="card-body">
-                  <br>
-                  <h5 class="card-title">Card1 </h5> 
-                  <p class="card-text">Descripcion para el card 1</p>
-                </div>
-              </div>
-            </a>
-          </div>
-          <!-- categoria 2 -->
-          <div class="col-xxl-3 col-xl-3 col-lg-4 col-md-6">
-            <a href="#">
-              <div class="card">        
-                <img src="{% static 'app/img/logo.png'%}" class="card-img-top" alt="...">     
-                <div class="card-body">
-                  <br>
-                  <h5 class="card-title">Card2 </h5> 
-                  <p class="card-text">Descripcion para el card 2</p>
-                </div>
-              </div>
-            </a>
-          </div>
-          <!-- categoria 3 -->
-          <div class="col-xxl-3 col-xl-3 col-lg-4 col-md-6">
-            <a href="#">
-              <div class="card">
-                <img src="{% static 'app/img/logo.png'%}" class="card-img-top" alt="...">
-                <div class="card-body">
-                  <br>
-                  <h5 class="card-title">Card3 </h5> 
-                  <p class="card-text">Descripcion para el card 3</p>
-                </div>
-              </div>
-            </a>
-          </div>   
-          <!-- categoria 4 -->
-          <div class="col-xxl-3 col-xl-3 col-lg-4 col-md-6">
-            <a href="#">
-              <div class="card">              
-                <img src="{% static 'app/img/logo.png'%}" class="card-img-top" alt="...">               
-                <div class="card-body">
-                  <br>
-                  <h5 class="card-title">Card4 </h5>
-                  <p class="card-text">Descripcion para el card 4</p>
-                </div>
-              </div>
-            </a>
-          </div>  
-        </div>   
-      </section>
+{% block js %}
+<script src="{% static 'js/catalogue.js' %}"></script>
+{% endblock %}
 
+{% block content %}
+{% load humanize %}
+<br><br><br><br><br><br>
+<div class="container my-5">
+  <div class="row">
+    <div class="col-md-3">
+      <div class="card">
+        <div class="card-body">
+          <h5 class="card-title">Filtros</h5>
+          <form>
+            <div class="mb-3">
+              <label class="form-label">Buscar por nombre</label>
+              <input type="text" class="form-control" placeholder="Ingrese el nombre">
+            </div>
+            <div class="mb-3">
+              <label class="form-label">Filtrar por categoría</label>
+              <select class="form-select" id="category-filter">
+                <option value="">Todas las categorías</option>
+                {% for category in categories %}
+                <option value="{{ category.id }}">{{ category.name }}</option>
+                {% endfor %}
+              </select>
+            </div>
+            <div class="mb-3">
+              <label class="form-label">Precio mínimo</label>
+              <input type="number" class="form-control" placeholder="Ingrese el precio mínimo">
+            </div>
+            <div class="mb-3">
+              <label class="form-label">Precio máximo</label>
+              <input type="number" class="form-control" placeholder="Ingrese el precio máximo">
+            </div>
+            <button type="submit" class="btn-btn-primary">Aplicar filtros</button>
+          </form>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-9">
+      <div class="row row-cols-1 row-cols-md-3 g-4">
+        {% for product in products %}
+        <div class="col-6 col-md-4 col-lg-3 mb-4">
+          <div class="card h-100">
+              <img src="{{ product.image.url }}" class="card-img-top" alt="{{ product.name }}" style="height: 150px;">
+            </a>
+            <div class="card-body">
+              <h5 class="card-title">{{ product.name }}</h5>
+              <p class="card-text">{{ product.description }}</p>
+              <p class="card-text">Precio: ${{ product.price }}</p>
+              <div class="d-flex justify-content-between">
+                <button class="btn-btn-primary add-to-cart flex-grow-2 flex-sm-grow-1">Agregar al carrito</button>
+                <div class="input-group quantity-input flex-grow-1 flex-sm-grow-2">
+                  <input type="number" class="form-control form-control-sm" value="1">
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
 </div>
 {% endblock %}

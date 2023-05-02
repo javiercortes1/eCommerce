@@ -18,13 +18,16 @@ body {
     background-color: var(--color-primary-2) !important;
     width: 100%;
     height: auto;
+    padding-bottom: 50px;
 }
 
 /* tamanio y posicion footer */
 footer {
     width: 100%;
-    height: calc(8px *12);
+    height: 10em;
     bottom: 0;
+    background-color: var(--color-primary) !important;
+    padding: 10px;
 }
 
 /* boton de busqueda */
@@ -55,6 +58,7 @@ footer {
     border-radius: 1rem;
     transition: all 100ms ease-in-out;
     /* color: var(--color-primary-2); */
+
 }
 
 .card:hover {
@@ -149,3 +153,43 @@ h5.noStock{
 .list-buttons button.bg-primary:hover {
     color: var(--color-secondary);
  }
+
+/* buttons del catalogue */
+ .quantity-input {
+    width: 100px;
+    margin-left: 10px;
+  }
+  
+  .quantity-input input {
+    text-align: center;
+    width: 50px;
+  }
+
+  .btn-btn-primary {
+    background-color: var(--color-primary) !important;
+    color: white;
+    border-radius: 1rem;
+    box-shadow: 2px 2px 2px #888;
+  }
+
+  .btn-btn-primary:hover {
+    color: var(--color-secondary) !important;
+
+  }
+
+/* items del footer */
+.ft-item a {
+    color: #ffffff;
+    margin-right: calc(8px*2);
+}
+
+.ft-link:hover {
+    color: var(--color-secondary);
+}
+
+/* sección categoria home */
+
+.category-section {
+    background-color: rgb(255, 237, 79);
+}
+

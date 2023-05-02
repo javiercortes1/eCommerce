@@ -56,7 +56,7 @@
                     <tbody>
                     </tbody>
 
-                    {% for p in products %}
+                    {% for p in entity %}
 
                     <tr>
                         <td>{{p.name | title }}</td>
@@ -90,9 +90,13 @@
                     {% endfor %}
 
                 </table>
+                <hr>
+                <div>
+                    {% include 'app/paginator.html' %}
+                </div>
             </div>
 
-            <br><br>
+            <br>
             <div class="row list-buttons">
 
                 <div class="col">
