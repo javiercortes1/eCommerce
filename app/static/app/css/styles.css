@@ -19,7 +19,6 @@ body {
     background-color: var(--color-primary-2) !important;
     width: 100%;
     height: auto;
-    padding-bottom: 50px;
 }
 
 /* tamanio y posicion footer */
@@ -71,6 +70,7 @@ footer {
 .card-img-top {
     border-top-left-radius: 1rem;
     border-top-right-radius: 1rem;
+    height: 180px;
 }
 
 /* decoracion para elementos de enlace */

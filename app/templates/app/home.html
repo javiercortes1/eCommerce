@@ -56,10 +56,10 @@
         <div class="col-xxl-2 col-xl-3 col-lg-4 col-md-6">
           <div class="card">
             {% if p.image %}
+            <!-- <img src="{{ p.image}}" class="card-img-top" alt="..."> -->
             <img src="{{ p.image.url }}" class="card-img-top" alt="...">
             {% endif %}
             <div class="card-body featured">
-              <h5 class="card-title">{{p.category | capfirst }} </h5>
               <h4 class="card-title">{{p.name | capfirst }} </h4>
               <p class="card-text">{{p.description }}</p>
               <p class="card-text">Disponible: {{p.stock}}</p>
@@ -148,7 +148,6 @@
             <img src="{{ p.image.url }}" class="card-img-top" alt="...">
             {% endif %}
             <div class="card-body featured">
-              <h5 class="card-title">{{p.category | capfirst }} </h5>
               <h4 class="card-title">{{p.name | capfirst }} </h4>
               <p class="card-text">{{p.description }}</p>
               <p class="card-text">Disponible: {{p.stock}}</p>
