@@ -1,5 +1,12 @@
-from django.urls import path
-from .views import home, services, catalogue, contact, add_product, list_product, update_product, delete_product
+from django.urls import path, include
+from .views import home, services, catalogue, contact,\
+    add_product, list_product, update_product, delete_product,\
+          ProductViewset, CategoryViewset
+from rest_framework import routers
+
+router = routers.DefaultRouter()
+router.register('product', ProductViewset)
+router.register('category', CategoryViewset)
 
 urlpatterns = [
     path('', home, name="home"),
@@ -10,4 +17,5 @@ urlpatterns = [
     path('list-product/', list_product, name="list_product"),
     path('update-product/<id>/', update_product, name="update_product"),
     path('delete-product/<id>/', delete_product, name="delete_product"),
+    path('api/', include(router.urls)),
 ]
