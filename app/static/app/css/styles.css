@@ -1,8 +1,9 @@
 /* paleta de colores para el proyecto */
 :root {
-    --color-primary: rgb(27, 46, 41);
-    --color-primary-2: rgb(240, 236, 202);
+    --color-primary: rgb(28, 92, 42);
+    --color-primary-2: rgb(255, 255, 255);
     --color-secondary: #ffd3a4;
+    --color-tres: rgba(172, 207, 177, 0.74);
 }
 
 /* color del background y body */
@@ -58,6 +59,7 @@ footer {
     border-radius: 1rem;
     transition: all 100ms ease-in-out;
     /* color: var(--color-primary-2); */
+    background-color: var(--color-tres) !important;
 
 }
 
@@ -187,9 +189,7 @@ h5.noStock{
     color: var(--color-secondary);
 }
 
-/* sección categoria home */
 
-.category-section {
-    background-color: rgb(255, 237, 79);
+.categorycard{
+    background-color: var(--color-tres) !important;
 }
-
