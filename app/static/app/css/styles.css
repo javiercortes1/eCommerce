@@ -104,8 +104,12 @@ a {
 
 /* aplica para todo el documento */
 * {
-    font-family: Georgia, 'Times New Roman', Times, serif;
+    font-family: "Futura", sans-serif;
 }
+
+h1 {
+    font-weight: bold;
+  }
 
 /* para darle el alto al body del card */
 .card-body.featured {

@@ -30,24 +30,24 @@
           <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
               <li class="nav-item">
-                <a class="nav-link" aria-current="page" href="{% url 'home' %}">Inicio</a>
+                <a class="nav-link" aria-current="page" href="{% url 'home' %}">INICIO</a>
               </li>
               <li class="nav-item">
-                <a class="nav-link" href="{% url 'catalogue' %}">Catálogo</a>
+                <a class="nav-link" href="{% url 'catalogue' %}">CATÁLOGO</a>
               </li>
               <li class="nav-item">
-                <a class="nav-link" href="{% url 'services' %}">Servicios</a>
+                <a class="nav-link" href="{% url 'services' %}">SERVICIOS</a>
               </li>
               <li class="nav-item">
-                <a class="nav-link" href="{% url 'contact' %}">Contacto</a>
+                <a class="nav-link" href="{% url 'contact' %}">CONTACTO</a>
               </li>
               {% if user.is_authenticated %}
             </ul>
             <div class="nav-item admin">
-              <a class="nav-link" aria-current="page" href="{% url 'list_product' %}">Administración</a>
+              <a class="nav-link" aria-current="page" href="{% url 'list_product' %}">ADMINISTRACIÓN</a>
             </div>
               <li>
-                  <a href="{% url 'logout' %}">Cerrar Sesión</a>
+                  <a href="{% url 'logout' %}">CERRAR SESIÓN</a>
               </li>
             </div>
               <li>
@@ -55,11 +55,11 @@
               </li>
               {% else %}
             <div class="nav-item login"> 
-              <a class="nav-link" aria-current="page" href="{% url 'login' %}">Iniciar Sesión</a>
+              <a class="nav-link" aria-current="page" href="{% url 'login' %}">INICIAR SESIÓN</a>
             </div>
             <li>
               <div class="nav-item register"> 
-                <a class="nav-link" aria-current="page" href="{% url 'register' %}">Registrate</a>
+                <a class="nav-link" aria-current="page" href="{% url 'register' %}">REGÍSTRATE</a>
               </div>
             </li>
          {% endif %}
