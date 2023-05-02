@@ -27,11 +27,11 @@ class ProductViewset(viewsets.ModelViewSet):
 
         if name:
             products = products.filter(name__contains=name)
-        elif featured:
+        if featured:
             products = products.filter(featured=True)
-        elif category:
+        if category:
             products = products.filter(category=category)
-        elif new:
+        if new:
             products = products.filter(new=True)
         return products
 
