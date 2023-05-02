@@ -5,8 +5,37 @@ from django.contrib.auth import authenticate ,login
 from .models import Product, Category
 from django.core.paginator import Paginator
 from django.http import Http404
+from rest_framework import viewsets
+from .serializers import ProductSerializer, CategorySerializer
 
 # Create your views here.
+class CategoryViewset(viewsets.ModelViewSet):
+    queryset = Category.objects.all()
+    serializer_class = CategorySerializer
+
+
+class ProductViewset(viewsets.ModelViewSet):
+    queryset = Product.objects.all()
+    serializer_class = ProductSerializer
+
+    def get_queryset(self):
+        products = Product.objects.all()
+
+        name = self.request.GET.get('name')
+        featured = self.request.GET.get('featured')
+        category = self.request.GET.get('category')
+        new = self.request.GET.get('new')
+
+        if name:
+            products = products.filter(name__contains=name)
+        if featured:
+            products = products.filter(featured=True)
+        if category:
+            products = products.filter(category=category)
+        if new:
+            products = products.filter(new=True)
+        return products
+
 def home(request):
     products = Product.objects.all()
     data = {
