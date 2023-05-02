@@ -7,6 +7,7 @@ from django.core.paginator import Paginator
 from django.http import Http404
 from rest_framework import viewsets
 from .serializers import ProductSerializer, CategorySerializer
+import requests
 
 # Create your views here.
 class CategoryViewset(viewsets.ModelViewSet):
@@ -41,6 +42,10 @@ def home(request):
     data = {
         'products': products
     }
+    # response = requests.get('http://127.0.0.1:8000/api/product/?featured=True&new=True').json()
+    # data = {
+    #      'products': response
+    #  }
     return render(request, 'app/home.html', data)
 
 def catalogue(request):
@@ -48,6 +53,10 @@ def catalogue(request):
     data = {
         'products': products
     }
+    # response = requests.get('http://127.0.0.1:8000/api/product/').json()
+    # data = {
+    #      'products': response
+    #  }
     return render(request, 'app/catalogue.html',data)
 
 def services(request):
