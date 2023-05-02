@@ -2,6 +2,8 @@ from django import forms
 from .models import Contact, Product
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Layout, Submit
+from django.contrib.auth.forms import UserCreationForm
+
 
 class ContactForm(forms.ModelForm):
 
@@ -34,3 +36,5 @@ class ProductForm(forms.ModelForm):
             'featured': 'Destacado?',
             'image': 'Imagen'
         }
+class CustomUserCreationForm(UserCreationForm):
+    pass         
