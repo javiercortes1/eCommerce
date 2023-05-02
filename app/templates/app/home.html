@@ -87,24 +87,36 @@
   <div class="container">
     <section class="pb-5 mt-5">
       <h1 class="text-center pb-4 mb-5">Quiénes Somos</h1>
-      
-      <div style="display: flex;">
-        <img src="{% static 'app/img/quienes somos.webp' %}" style="float: left; margin-right: 10px; width: 50%;" alt="...">
-        <div>
-          <h1>Cervecería artesanal Conejo Furioso</h1>
-          <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Odio voluptate eveniet repellat similique dolore veritatis corporis non nesciunt quisquam alias asperiores odit minima ipsa pariatur corrupti, quaerat itaque sapiente suscipit!
-            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Odio voluptate eveniet repellat similique dolore veritatis corporis non nesciunt quisquam alias asperiores odit minima ipsa pariatur corrupti, quaerat itaque sapiente suscipit!
-            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Odio voluptate eveniet repellat similique dolore veritatis corporis non nesciunt quisquam alias asperiores odit minima ipsa pariatur corrupti, quaerat itaque sapiente suscipit!
-            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Odio voluptate eveniet repellat similique dolore veritatis corporis non nesciunt quisquam alias asperiores odit minima ipsa pariatur corrupti, quaerat itaque sapiente suscipit!
-            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Odio voluptate eveniet repellat similique dolore veritatis corporis non nesciunt quisquam alias asperiores odit minima ipsa pariatur corrupti, quaerat itaque sapiente suscipit!
-          </p>
+      <div class="row">
+        <div class="col">
+          <div style="display: flex;">
+            <img src="{% static 'app/img/quienes somos.webp' %}" style="float: left; margin-right: 10px; width: 50%;" alt="...">
+            <div class="col">
+              <h1>Cervecería artesanal Conejo Furioso</h1>
+              <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Odio voluptate eveniet repellat similique dolore veritatis corporis non nesciunt quisquam alias asperiores odit minima ipsa pariatur corrupti, quaerat itaque sapiente suscipit!
+                Lorem ipsum dolor sit amet, consectetur adipisicing elit. Odio voluptate eveniet repellat similique dolore veritatis corporis non nesciunt quisquam alias asperiores odit minima ipsa pariatur corrupti, quaerat itaque sapiente suscipit!
+                Lorem ipsum dolor sit amet, consectetur adipisicing elit. Odio voluptate eveniet repellat similique dolore veritatis corporis non nesciunt quisquam alias asperiores odit minima ipsa pariatur corrupti, quaerat itaque sapiente suscipit!
+                Lorem ipsum dolor sit amet, consectetur adipisicing elit. Odio voluptate eveniet repellat similique dolore veritatis corporis non nesciunt quisquam alias asperiores odit minima ipsa pariatur corrupti, quaerat itaque sapiente suscipit!
+                Lorem ipsum dolor sit amet, consectetur adipisicing elit. Odio voluptate eveniet repellat similique dolore veritatis corporis non nesciunt quisquam alias asperiores odit minima ipsa pariatur corrupti, quaerat itaque sapiente suscipit!
+              </p>
+            </div>
+          </div>
         </div>
       </div>
     </section>
   </div>
+
+  <div class="container">
+    <section class="pb-5 mt-5" style="display: flex; justify-content: center; align-items: center;">
+      <img src="{% static 'app/img/logo.png' %}" alt="..." style="width: 20%;"  >
+
+    </section>
+
+  </div>
+
    <!-- sección categorías -->
    <div class="container">
-    <section class="pb-5 mt-5">
+    <section class="pb-5 mt-5 category-section">
       <h1 class="text-center pb-4 mb-5">Explora nuestras distintas categorías</h1>
       <div style="display: flex; justify-content: space-between;">
         <div style="width: 30%; background-color: white; padding: 20px; border-radius: 5px;">
@@ -123,9 +135,10 @@
     </section>
    </div>
 
+  <!-- sección productos nuevos -->
    <div class="container">
-    <section class="pb-5 mt-5">
-      <h2 class="text-center pb-4 mb-5">Nuevos Productos(?)</h2>
+    <section class="pb-5 mt-5 ">
+      <h2 class="text-center pb-4 mb-5">Nuevos Productos</h2>
       <div class="row">
         {% for p in products %}
         {% if p.new %}
