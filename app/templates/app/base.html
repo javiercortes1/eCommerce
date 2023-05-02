@@ -41,19 +41,32 @@
               <li class="nav-item">
                 <a class="nav-link" href="{% url 'contact' %}">Contacto</a>
               </li>
-
+              {% if user.is_authenticated %}
             </ul>
             <div class="nav-item admin">
               <a class="nav-link" aria-current="page" href="{% url 'list_product' %}">Administracion</a>
             </div>
-            <div class="nav-item login">
-              <i class="fa fa-user"></i>
-              <a class="nav-link" aria-current="page" href="#">Iniciar Sesión</a>
+              <li>
+                  <a href="{% url 'logout' %}">Cerrar Sesión</a>
+              </li>
             </div>
-
-
-
-          </div>
+              <li>
+                <a href="#">@{{ user.username }}</a>
+              </li>
+              {% else %}
+            <div class="nav-item login"> 
+              <a class="nav-link" aria-current="page" href="{% url 'login' %}">Iniciar Sesión</a>
+            </div>
+            <li>
+              <div class="nav-item register"> 
+                <a class="nav-link" aria-current="page" href="{% url 'registro' %}">Registrate</a>
+              </div>
+            </li>
+         {% endif %}
+            
+            
+            
+        </div>
         </div>
       </nav>
     </header>
