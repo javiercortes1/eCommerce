@@ -40,7 +40,7 @@
               <label class="form-label">Precio máximo</label>
               <input type="number" class="form-control" placeholder="Ingrese el precio máximo">
             </div>
-            <button type="submit" class="btn bg-primary-2">Aplicar filtros</button>
+            <button type="submit" class="btn bg-primary-3">Aplicar filtros</button>
           </form>
         </div>
       </div>
@@ -50,17 +50,24 @@
         {% for p in products %}
         <div class="col-6 col-md-4 col-lg-3 mb-4">
           <div class="card h-100">
-              <img src="{{ p.image.url }}" class="card-img-top" alt="{{ product.name }}" style="height: 150px;">
-            </a>
-            <div class="card-body featured">
-              <h5 class="card-title">{{ p.name }}</h5>
-              <p class="card-text">{{ p.description }}</p>
-              <p class="card-text">Precio: ${{ p.price }}</p>
+            <img src="{{ p.image.url }}" class="card-img-top" alt="{{ product.name }}" style="height: 150px;">
+            <div class="card-body text-center">
+              <div class="row">
+                <h5 class="card-title">{{ p.name }}</h5>
+              </div>
+              <div class="row">
+                <p class="card-text description">{{ p.description }}</p>
+              </div>
+              <div class="row">
+                <p class="card-text price">Precio: ${{ p.price }}</p>
+              </div>
+            </div>
+            <div class="card-footer">
               <div class="d-flex justify-content-between">
-                <button class="btn bg-primary-2 ">Agregar al carrito</button>
                 <div class="input-group quantity-input flex-grow-1 flex-sm-grow-2">
                   <input type="number" class="form-control form-control-sm" value="1">
                 </div>
+                <a class="btn bg-primary-3 ">Agregar al carrito</a>
               </div>
             </div>
           </div>

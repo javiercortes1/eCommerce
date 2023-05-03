@@ -1,18 +1,29 @@
 /* paleta de colores para el proyecto */
 :root {
-    --color-primary: #96D6EF; /* color navbar y footer */
-    --color-primary-2: rgb(246, 241, 241); /* fondo */
-    --color-secondary: #ffffff; /* hover links */
-    --color-tres: #b7dae7ad; /* fondo cards */
+    /* color navbar y footer */
+    --color-primary: #96D6EF;
+
+    /* fondo body*/
+    --color-primary-2: rgb(246, 241, 241);
+
+    /* color para buttons */
+    --color-primary-3: #19A7CE;
+
+    /* color hover y navbar toggler */
+    --color-secondary: #ffffff;
+
+    /* fondo cards */
+    --color-tres: #b7dae7ad;
+
 }
 
-/* color del background y body */
+/* color del background ,body y buttons */
 .bg-primary {
     background-color: var(--color-primary) !important;
 }
 
-.bg-primary-2 {
-    background-color: var(--color-primary-2) !important;
+.bg-primary-3 {
+    background-color: var(--color-primary-3) !important;
 }
 
 body {
@@ -36,20 +47,21 @@ footer {
     margin-top: calc(8px *1.5);
     margin-bottom: calc(8px *1.5);
     /* margin: calc(8px *1.5) 0; */
-    border: none;
-    border-radius: 1rem;
+    /* border: none;
+    border-radius: 1rem; */
+    border-color: #000000;
+    border-width: 2px;
     transition: all 100ms ease-in-out;
     /* color: var(--color-primary-2); */
     background-color: var(--color-tres) !important;
 
 }
 
-.btn{
-
+/* .btn {
     background-color: var(--color-primary) !important;
-}
+} */
 
-.btn:hover{
+.btn:hover {
 
     background-color: black;
 }
@@ -61,8 +73,8 @@ footer {
 
 .card-img,
 .card-img-top {
-    border-top-left-radius: 1rem;
-    border-top-right-radius: 1rem;
+    /* border-top-left-radius: 1rem;
+    border-top-right-radius: 1rem; */
     height: 180px;
 }
 
@@ -75,6 +87,7 @@ a {
 .nav-item a {
     color: #000000;
     margin-right: calc(8px*2);
+    font-weight: bold;
 }
 
 .services a {
@@ -102,20 +115,21 @@ a {
 
 h1 {
     font-weight: bold;
-  }
+}
 
 /* para darle el alto al body del card */
-.card-body.featured {
+/* .card-body.featured {
     height: 305px;
-}
+} */
 
 /* boton del card body */
 .featured a {
     position: absolute;
     bottom: 0;
     margin-bottom: calc(8px*2);
-    color: #ffffff;
+    color: #000000;
 }
+
 
 .featured a:hover {
     position: absolute;
@@ -123,46 +137,47 @@ h1 {
     margin-bottom: calc(8px*2);
     color: var(--color-secondary);
 }
+
 /* elemento nostock */
-h5.noStock{
+h5.noStock {
     position: absolute;
     bottom: 0;
     margin-bottom: calc(8px*3);
     color: var(--color-primary);
-} 
+}
 
 /*  forms */
-.form button{
+.form button {
     color: #ffffff;
 }
 
-.form button:hover{
+.form button:hover {
     color: var(--color-secondary);
 }
 
-.card-form{
+.card-form {
     width: 600px;
 }
 
 /* buttons listado  */
 .list-buttons button.bg-primary {
-   color: #ffffff;
+    color: #ffffff;
 }
 
 .list-buttons button.bg-primary:hover {
     color: var(--color-secondary);
- }
+}
 
 /* buttons del catalogue */
- .quantity-input {
+.quantity-input {
     width: 100px;
     margin-left: 10px;
-  }
-  
-  .quantity-input input {
+}
+
+.quantity-input input {
     text-align: center;
     width: 50px;
-  }
+}
 
 
 /* items del footer */
@@ -177,6 +192,33 @@ h5.noStock{
 }
 
 
-.categorycard{
+.categorycard {
     background-color: var(--color-tres) !important;
+}
+
+
+/* para que en el catalogo las cards mantengan la misma estructura */
+.card-text.description {
+    height: 70px;
+    overflow: hidden;
+}
+
+.card-text.price {
+    height: 25px;
+    overflow: hidden;
+    margin-top: 8px;
+}
+
+.card-body-featured {
+    height: 250px;
+}
+
+.card-title {
+    font-weight: bold;
+    height: 50px;
+    overflow: auto;
+}
+
+.about-us p{
+    text-align: justify;
 }

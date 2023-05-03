@@ -48,34 +48,31 @@
   <!-- seccion cards/productos destacados -->
   {% load humanize %}
   <div class="container">
-    <section class="pb-5 mt-5">
-      <h1 class="text-center pb-4 mb-5">PRODUCTOS DESTACADOS</h1>
+    <section class="pb-5">
+      <h1 class="text-center py-5">PRODUCTOS DESTACADOS</h1>
       <div class="row">
         {% for p in products %}
         {% if p.featured %}
         <div class="col-xxl-2 col-xl-3 col-lg-4 col-md-6">
+
           <div class="card">
-            {% if p.image %}
-            <!-- <img src="{{ p.image}}" class="card-img-top" alt="..."> -->
+
             <img src="{{ p.image.url }}" class="card-img-top" alt="...">
-            {% endif %}
-            <div class="card-body featured">
-              <h4 class="card-title">{{p.name | capfirst }} </h4>
-              <p class="card-text">{{p.description }}</p>
-              <p class="card-text">Disponible: {{p.stock}}</p>
-              <p class="card-text"><b>CLP ${{ p.price | intcomma }}</b></p>
+
+            <div class="card-body text-center">
+              <h5 class="card-title">{{p.name | capfirst }} </h5>
+              <p class="card-text description">{{p.description }}</p>
+              <p class="card-text price"><b>CLP ${{p.price | intcomma}}</b></p>
               {% if p.stock > 0 %}
-              <div style="display: flex; justify-content: center; align-items: center;">
-                <a href="#" class="btn bg-primary-2">Agregar al Carrito</a>
-              </div>
+              <a href="#" class="btn bg-primary-3">Agregar al Carrito</a>
               {% else %}
-              <div style="display: flex; justify-content: center; align-items: center;">
-                <h5 class="noStock"><b>Sin Stock</b></h5>
-              </div>
+              <h4 class="text-center"><b>Sin Stock</b></h4>
               {% endif %}
               <p></p>
             </div>
+
           </div>
+
         </div>
         {% endif %}
         {% endfor %}
@@ -90,12 +87,13 @@
       <div class="row">
         <div class="col-xxl-6 col-xl-6 col-lg-6 col-md-12 col-sm-12">
           <div style="display: flex;">
-            <img src="{% static 'app/img/quienes somos.webp' %}" style="float: left; margin-right: 10px; width: 450px; height: 450px;"
-              alt="...">
+            <img src="{% static 'app/img/quienes somos.webp' %}"
+              style="float: left; margin-right: 10px; width: 450px; height: 450px;" alt="...">
           </div>
         </div>
-        <div class="col-xxl-6 col-xl-6 col-lg-6 col-md-12 col-sm-12">
+        <div class="col-xxl-6 col-xl-6 col-lg-6 col-md-12 col-sm-12 ">
           <h1>Cervecería artesanal Conejo Furioso</h1>
+          <div class="about-us">
           <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Odio voluptate eveniet repellat similique
             dolore veritatis corporis non nesciunt quisquam alias asperiores odit minima ipsa pariatur corrupti,
             quaerat itaque sapiente suscipit!
@@ -113,21 +111,20 @@
             itaque sapiente suscipit!
           </p>
         </div>
+        </div>
       </div>
+    </section>
   </div>
-</div>
-</section>
-</div>
 
-<div class="container">
-  <section class="pb-5 mt-5" style="display: flex; justify-content: center; align-items: center;">
-    <img src="{% static 'app/img/logo.png' %}" alt="..." style="width: 20%;">
+  <div class="container">
+    <section class="pb-5 mt-5" style="display: flex; justify-content: center; align-items: center;">
+      <img src="{% static 'app/img/logo.png' %}" alt="..." style="width: 20%;">
 
-  </section>
+    </section>
 
-</div>
-   <!-- sección categorías -->
-   <div class="container">
+  </div>
+  <!-- sección categorías -->
+  <div class="container">
     <section class="pb-5 mt-5">
       <h1 class="text-center pb-4 mb-5">EXPLORA NUESTRAS DISTINTAS CATEGORÍAS</h1>
       <div class="categorycard" style="display: flex; justify-content: space-between;">
@@ -144,43 +141,40 @@
           <p>Esta cerveza te volará la cabeza</p>
         </div>
       </div>
-    </div>
+  </div>
   </section>
 </div>
-  <!-- sección productos nuevos -->
-   <div class="container">
-    <section class="pb-5 mt-5 ">
-      <h1 class="text-center pb-4 mb-5">NUEVOS PRODUCTOS</h1>
-      <div class="row">
-        {% for p in products %}
-        {% if p.new %}
-        <div class="col-xxl-2 col-xl-3 col-lg-4 col-md-6">
-          <div class="card">
-            {% if p.image %}
-            <img src="{{ p.image.url }}" class="card-img-top" alt="...">
+<!-- sección productos nuevos -->
+<div class="container">
+  <section class="pb-5">
+    <h1 class="text-center py-5">PRODUCTOS NUEVOS</h1>
+    <div class="row">
+      {% for p in products %}
+      {% if p.new %}
+      <div class="col-xxl-2 col-xl-3 col-lg-4 col-md-6">
+
+        <div class="card">
+
+          <img src="{{ p.image.url }}" class="card-img-top" alt="...">
+
+          <div class="card-body text-center">
+            <h5 class="card-title">{{p.name | capfirst }} </h5>
+            <p class="card-text description">{{p.description }}</p>
+            <p class="card-text price"><b>CLP ${{p.price | intcomma}}</b></p>
+            {% if p.stock > 0 %}
+            <a href="#" class="btn bg-primary-3">Agregar al Carrito</a>
+            {% else %}
+            <h4 class="text-center"><b>Sin Stock</b></h4>
             {% endif %}
-            <div class="card-body featured">
-              <h4 class="card-title">{{p.name | capfirst }} </h4>
-              <p class="card-text">{{p.description }}</p>
-              <p class="card-text">Disponible: {{p.stock}}</p>
-              <p class="card-text"><b>CLP ${{ p.price | intcomma }}</b></p>
-              {% if p.stock > 0 %}
-              <div style="display: flex; justify-content: center; align-items: center;">
-                <a href="#" class="btn bg-primary-2">Agregar al Carrito</a>
-              </div>
-              {% else %}
-              <div style="display: flex; justify-content: center; align-items: center;">
-                <h5 class="noStock"><b>Sin Stock</b></h5>
-              </div>
-              {% endif %}
-              <p></p>
-            </div>
+            <p></p>
+          </div>
+
         </div>
+
       </div>
       {% endif %}
       {% endfor %}
     </div>
   </section>
-</div>
 </div>
 {% endblock %}
