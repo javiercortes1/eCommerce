@@ -57,18 +57,24 @@ footer {
 
 }
 
-/* .btn {
-    background-color: var(--color-primary) !important;
-} */
+.btn-default{
+    background-color: var(--color-primary-3) !important;
+    border-width:2px;
+    border-color: #000000;
+    
+} 
 
-.btn:hover {
+.btn-default:hover {
 
     background-color: black;
+    box-shadow: 0 0.4rem 1rem rgba(0, 0, 0, 0.26);
+    color: var(--color-secondary)!important;
 }
 
 
 .card:hover {
     box-shadow: 0 0.4rem 1rem rgba(0, 0, 0, 0.26);
+    
 }
 
 .card-img,
