@@ -15,15 +15,15 @@
             <div class="col-12 col-md-6">
                 <div class="card my-5">
                     <div class="card-body">
-                        <h2>Ingresa tus credenciales </h2>
+                        <h2 class="text-center">Ingresa tus credenciales </h2>
                         <hr>
                         <form action="" method="post" class="form">
                             {% csrf_token %}
                             {{form | crispy }}
                             <a href="{% url 'home' %}">Inicio</a> |
-                            <a href="{% url 'register' %}">Registrate</a>
+                            <a href="{% url 'register' %}">Regístrate</a>
                             <br>
-                            <button type="submit" class="btn bg-primary-2">Ingresar</button>
+                            <button type="submit" class="btn btn-default bg-primary-3">Ingresar</button>
                         </form>
                              
                     </div>
