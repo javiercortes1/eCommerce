@@ -144,6 +144,7 @@ h5.noStock{
     width: 600px;
 }
 
+
 /* buttons listado  */
 .list-buttons button.bg-primary {
    color: #ffffff;
@@ -179,4 +180,9 @@ h5.noStock{
 
 .categorycard{
     background-color: var(--color-tres) !important;
+}
+
+.register a{
+
+    text-decoration: none;
 }
