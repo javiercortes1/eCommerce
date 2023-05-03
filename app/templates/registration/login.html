@@ -9,29 +9,28 @@
 
 {% load humanize %}
     {% load crispy_forms_tags %}
+    <br><br>
     <div class="container my-5" style="max-width: 600px;">
-
-        <div class="row">
-            <div class="col-12 col-md-6 offset-md-3">
-                <div class="card">
+        <div class="row d-flex justify-content-center">
+            <div class="col-12 col-md-6">
+                <div class="card my-5">
                     <div class="card-body">
                         <h2>Ingresa tus credenciales </h2>
                         <hr>
                         <form action="" method="post" class="form">
                             {% csrf_token %}
                             {{form | crispy }}
-                            <a href="{% url 'home' %}">Home</a> |
+                            <a href="{% url 'home' %}">Inicio</a> |
                             <a href="{% url 'register' %}">Registrate</a>
                             <br>
-                            <button type="submit" class="btn bg-primary-2 align-items-center">Ingresar</button>
-                        </form>     
+                            <button type="submit" class="btn bg-primary-2">Ingresar</button>
+                        </form>
+                             
                     </div>
                 </div>
             </div>
         </div>
-
+        <br><br><br><br><br><br><br><br>
     </div>
-</body>
-</html>
 
 {% endblock %}

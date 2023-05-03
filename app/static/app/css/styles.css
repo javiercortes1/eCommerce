@@ -159,6 +159,7 @@ h5.noStock {
     width: 600px;
 }
 
+
 /* buttons listado  */
 .list-buttons button.bg-primary {
     color: #ffffff;
@@ -219,6 +220,11 @@ h5.noStock {
     overflow: auto;
 }
 
-.about-us p{
+.about-us p {
     text-align: justify;
+}
+
+.register a {
+
+    text-decoration: none;
 }
