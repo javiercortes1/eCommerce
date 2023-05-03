@@ -3,7 +3,8 @@ from .models import Contact, Product
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Layout, Submit
 from django.contrib.auth.forms import UserCreationForm
-
+from .validators import MaxSizeFileValidator
+from django.forms import ValidationError
 
 class ContactForm(forms.ModelForm):
 
@@ -20,6 +21,18 @@ class ContactForm(forms.ModelForm):
         }
 
 class ProductForm(forms.ModelForm):
+
+    image = forms.ImageField(required=False,validators=[MaxSizeFileValidator(20)])
+    name = forms.CharField(min_length=3,max_length=50)
+    price = forms.IntegerField(min_value=1,max_value=1500000)
+
+    def clean_name(self):
+        name =self.cleaned_data["name"]
+        exist = Product.objects.filter(name__iexact=name).exist()
+
+        if exist:
+            raise ValidationError("Este producto ya existe")
+        return name 
 
     class Meta:
         model = Product
