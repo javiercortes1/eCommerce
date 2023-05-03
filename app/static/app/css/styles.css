@@ -1,8 +1,9 @@
 /* paleta de colores para el proyecto */
 :root {
-    --color-primary: rgb(27, 46, 41);
-    --color-primary-2: rgb(240, 236, 202);
-    --color-secondary: #ffd3a4;
+    --color-primary: #96D6EF; /* color navbar y footer */
+    --color-primary-2: rgb(246, 241, 241); /* fondo */
+    --color-secondary: #ffffff; /* hover links */
+    --color-tres: #b7dae7ad; /* fondo cards */
 }
 
 /* color del background y body */
@@ -23,29 +24,11 @@ body {
 /* tamanio y posicion footer */
 footer {
     width: 100%;
-    height: 10em;
+    height: 25%;
     bottom: 0;
     background-color: var(--color-primary) !important;
     padding: 10px;
-}
-
-/* boton de busqueda */
-.btn-search {
-    width: calc(8px*10);
-    color: black;
-    background-color: var(--color-secondary);
-    margin-right: 24px;
-}
-
-.btn-search:hover {
-    width: calc(8px*10);
-    color: rgb(255, 255, 255);
-    background-color: #000000;
-}
-
-/* barra de busqueda */
-.input-search {
-    width: calc(8px*50);
+    position: relative;
 }
 
 /* caracteristicas de las cards */
@@ -57,8 +40,20 @@ footer {
     border-radius: 1rem;
     transition: all 100ms ease-in-out;
     /* color: var(--color-primary-2); */
+    background-color: var(--color-tres) !important;
 
 }
+
+.btn{
+
+    background-color: var(--color-primary) !important;
+}
+
+.btn:hover{
+
+    background-color: black;
+}
+
 
 .card:hover {
     box-shadow: 0 0.4rem 1rem rgba(0, 0, 0, 0.26);
@@ -78,7 +73,7 @@ a {
 
 /* items del navbar */
 .nav-item a {
-    color: #ffffff;
+    color: #000000;
     margin-right: calc(8px*2);
 }
 
@@ -102,8 +97,12 @@ a {
 
 /* aplica para todo el documento */
 * {
-    font-family: Georgia, 'Times New Roman', Times, serif;
+    font-family: "Futura", sans-serif;
 }
+
+h1 {
+    font-weight: bold;
+  }
 
 /* para darle el alto al body del card */
 .card-body.featured {
@@ -165,31 +164,19 @@ h5.noStock{
     width: 50px;
   }
 
-  .btn-btn-primary {
-    background-color: var(--color-primary) !important;
-    color: white;
-    border-radius: 1rem;
-    box-shadow: 2px 2px 2px #888;
-  }
-
-  .btn-btn-primary:hover {
-    color: var(--color-secondary) !important;
-
-  }
 
 /* items del footer */
 .ft-item a {
     color: #ffffff;
     margin-right: calc(8px*2);
+    height: auto;
 }
 
 .ft-link:hover {
     color: var(--color-secondary);
 }
 
-/* sección categoria home */
 
-.category-section {
-    background-color: rgb(255, 237, 79);
+.categorycard{
+    background-color: var(--color-tres) !important;
 }
-

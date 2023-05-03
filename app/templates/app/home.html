@@ -49,7 +49,7 @@
   {% load humanize %}
   <div class="container">
     <section class="pb-5 mt-5">
-      <h2 class="text-center pb-4 mb-5">Productos Destacados</h2>
+      <h1 class="text-center pb-4 mb-5">PRODUCTOS DESTACADOS</h1>
       <div class="row">
         {% for p in products %}
         {% if p.featured %}
@@ -66,7 +66,7 @@
               <p class="card-text"><b>CLP ${{ p.price | intcomma }}</b></p>
               {% if p.stock > 0 %}
               <div style="display: flex; justify-content: center; align-items: center;">
-                <a href="#" class="btn bg-primary">Agregar al Carrito</a>
+                <a href="#" class="btn bg-primary-2">Agregar al Carrito</a>
               </div>
               {% else %}
               <div style="display: flex; justify-content: center; align-items: center;">
@@ -86,7 +86,7 @@
   <!-- seccion quienes somos -->
   <div class="container">
     <section class="pb-5 mt-5">
-      <h1 class="text-center pb-4 mb-5">Quiénes Somos</h1>
+      <h1 class="text-center pb-4 mb-5">QUIÉNES SOMOS</h1>
       <div class="row">
         <div class="col-xxl-6 col-xl-6 col-lg-6 col-md-12 col-sm-12">
           <div style="display: flex;">
@@ -126,15 +126,23 @@
   </section>
 
 </div>
-
-<!-- sección categorías -->
-<div class="container">
-  <section class="pb-5 mt-5 category-section">
-    <h1 class="text-center pb-4 mb-5">Explora nuestras distintas categorías</h1>
-    <div style="display: flex; justify-content: space-between;">
-      <div style="width: 30%; background-color: white; padding: 20px; border-radius: 5px;">
-        <h2 style="font-family: impact, sans-serif; font-weight: bold;">Lager</h2>
-        <p>Chela depana, la misma de siempre</p>
+   <!-- sección categorías -->
+   <div class="container">
+    <section class="pb-5 mt-5">
+      <h1 class="text-center pb-4 mb-5">EXPLORA NUESTRAS DISTINTAS CATEGORÍAS</h1>
+      <div class="categorycard" style="display: flex; justify-content: space-between;">
+        <div style="width: 30%; padding: 20px; border-radius: 5px;">
+          <h2 style="font-family: impact, sans-serif; font-weight: bold;">Lager</h2>
+          <p>Chela depana, la misma de siempre</p>
+        </div>
+        <div style="width: 30%; padding: 20px; border-radius: 5px;">
+          <h2 style="font-family: impact, sans-serif; font-weight: bold;">American Lager</h2>
+          <p>Very good beer</p>
+        </div>
+        <div style="width: 30%; padding: 20px; border-radius: 5px;">
+          <h2 style="font-family: impact, sans-serif; font-weight: bold;">Stout</h2>
+          <p>Esta cerveza te volará la cabeza</p>
+        </div>
       </div>
       <div style="width: 30%; background-color: white; padding: 20px; border-radius: 5px;">
         <h2 style="font-family: impact, sans-serif; font-weight: bold;">American Lager</h2>
@@ -147,27 +155,33 @@
     </div>
   </section>
 </div>
-
-<!-- sección productos nuevos -->
-<div class="container">
-  <section class="pb-5 mt-5 ">
-    <h2 class="text-center pb-4 mb-5">Nuevos Productos</h2>
-    <div class="row">
-      {% for p in products %}
-      {% if p.new %}
-      <div class="col-xxl-2 col-xl-3 col-lg-4 col-md-6">
-        <div class="card">
-          {% if p.image %}
-          <img src="{{ p.image.url }}" class="card-img-top" alt="...">
-          {% endif %}
-          <div class="card-body featured">
-            <h4 class="card-title">{{p.name | capfirst }} </h4>
-            <p class="card-text">{{p.description }}</p>
-            <p class="card-text">Disponible: {{p.stock}}</p>
-            <p class="card-text"><b>CLP ${{ p.price | intcomma }}</b></p>
-            {% if p.stock > 0 %}
-            <div style="display: flex; justify-content: center; align-items: center;">
-              <a href="#" class="btn bg-primary">Agregar al Carrito</a>
+  <!-- sección productos nuevos -->
+   <div class="container">
+    <section class="pb-5 mt-5 ">
+      <h1 class="text-center pb-4 mb-5">NUEVOS PRODUCTOS</h1>
+      <div class="row">
+        {% for p in products %}
+        {% if p.new %}
+        <div class="col-xxl-2 col-xl-3 col-lg-4 col-md-6">
+          <div class="card">
+            {% if p.image %}
+            <img src="{{ p.image.url }}" class="card-img-top" alt="...">
+            {% endif %}
+            <div class="card-body featured">
+              <h4 class="card-title">{{p.name | capfirst }} </h4>
+              <p class="card-text">{{p.description }}</p>
+              <p class="card-text">Disponible: {{p.stock}}</p>
+              <p class="card-text"><b>CLP ${{ p.price | intcomma }}</b></p>
+              {% if p.stock > 0 %}
+              <div style="display: flex; justify-content: center; align-items: center;">
+                <a href="#" class="btn bg-primary-2">Agregar al Carrito</a>
+              </div>
+              {% else %}
+              <div style="display: flex; justify-content: center; align-items: center;">
+                <h5 class="noStock"><b>Sin Stock</b></h5>
+              </div>
+              {% endif %}
+              <p></p>
             </div>
             {% else %}
             <div style="display: flex; justify-content: center; align-items: center;">
@@ -183,8 +197,5 @@
     </div>
   </section>
 </div>
-
-
 </div>
-
 {% endblock %}
