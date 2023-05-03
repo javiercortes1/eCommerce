@@ -149,7 +149,7 @@ def register(request):
             formulario.save()
             user = authenticate(username=formulario.cleaned_data["username"], password=formulario.cleaned_data["password1"])
             login(request, user)
-            messages.success(request, "Te haz registrado correctamente")
+            messages.success(request, "Te has registrado correctamente")
             #redirigir al home 
             return redirect(to="home") 
         data ["form"] = formulario    
