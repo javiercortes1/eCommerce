@@ -1,0 +1,36 @@
+{% extends 'app/base.html' %}
+
+{% load static %}
+{% block css %}
+<title>Conejo Furioso</title>
+{% endblock %}
+<img src="" alt="">
+
+
+
+{% block content %}
+{% load humanize %}
+<div class="container">
+    <section class="pb-5">
+        <div class="row">
+            <div class="col-xxl-2 col-xl-3 col-lg-4 col-md-6">
+                <div class="card">
+                    <img src="{{ product.image.url }}" class="card-img-top" alt="...">
+                    <div class="card-body text-center">
+                        <h5 class="card-title">{{product.name | capfirst }} </h5>
+                        <p class="card-text description">{{product.description }}</p>
+                        <p class="card-text price"><b>CLP ${{product.price | intcomma}}</b></p>
+                        {% if product.stock > 0 %}
+                        <a href="#" class="btn btn-default bg-primary-3">Agregar al Carrito</a>
+                        {% else %}
+                        <h4 class="text-center"><b>Sin Stock</b></h4>
+                        {% endif %}
+                        <p></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+
+{% endblock %}
