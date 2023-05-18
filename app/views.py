@@ -139,6 +139,19 @@ def delete_product(request, id):
     messages.success(request, "Eliminado correctamente")
     return redirect(to="list_product")
 
+def product_detail(request, id):
+    product = get_object_or_404(Product, id=id)
+
+    data = {
+        'product':product
+    }
+
+    return render(request, 'app/product/detail.html',data)
+
+
+
+
+
 def register(request):
     data = {
         'form' : CustomUserCreationForm()
