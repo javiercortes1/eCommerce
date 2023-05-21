@@ -4,11 +4,6 @@
 <title>Catalogo | Conejo Furioso</title>
 {% endblock %}
 
-{% block js %}
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script src="{% static 'app/js/catalogue.js' %}"></script>
-{% endblock %}
-
 {% block content %}
 {% load humanize %}
 <br><br><br><br><br><br>
@@ -21,26 +16,29 @@
           <form>
             <div class="mb-3">
               <label class="form-label">Buscar por nombre</label>
-              <input type="text" class="form-control" placeholder="Ingrese el nombre">
+              <input type="text" class="form-control" placeholder="Ingrese el nombre" name="name">
             </div>
             <div class="mb-3">
               <label class="form-label">Filtrar por categoría</label>
-              <select class="form-select" id="category-filter">
+              <select class="form-select" id="category-filter" name="category">
                 <option value="">Todas las categorías</option>
                 {% for category in categories %}
-                <option value="{{ category.id }}">{{ category.name }}</option>
+                    <option value="{{ category.id }}">{{ category.name }}</option>
                 {% endfor %}
-              </select>
+            </select>
             </div>
             <div class="mb-3">
               <label class="form-label">Precio mínimo</label>
-              <input type="number" class="form-control" placeholder="Ingrese el precio mínimo">
+              <input type="number" class="form-control" placeholder="Ingrese el precio mínimo" name="min_price">
             </div>
             <div class="mb-3">
               <label class="form-label">Precio máximo</label>
-              <input type="number" class="form-control" placeholder="Ingrese el precio máximo">
+              <input type="number" class="form-control" placeholder="Ingrese el precio máximo" name="max_price">
             </div>
-            <button type="submit" class="btn bg-primary-3">Aplicar filtros</button>
+            <button type="submit" class="btn bg-primary-3" name="filter_submit">Aplicar filtros</button>
+            {% if request.GET.name or request.GET.category or request.GET.min_price or request.GET.max_price %}
+            <button type="submit" class="btn bg-primary-3" name="clear_filters">Eliminar filtros</button>
+            {% endif %}
           </form>
         </div>
       </div>
@@ -62,13 +60,8 @@
                 <p class="card-text price">Precio: ${{ p.price }}</p>
               </div>
             </div>
-            <div class="card-footer">
-              <div class="d-flex justify-content-between">
-                <div class="input-group quantity-input flex-grow-1 flex-sm-grow-2">
-                  <input type="number" class="form-control form-control-sm" value="1">
-                </div>
-                <a href="{% url 'Add' p.id %}" class="btn btn-primary add-to-cart-btn">Agregar al Carrito</a>
-              </div>
+            <div class="card-footer" style="text-align: center;">
+              <a href="{% url 'Add' p.id %}" class="btn btn-primary add-to-cart-btn">Agregar al Carrito</a>
             </div>
           </div>
         </div>

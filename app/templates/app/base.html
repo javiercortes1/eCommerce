@@ -64,13 +64,13 @@
             </div>
             {% else %}
             <div class="nav-item login">
-              <a class="nav-link" aria-current="page" href="{% url 'login' %}">INICIAR SESIÓN</a>
+              <a class="nav-link" aria-current="page" href="{% url 'login' %}">INICIAR SESIÓN | REGISTRARSE</a>
             </div>
           </div>
 
-          <div class="nav-item cart"> 
-                <a class="nav-link" aria-current="page" href="{% url 'Cart' %}">CARRITO</a>
-              </div>
+          <div class="nav-item cart">
+            <a class="nav-link" aria-current="page" href="{% url 'Cart' %}">CARRITO</a>
+          </div>
           {% endif %}
         </div>
   </div>

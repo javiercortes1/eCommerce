@@ -51,15 +51,36 @@ def home(request):
     return render(request, 'app/home.html', data)
 
 def catalogue(request):
+    name_filter = request.GET.get('name', '')
+    category_filter = request.GET.get('category', '')
+    min_price_filter = request.GET.get('min_price', '')
+    max_price_filter = request.GET.get('max_price', '')
+
     products = Product.objects.all()
+    categories = Category.objects.all()  # Obtener todas las categorías
+
+    if name_filter:
+        products = products.filter(name__icontains=name_filter)
+
+    if category_filter:
+        products = products.filter(category_id=category_filter)
+
+    if min_price_filter:
+        products = products.filter(price__gte=min_price_filter)
+
+    if max_price_filter:
+        products = products.filter(price__lte=max_price_filter)
+
+    if 'clear_filters' in request.GET:
+        # Si se hizo clic en el botón de eliminar filtros, reiniciar los filtros
+        products = Product.objects.all()
+
     data = {
-        'products': products
+        'products': products,
+        'categories': categories,
     }
-    # response = requests.get('http://127.0.0.1:8000/api/product/').json()
-    # data = {
-    #      'products': response
-    #  }
-    return render(request, 'app/catalogue.html',data)
+
+    return render(request, 'app/catalogue.html', data)
 
 def services(request):
     return render(request, 'app/services.html')

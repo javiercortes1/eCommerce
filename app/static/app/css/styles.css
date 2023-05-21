@@ -28,9 +28,11 @@
 
 body {
     background-color: var(--color-primary-2) !important;
-    width: 100%;
-    height: auto;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
 }
+
 
 /* tamanio y posicion footer */
 footer {
@@ -234,3 +236,7 @@ h5.noStock {
 
     text-decoration: none;
 }
+
+.content {
+    flex: 1;
+  }
