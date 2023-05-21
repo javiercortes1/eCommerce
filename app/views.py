@@ -189,7 +189,15 @@ def register(request):
 def add_prod_cart(request, product_id):
     cart = Cart(request)
     product = Product.objects.get(id=product_id)
-    cart.add(product)
+    
+    if product.stock <= 0:
+        messages.error(request, "Error: Product is out of stock.")
+    elif cart.get_product_quantity(product) >= product.stock:
+        messages.error(request, "Error: Maximum stock limit reached.")
+    else:
+        cart.add(product)
+        # messages.success(request, "Product added to cart successfully.")
+    
     return redirect(to="Cart")
 
 def del_prod_cart(request, product_id):
