@@ -4,8 +4,6 @@
 {% block css %}
 <title>Conejo Furioso</title>
 {% endblock %}
-<img src="" alt="">
-
 
 
 {% block content %}
@@ -21,7 +19,16 @@
                         <p class="card-text description">{{product.description }}</p>
                         <p class="card-text price"><b>CLP ${{product.price | intcomma}}</b></p>
                         {% if product.stock > 0 %}
-                        <a href="#" class="btn btn-default bg-primary-3">Agregar al Carrito</a>
+                        <a href="{% url  'Add' product.id %}" class="btn btn-primary">Agregar al Carrito</a>
+                        
+                        <!-- {% comment %}
+                        <form action="{% url 'add_to_cart' product.id %}" method="post">
+                            {% csrf_token %}
+                            <input type="hidden" name="product_id" value="{{ product.id }}">
+                            <button type="submit">Agregar al carrito</button>
+                          </form>
+                        {% endcomment %} -->
+
                         {% else %}
                         <h4 class="text-center"><b>Sin Stock</b></h4>
                         {% endif %}

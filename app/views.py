@@ -9,12 +9,13 @@ from rest_framework import viewsets
 from .serializers import ProductSerializer, CategorySerializer
 import requests
 from django.contrib.auth.decorators import login_required, permission_required
+from django.core.cache import cache
+from app.cart import Cart
 
 # Create your views here.
 class CategoryViewset(viewsets.ModelViewSet):
     queryset = Category.objects.all()
     serializer_class = CategorySerializer
-
 
 class ProductViewset(viewsets.ModelViewSet):
     queryset = Product.objects.all()
@@ -148,10 +149,6 @@ def product_detail(request, id):
 
     return render(request, 'app/product/detail.html',data)
 
-
-
-
-
 def register(request):
     data = {
         'form' : CustomUserCreationForm()
@@ -167,3 +164,48 @@ def register(request):
             return redirect(to="home") 
         data ["form"] = formulario    
     return render(request,'registration/register.html', data)
+
+def add_prod_cart(request, product_id):
+    cart = Cart(request)
+    product = Product.objects.get(id=product_id)
+    cart.add(product)
+    return redirect(to="Cart")
+
+def del_prod_cart(request, product_id):
+    cart = Cart(request)
+    product = Product.objects.get(id=product_id)
+    cart.delete(product)
+    return redirect(to="Cart")
+
+def subtract_product_cart(request, product_id):
+    cart = Cart(request)
+    product = Product.objects.get(id=product_id)
+    cart.subtract(product)
+    return redirect("Cart")
+
+def clean_cart(request):
+    cart = Cart(request)
+    cart.clean()
+    return redirect("Cart")
+
+def cart_page(request):
+    products = Product.objects.all()
+    data = {
+        'products': products
+    }
+    
+    return render(request, 'app/cart_page.html', data)
+
+# def checkout(request):
+
+#     return render(request,'core/checkout.html')
+
+def buy_confirm(request):
+    cart = Cart(request)
+    cart.buy()
+    cart.clean()
+    return redirect('cart')
+
+# def pago_exitoso(request):
+
+#     return render(request,'core/pago_exitoso.html')
