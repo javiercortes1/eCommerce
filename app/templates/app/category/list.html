@@ -2,7 +2,7 @@
 
 {% block js %}
 <script>
-    function delete_Product(id){
+    function delete_Category(id){
         Swal.fire({
             "title": "Seguro?",
             "text":"esta accion es permanente",
@@ -15,7 +15,7 @@
         })
         .then(function(result){
             if(result.isConfirmed){
-                window.location.href = "/delete-product/"+id+"/"
+                window.location.href = "/delete-category/"+id+"/"
             }
         })
     }
@@ -34,7 +34,7 @@
     <div class="card">
         <div class="card-body">
             <center>
-                <h2>Lista de Productos</h2>
+                <h2>Lista de Categorias</h2>
             </center>
             <hr>
             <div class="table-responsive">
@@ -43,16 +43,11 @@
                         <tr>
                             <th>Nombre</th>
                             <th>Descripcion</th>
-                            <th>Valor</th>
-                            <th>Categoria</th>
-                            <th>Destacado</th>
-                            <th>Unidades</th>
-                            <th>Nuevo</th>
-                            {% if perms.app.change_product %}
+                            {% if perms.app.change_category %}
                             <th>Modificar</th>
                             {% endif %}
 
-                            {% if perms.app.delete_product %}
+                            {% if perms.app.delete_category %}
                             <th>Eliminar</th>
                             {% endif %}
                         </tr>
@@ -60,37 +55,21 @@
                     <tbody>
                     </tbody>
 
-                    {% for p in entity %}
+                    {% for c in entity %}
 
                     <tr>
-                        <td>{{p.name | title }}</td>
-                        <td>{{p.description }}</td>
-                        <td>${{p.price | intcomma }}</td>
-                        <td>{{p.category | title }}</td>
+                        <td>{{c.name | title }}</td>
+                        <td>{{c.description }}</td>
 
-                        {% if p.featured %}
-                        <td>Si</td>
-                        {% else %}
-                        <td>No</td>
-                        {% endif %}
-
-                        <td>{{p.stock}}</td>
-
-                        {% if p.new %}
-                        <td>Si</td>
-                        {% else %}
-                        <td>No</td>
-                        {% endif %}
-
-                        {% if perms.app.change_product %}
+                        {% if perms.app.change_category %}
                         <td>
-                            <a href="{% url 'update_product' p.id %}" class="btn btn-info btn-sm">Modificar</a>
+                            <a href="{% url 'update_category' c.id %}" class="btn btn-info btn-sm">Modificar</a>
                         </td>
                         {% endif %}
 
-                        {% if perms.app.delete_product %}
+                        {% if perms.app.delete_category %}
                         <td>
-                            <a href="#" onclick="delete_Product({{ p.id }})" class="btn btn-danger btn-sm">Eliminar</a>
+                            <a href="#" onclick="delete_Category({{ c.id }})" class="btn btn-danger btn-sm">Eliminar</a>
                         </td>
                         {% endif %}
                     </tr>
@@ -121,9 +100,9 @@
 
                 </div>
 
-                {% if perms.app.add_product %}
+                {% if perms.app.add_category %}
                 <div class="col">
-                    <a href="{% url 'add_product' %}">
+                    <a href="{% url 'add_category' %}">
                         <button class="btn btn-default bg-primary-3" type="button">Agregar Nuevo</button>
                     </a>
                 </div>

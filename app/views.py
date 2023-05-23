@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from .forms import ContactForm, ProductForm, CustomUserCreationForm
+from .forms import ContactForm, ProductForm, CustomUserCreationForm, CategoryForm
 from django.contrib import messages
 from django.contrib.auth import authenticate ,login 
 from .models import Product, Category
@@ -99,6 +99,7 @@ def contact(request):
             data["form"] = form
     return render(request, 'app/contact.html', data)
 
+#product
 @permission_required('app.add_product')
 def add_product(request):
 
@@ -170,6 +171,7 @@ def product_detail(request, id):
 
     return render(request, 'app/product/detail.html',data)
 
+#register
 def register(request):
     data = {
         'form' : CustomUserCreationForm()
@@ -186,6 +188,7 @@ def register(request):
         data ["form"] = formulario    
     return render(request,'registration/register.html', data)
 
+#carrito
 def add_prod_cart(request, product_id):
     cart = Cart(request)
     product = Product.objects.get(id=product_id)
@@ -238,3 +241,66 @@ def buy_confirm(request):
 # def pago_exitoso(request):
 
 #     return render(request,'core/pago_exitoso.html')
+
+#Category
+@permission_required('app.add_category')
+def add_category(request):
+
+    data = {
+        'form': CategoryForm()
+    }
+
+    if request.method == 'POST':
+        form = CategoryForm(data=request.POST, files=request.FILES)
+        if form.is_valid():
+            form.save()
+            messages.success(request, "Categoria Agregada")
+            return redirect(to="list_category")
+        else:
+            data["form"] = form
+    return render(request, 'app/category/add.html',data)
+
+@permission_required('app.view_category')
+def list_category(request):
+    categories = Category.objects.all()
+    page = request.GET.get('page', 1)
+
+    try:
+        paginator = Paginator(categories, 5)
+        categories = paginator.page(page)
+    except:
+        raise Http404
+
+
+    data = {
+        'entity': categories,
+        'paginator': paginator
+    }
+    return render(request, 'app/category/list.html', data)
+
+@permission_required('app.change_category')
+def update_category(request, id):
+
+    category = get_object_or_404(Category, id=id)
+
+    data = {
+        'form':CategoryForm(instance=category)
+    }
+
+    if request.method == 'POST':
+        form = CategoryForm(data=request.POST, instance=category, files=request.FILES)
+        if form.is_valid():
+            form.save()
+            messages.success(request, "Modificado correctamente")
+            return redirect(to="list_category")
+        data["form"] = form
+
+
+    return render(request, 'app/category/update.html',data)
+
+@permission_required('app.delete_category')
+def delete_category(request, id):
+    category = get_object_or_404(Category, id=id)
+    category.delete()
+    messages.success(request, "Eliminado correctamente")
+    return redirect(to="list_category")
