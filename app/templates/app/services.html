@@ -1,10 +1,58 @@
 {% extends 'app/base.html' %}
 {% load static %}
-{% block tittle_css %}
+{% block title_css %}
 <title>Servicios | Conejo Furioso</title>
 {% endblock %}
 
-{% block content %} 
+{% block js %}
+<link href="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.10.2/fullcalendar.min.css" rel="stylesheet" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.10.2/fullcalendar.min.js"></script>
+<script src="{% static 'app/js/services.js' %}"></script>
 
 {% endblock %}
+
+{% block content %} 
+<div class="container">
+    <h1>Servicios de Arriendo de Barriles de Cerveza</h1>
     
+    <div class="calendar-container">
+      <div id="calendar"></div>
+    </div>
+    
+    <div class="reservation-form">
+      <h2>Realizar una Reserva</h2>
+      <form>
+        <!-- Campos del formulario de reserva -->
+        <div class="form-group">
+          <label for="start-date">Fecha de inicio:</label>
+          <input type="date" id="start-date" name="start-date">
+        </div>
+        <div class="form-group">
+          <label for="end-date">Fecha de fin:</label>
+          <input type="date" id="end-date" name="end-date">
+        </div>
+        <div class="form-group">
+          <label for="name">Nombre:</label>
+          <input type="text" id="name" name="name">
+        </div>
+        <div class="form-group">
+          <label for="email">Email:</label>
+          <input type="email" id="email" name="email">
+        </div>
+        <div class="form-group">
+          <button type="submit">Realizar Reserva</button>
+        </div>
+      </form>
+    </div>
+    
+    <div class="rental-products">
+        <h2>Productos Arrendables Disponibles</h2>
+        <ul>
+          {% for product in rental_products %}
+            <li>{{ product.name }}</li>
+          {% endfor %}
+        </ul>
+      </div>
+  </div>
+{% endblock %}
