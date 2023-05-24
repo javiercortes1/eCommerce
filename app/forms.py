@@ -89,6 +89,7 @@ class ProductForm(forms.ModelForm):
             'stock': 'Unidades',
             'new': '¿Nuevo?',
             'featured': '¿Destacado?',
+            'rental_product' : '¿Arrendable?',
             'image': 'Imagen'
         }
 class CustomUserCreationForm(UserCreationForm):
