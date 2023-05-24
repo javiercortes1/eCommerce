@@ -25,17 +25,16 @@
         <!-- INFO PRODUCTO-->
         <div class="col-xxl-6 col-xl-6 col-lg-6 col-md-12 col-sm-12">
             <div class="card h-100">
-                <div class="card-header">
-                    <img src="{% static 'app/img/logo.png' %}" alt="Logo" style="max-width: 100px; max-height: 100px; float: right;">
-                    <br>
-                    <h1>{{ product.name | capfirst }}</h1>
-                </div>
                 <div class="card-body d-flex flex-column justify-content-between">
                     <div>
-                        <h2>Descripción: {{ product.description }}</h2>
-                        <h2>Categoría: {{ product.category }}</h2>
-                        <h2>Volumen: {{ product.cc }} cc.</h2>
-                        <h2>Precio: ${{ product.price | intcomma }}</h2>
+                        <h1>{{ product.name | capfirst }}</h1>
+                        <br>
+                        <br>
+                        <h2>Descripción del producto</h2>
+                        <h3>{{ product.description }}</h3>
+                        <h3>Categoría: {{ product.category}}</h3>
+                        <h3>Volumen: {{ product.cc}} cc.</h3>
+                        <h2><b>${{ product.price | intcomma }}</b></h2>
                     </div>
                     <div>
                         <a href="#" class="btn btn-default bg-primary-3 float-end">Agregar al Carrito</a>
