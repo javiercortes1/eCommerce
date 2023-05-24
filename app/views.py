@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from .forms import ContactForm, ProductForm, CustomUserCreationForm, CategoryForm
 from django.contrib import messages
 from django.contrib.auth import authenticate ,login 
-from .models import Product, Category
+from .models import Product, Category, Rental
 from django.core.paginator import Paginator
 from django.http import Http404
 from rest_framework import viewsets
@@ -11,6 +11,9 @@ import requests
 from django.contrib.auth.decorators import login_required, permission_required
 from django.core.cache import cache
 from app.cart import Cart
+from django.core.mail import send_mail
+from django.db.models import Q
+from datetime import date
 
 # Create your views here.
 class CategoryViewset(viewsets.ModelViewSet):
@@ -91,12 +94,33 @@ def contact(request):
     }
 
     if request.method == 'POST':
-        form = ContactForm(data=request.POST)
+        form = ContactForm(request.POST)
         if form.is_valid():
-            form.save()
-            data["message"] = "Enviado exitosamente"
-        else:
-            data["form"] = form
+            contact = form.save()
+
+            # Obtener los datos del formulario
+            name = contact.name
+            email = contact.email
+            phone = contact.phone
+            message = contact.message
+
+            # Construir el mensaje de correo electrónico con los datos del formulario
+            subject = 'Nuevo mensaje de contacto'
+            message = f'''
+                Se ha recibido un nuevo mensaje de contacto:
+                Nombre: {name}
+                Correo electrónico: {email}
+                Teléfono: {phone}
+                Mensaje: {message}
+            '''
+            from_email = 'erreapectm@gmail.com'  # Tu dirección de correo electrónico
+            to_email = 'dario.vera96@gmail.com'  # La dirección de correo electrónico del destinatario
+            send_mail(subject, message, from_email, [to_email])
+
+            return redirect('contact')  # Redireccionar a la página de éxito o cualquier otra página
+
+    else:
+        form = ContactForm()
     return render(request, 'app/contact.html', data)
 
 #product
@@ -304,3 +328,29 @@ def delete_category(request, id):
     category.delete()
     messages.success(request, "Eliminado correctamente")
     return redirect(to="list_category")
+
+def admin_panel(request):
+    
+    return render(request, 'app/admin_panel.html')
+
+def services(request):
+    # Obtener los barriles de cerveza arrendables disponibles
+    rental_products = Product.objects.filter(rental_product=True)
+    
+    # Obtener los arriendos existentes en las fechas seleccionadas
+    rented_dates = Rental.objects.filter(
+        Q(start_date__gte=date.today()) | Q(end_date__gte=date.today())
+    ).values_list('product', flat=True)
+    
+    barrels_data = []
+    for product in rental_products:
+        if product.pk in rented_dates:
+            # Barril ocupado, no se muestra en el calendario
+            continue
+        barrels_data.append({
+            'title': product.name,
+            'start': '',  # Fecha de inicio vacía para permitir la selección en cualquier fecha
+            'end': ''  # Fecha de fin vacía para permitir la selección en cualquier fecha
+        })
+    
+    return render(request, 'app/services.html', {'barrels_data': barrels_data})

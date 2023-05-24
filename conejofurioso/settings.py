@@ -46,7 +46,8 @@ INSTALLED_APPS = [
     'django.contrib.humanize',
     'crispy_forms',
     'crispy_bootstrap5',
-    'rest_framework'
+    'rest_framework',
+    'schedule'
 
 ]
 
@@ -83,6 +84,15 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'conejofurioso.wsgi.application'
+
+# Configuración para el envío de correo electrónico
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_HOST_USER = 'erreapectm@gmail.com'  # Tu dirección de correo electrónico
+EMAIL_HOST_PASSWORD = 'pouwksiilwdoiblc'  # Tu contraseña de correo electrónico
+EMAIL_USE_TLS = True
+DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
 
 
 # Database

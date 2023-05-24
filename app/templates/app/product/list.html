@@ -48,6 +48,7 @@
                             <th>Destacado</th>
                             <th>Unidades</th>
                             <th>Nuevo</th>
+                            <th>Creacion</th>
                             {% if perms.app.change_product %}
                             <th>Modificar</th>
                             {% endif %}
@@ -81,6 +82,8 @@
                         {% else %}
                         <td>No</td>
                         {% endif %}
+
+                        <td>{{p.created_at}}</td>
 
                         {% if perms.app.change_product %}
                         <td>
