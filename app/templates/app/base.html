@@ -64,23 +64,20 @@
             </div>
             {% else %}
             <div class="nav-item login">
-              <a class="nav-link" aria-current="page" href="{% url 'login' %}">INICIAR SESIÓN</a>
+              <a class="nav-link" aria-current="page" href="{% url 'login' %}">INICIAR SESIÓN | REGISTRARSE</a>
             </div>
           </div>
 
-          <!--<div class="nav-item register"> 
-                <a class="nav-link" aria-current="page" href="{% url 'register' %}">Registrate</a>
-              </div>-->
-
+          <div class="nav-item cart">
+            <a class="nav-link" aria-current="page" href="{% url 'Cart' %}">CARRITO</a>
+          </div>
           {% endif %}
-
-
-
         </div>
   </div>
   </nav>
   </header>
   </div>
+
   <main class="bg-primary-2">
 
     {% block content %}
@@ -115,16 +112,35 @@
 
   {% if messages %}
   {% for m in messages %}
-  <script>
-    Swal.fire({
-      "title": "Felicitaciones",
-      "text": "{{m}}",
-      "icon": "success"
-    })
-  </script>
+    {% if m.tags == 'confirm' %}
+      <script>
+        Swal.fire({
+          title: "Confirmación",
+          text: "{{ m }}",
+          icon: "warning",
+          showCancelButton: true,
+          confirmButtonText: "Sí",
+          cancelButtonText: "No"
+        }).then((result) => {
+          if (result.isConfirmed) {
+            // Lógica para eliminar el producto
+            // Puedes realizar una petición AJAX o redirigir a una URL específica
+          } else {
+            // Lógica si el usuario cancela la eliminación
+          }
+        });
+      </script>
+    {% else %}
+      <script>
+        Swal.fire({
+          title: "{% if m.tags == 'success' %}Felicitaciones{% else %}Error{% endif %}",
+          text: "{{ m }}",
+          icon: "{% if m.tags == 'success' %}success{% else %}error{% endif %}"
+        });
+      </script>
+    {% endif %}
   {% endfor %}
-  {% endif %}
-
+{% endif %}
 
   {% block js %}
   {% endblock %}

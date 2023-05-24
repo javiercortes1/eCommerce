@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from .forms import ContactForm, ProductForm, CustomUserCreationForm
+from .forms import ContactForm, ProductForm, CustomUserCreationForm, CategoryForm
 from django.contrib import messages
 from django.contrib.auth import authenticate ,login 
 from .models import Product, Category
@@ -9,12 +9,13 @@ from rest_framework import viewsets
 from .serializers import ProductSerializer, CategorySerializer
 import requests
 from django.contrib.auth.decorators import login_required, permission_required
+from django.core.cache import cache
+from app.cart import Cart
 
 # Create your views here.
 class CategoryViewset(viewsets.ModelViewSet):
     queryset = Category.objects.all()
     serializer_class = CategorySerializer
-
 
 class ProductViewset(viewsets.ModelViewSet):
     queryset = Product.objects.all()
@@ -50,15 +51,36 @@ def home(request):
     return render(request, 'app/home.html', data)
 
 def catalogue(request):
+    name_filter = request.GET.get('name', '')
+    category_filter = request.GET.get('category', '')
+    min_price_filter = request.GET.get('min_price', '')
+    max_price_filter = request.GET.get('max_price', '')
+
     products = Product.objects.all()
+    categories = Category.objects.all()  # Obtener todas las categorías
+
+    if name_filter:
+        products = products.filter(name__icontains=name_filter)
+
+    if category_filter:
+        products = products.filter(category_id=category_filter)
+
+    if min_price_filter:
+        products = products.filter(price__gte=min_price_filter)
+
+    if max_price_filter:
+        products = products.filter(price__lte=max_price_filter)
+
+    if 'clear_filters' in request.GET:
+        # Si se hizo clic en el botón de eliminar filtros, reiniciar los filtros
+        products = Product.objects.all()
+
     data = {
-        'products': products
+        'products': products,
+        'categories': categories,
     }
-    # response = requests.get('http://127.0.0.1:8000/api/product/').json()
-    # data = {
-    #      'products': response
-    #  }
-    return render(request, 'app/catalogue.html',data)
+
+    return render(request, 'app/catalogue.html', data)
 
 def services(request):
     return render(request, 'app/services.html')
@@ -77,6 +99,7 @@ def contact(request):
             data["form"] = form
     return render(request, 'app/contact.html', data)
 
+#product
 @permission_required('app.add_product')
 def add_product(request):
 
@@ -148,10 +171,7 @@ def product_detail(request, id):
 
     return render(request, 'app/product/detail.html',data)
 
-
-
-
-
+#register
 def register(request):
     data = {
         'form' : CustomUserCreationForm()
@@ -167,3 +187,120 @@ def register(request):
             return redirect(to="home") 
         data ["form"] = formulario    
     return render(request,'registration/register.html', data)
+
+#carrito
+def add_prod_cart(request, product_id):
+    cart = Cart(request)
+    product = Product.objects.get(id=product_id)
+    
+    if product.stock <= 0:
+        messages.error(request, "Error: Product is out of stock.")
+    elif cart.get_product_quantity(product) >= product.stock:
+        messages.error(request, "Error: Maximum stock limit reached.")
+    else:
+        cart.add(product)
+        # messages.success(request, "Product added to cart successfully.")
+    
+    return redirect(to="Cart")
+
+def del_prod_cart(request, product_id):
+    cart = Cart(request)
+    product = Product.objects.get(id=product_id)
+    cart.delete(product)
+    return redirect(to="Cart")
+
+def subtract_product_cart(request, product_id):
+    cart = Cart(request)
+    product = Product.objects.get(id=product_id)
+    cart.subtract(product)
+    return redirect("Cart")
+
+def clean_cart(request):
+    cart = Cart(request)
+    cart.clean()
+    return redirect("Cart")
+
+def cart_page(request):
+    products = Product.objects.all()
+    data = {
+        'products': products
+    }
+    
+    return render(request, 'app/cart_page.html', data)
+
+# def checkout(request):
+
+#     return render(request,'core/checkout.html')
+
+def buy_confirm(request):
+    cart = Cart(request)
+    cart.buy()
+    cart.clean()
+    return redirect('cart')
+
+# def pago_exitoso(request):
+
+#     return render(request,'core/pago_exitoso.html')
+
+#Category
+@permission_required('app.add_category')
+def add_category(request):
+
+    data = {
+        'form': CategoryForm()
+    }
+
+    if request.method == 'POST':
+        form = CategoryForm(data=request.POST, files=request.FILES)
+        if form.is_valid():
+            form.save()
+            messages.success(request, "Categoria Agregada")
+            return redirect(to="list_category")
+        else:
+            data["form"] = form
+    return render(request, 'app/category/add.html',data)
+
+@permission_required('app.view_category')
+def list_category(request):
+    categories = Category.objects.all()
+    page = request.GET.get('page', 1)
+
+    try:
+        paginator = Paginator(categories, 5)
+        categories = paginator.page(page)
+    except:
+        raise Http404
+
+
+    data = {
+        'entity': categories,
+        'paginator': paginator
+    }
+    return render(request, 'app/category/list.html', data)
+
+@permission_required('app.change_category')
+def update_category(request, id):
+
+    category = get_object_or_404(Category, id=id)
+
+    data = {
+        'form':CategoryForm(instance=category)
+    }
+
+    if request.method == 'POST':
+        form = CategoryForm(data=request.POST, instance=category, files=request.FILES)
+        if form.is_valid():
+            form.save()
+            messages.success(request, "Modificado correctamente")
+            return redirect(to="list_category")
+        data["form"] = form
+
+
+    return render(request, 'app/category/update.html',data)
+
+@permission_required('app.delete_category')
+def delete_category(request, id):
+    category = get_object_or_404(Category, id=id)
+    category.delete()
+    messages.success(request, "Eliminado correctamente")
+    return redirect(to="list_category")
