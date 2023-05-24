@@ -12,7 +12,7 @@ class Category(models.Model):
 
 class Product(models.Model):
     name = models.CharField(max_length=50)
-    price = models.IntegerField(max_length=10)
+    price = models.IntegerField()
     description = models.TextField(max_length=200)
     new = models.BooleanField(default=True)
     category = models.ForeignKey(Category, on_delete=models.PROTECT)
