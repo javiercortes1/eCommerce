@@ -7,7 +7,7 @@ django.setup()
 
 import schedule
 import time
-from datetime import datetime, timedelta
+from datetime import timedelta
 from app.models import Product
 from django.utils import timezone
 
