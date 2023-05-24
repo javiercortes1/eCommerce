@@ -4,7 +4,7 @@ from .views import home, services, catalogue, contact,\
           ProductViewset, CategoryViewset, register, product_detail,\
           add_prod_cart, del_prod_cart, subtract_product_cart,\
           clean_cart, cart_page, buy_confirm, add_category,\
-              list_category, update_category, delete_category
+              list_category, update_category, delete_category, admin_panel
 
 from rest_framework import routers
 
@@ -36,6 +36,7 @@ urlpatterns = [
     path("cart/", cart_page, name="Cart"),
     # path("checkout/", checkout, name="Checkout"),
     path("buy-confirm/", buy_confirm, name="buy_confirm"),
+    path("admin-panel/", admin_panel, name="admin_panel"),
     # path("success-payment/", pago_exitoso, name="pago_exitoso"),
 
 ]

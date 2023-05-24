@@ -46,19 +46,24 @@
                 <a class="nav-link" href="{% url 'contact' %}">CONTACTO</a>
               </li>
             </ul>
-
+  
             {% if user|has_group:"Administrador" %}
-            <div class="nav-item admin">
-              <a class="nav-link" aria-current="page" href="{% url 'list_product' %}">ADMINISTRACIÓN</a>
+            <div class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" id="adminDropdown" role="button" data-bs-toggle="dropdown"
+                aria-expanded="false">ADMINISTRACIÓN</a>
+              <ul class="dropdown-menu" aria-labelledby="adminDropdown">
+                <li><a class="dropdown-item" href="{% url 'list_product' %}">Productos</a></li>
+                <li><a class="dropdown-item" href="{% url 'list_category' %}">Categorías</a></li>
+              </ul>
             </div>
             {% endif %}
-
+  
             {% if user.is_authenticated %}
             <input type="hidden" id="is-authenticated" value="{{ user.is_authenticated }}">
             <div class="nav-item logout">
               <a id="logout-link" class="nav-link" href="{% url 'logout' %}">CERRAR SESIÓN</a>
             </div>
-
+  
             <div class="nav-item username">
               <a class="nav-link" href="#">@{{ user.username }}</a>
             </div>
@@ -66,16 +71,16 @@
             <div class="nav-item login">
               <a class="nav-link" aria-current="page" href="{% url 'login' %}">INICIAR SESIÓN | REGISTRARSE</a>
             </div>
+            </div>
+  
+            <div class="nav-item cart">
+              <a class="nav-link" aria-current="page" href="{% url 'Cart' %}">CARRITO</a>
+            </div>
+            {% endif %}
           </div>
-
-          <div class="nav-item cart">
-            <a class="nav-link" aria-current="page" href="{% url 'Cart' %}">CARRITO</a>
-          </div>
-          {% endif %}
         </div>
-  </div>
-  </nav>
-  </header>
+      </nav>
+    </header>
   </div>
 
   <main class="bg-primary-2">

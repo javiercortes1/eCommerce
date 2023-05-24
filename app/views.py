@@ -11,6 +11,7 @@ import requests
 from django.contrib.auth.decorators import login_required, permission_required
 from django.core.cache import cache
 from app.cart import Cart
+from django.core.mail import send_mail
 
 # Create your views here.
 class CategoryViewset(viewsets.ModelViewSet):
@@ -91,12 +92,33 @@ def contact(request):
     }
 
     if request.method == 'POST':
-        form = ContactForm(data=request.POST)
+        form = ContactForm(request.POST)
         if form.is_valid():
-            form.save()
-            data["message"] = "Enviado exitosamente"
-        else:
-            data["form"] = form
+            contact = form.save()
+
+            # Obtener los datos del formulario
+            name = contact.name
+            email = contact.email
+            phone = contact.phone
+            message = contact.message
+
+            # Construir el mensaje de correo electrónico con los datos del formulario
+            subject = 'Nuevo mensaje de contacto'
+            message = f'''
+                Se ha recibido un nuevo mensaje de contacto:
+                Nombre: {name}
+                Correo electrónico: {email}
+                Teléfono: {phone}
+                Mensaje: {message}
+            '''
+            from_email = 'erreapectm@gmail.com'  # Tu dirección de correo electrónico
+            to_email = 'dario.vera96@gmail.com'  # La dirección de correo electrónico del destinatario
+            send_mail(subject, message, from_email, [to_email])
+
+            return redirect('contact')  # Redireccionar a la página de éxito o cualquier otra página
+
+    else:
+        form = ContactForm()
     return render(request, 'app/contact.html', data)
 
 #product
@@ -304,3 +326,7 @@ def delete_category(request, id):
     category.delete()
     messages.success(request, "Eliminado correctamente")
     return redirect(to="list_category")
+
+def admin_panel(request):
+    
+    return render(request, 'app/admin_panel.html')
