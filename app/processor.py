@@ -4,3 +4,4 @@ def cart_total(request):
         for key, value in request.session["cart"].items():
             total += int(value["accumulated"])
     return {"cart_total": total}
+
