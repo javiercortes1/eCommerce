@@ -59,6 +59,11 @@ footer {
 
 }
 
+.card-home{
+    width: 250px;
+    height: 450px;
+}
+
 .btn-default {
     background-color: var(--color-primary-3) !important;
     border-width: 2px;
@@ -207,10 +212,6 @@ h5.noStock {
 
 
 /* para que en el catalogo las cards mantengan la misma estructura */
-.card-text.description {
-    height: 70px;
-    overflow: hidden;
-}
 
 .card-text.price {
     height: 25px;
@@ -220,12 +221,6 @@ h5.noStock {
 
 .card-body-featured {
     height: 250px;
-}
-
-.card-title {
-    font-weight: bold;
-    height: 50px;
-    overflow: auto;
 }
 
 .about-us p {

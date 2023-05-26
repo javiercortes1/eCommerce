@@ -1,9 +1,11 @@
 from django.db import models
 from django.contrib.auth.models import User
+from django.core.exceptions import ValidationError
+from django.utils import timezone
 
 # Create your models here.
 
-
+#categorias para producto
 class Category(models.Model):
     name = models.CharField(max_length=50)
     description = models.TextField(max_length=200)
@@ -12,7 +14,7 @@ class Category(models.Model):
     def __str__(self):
         return self.name
 
-
+#producto
 class Product(models.Model):
     name = models.CharField(max_length=50)
     price = models.IntegerField()
@@ -27,7 +29,7 @@ class Product(models.Model):
     def __str__(self):
         return self.name
 
-
+#tipo de consulta
 class QueryType(models.Model):
     name = models.CharField(max_length=50)
     description = models.TextField(max_length=200)
@@ -35,7 +37,7 @@ class QueryType(models.Model):
     def __str__(self):
         return self.name
 
-
+#consulta
 class Contact(models.Model):
     name = models.CharField(max_length=50)
     email = models.EmailField()
@@ -46,8 +48,8 @@ class Contact(models.Model):
     def __str__(self):
         return self.name
 
-
-class Barrel(models.Model):
+# modelo para objeto arrendable
+class Rentable(models.Model):
     name = models.CharField(max_length=50)
     description = models.TextField(max_length=200)
     available = models.BooleanField(default=True)
@@ -56,10 +58,10 @@ class Barrel(models.Model):
     def __str__(self):
         return self.name
 
-
+# modelo para el arriendo
 class Rental(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    barrels = models.ManyToManyField(Barrel)
+    rentables = models.ManyToManyField(Rentable)
     start_date = models.DateField()
     end_date = models.DateField()
     status = models.CharField(max_length=20)

@@ -1,5 +1,5 @@
 from django import forms
-from .models import Contact, Product, Category, QueryType, Rental, Barrel
+from .models import Contact, Product, Category, QueryType, Rental
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Layout, Submit
 from django.contrib.auth.forms import UserCreationForm
@@ -144,11 +144,11 @@ class RentalForm(forms.ModelForm):
 
     class Meta:
         model = Rental
-        fields = ['user', 'barrels', 'start_date',
+        fields = ['user', 'rentables', 'start_date',
                   'end_date', 'status', 'deposit_paid']
         labels = {
             'user': 'Usuario',
-            'barrels': 'Barriles',
+            'rentables': 'Arrendables',
             'start_date': 'Fecha de inicio',
             'end_date': 'Fecha de finalización',
             'status': 'Estado',
@@ -156,7 +156,7 @@ class RentalForm(forms.ModelForm):
         }
         widgets = {
             'user': forms.HiddenInput(),
-            'barrels': forms.CheckboxSelectMultiple(),
+            'rentables': forms.CheckboxSelectMultiple(),
             'status': forms.HiddenInput(),
             'deposit_paid': forms.HiddenInput()
         }
