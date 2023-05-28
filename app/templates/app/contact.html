@@ -51,7 +51,7 @@
         var form = new FormData(this);  // Obtener los datos del formulario
 
         // Realizar la solicitud POST a la API
-        fetch("{% url 'contact_api' %}", {
+        fetch("{% url 'contact-list' %}", {
             method: "POST",
             body: form
         })

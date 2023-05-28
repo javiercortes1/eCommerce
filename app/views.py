@@ -14,6 +14,7 @@ from app.cart import Cart
 from django.core.mail import send_mail
 from django.db.models import Q
 from datetime import date
+from rest_framework.response import Response
 
 # Create your views here.
 
@@ -54,43 +55,38 @@ class ProductViewset(viewsets.ModelViewSet):
 
         return products
     
-class ContactAPIView(generics.CreateAPIView):
+    def create(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        self.perform_create(serializer)
+        headers = self.get_success_headers(serializer.data)
+        return Response(serializer.data, status=201, headers=headers)
+    
+class ContactViewSet(viewsets.ModelViewSet):
     queryset = Contact.objects.all()
     serializer_class = ContactSerializer
 
-    def perform_create(self, serializer):
-        contact = serializer.save()
+    def create(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        contact = serializer.save()  # Utilizar el método save() del serializador
 
-        # Obtener los datos del formulario
-        name = contact.name
-        email = contact.email
-        phone = contact.phone
-        message = contact.message
-
-        # Construir el mensaje de correo electrónico con los datos del formulario
-        subject = 'Nuevo mensaje de contacto'
-        email_message = f'''
-            Se ha recibido un nuevo mensaje de contacto:
-            Nombre: {name}
-            Correo electrónico: {email}
-            Teléfono: {phone}
-            Mensaje: {message}
-        '''
-        from_email = 'erreapectm@gmail.com'  # Tu dirección de correo electrónico
-        # La dirección de correo electrónico del destinatario
-        to_email = 'dario.vera96@gmail.com'
-        send_mail(subject, email_message, from_email, [to_email])
+        headers = self.get_success_headers(serializer.data)
+        return Response(serializer.data, status=201, headers=headers)
 
 
 def home(request):
-    # products = Product.objects.all()
-    # data = {
-    #     'products': products
-    # }
-    response = requests.get('http://127.0.0.1:8000/api/product/?featured=True&new=True').json()
+    params = {
+        'featured': True,
+        'new': True
+    }
+    
+    response = requests.get('http://127.0.0.1:8000/api/product/', params=params).json()
+    
     data = {
-         'products': response
-     }
+        'products': response
+    }
+    
     return render(request, 'app/home.html', data)
 
 
@@ -136,43 +132,12 @@ def contact(request):
         'form': ContactForm()
     }
 
-    if request.method == 'POST':
-        form = ContactForm(request.POST)
-        if form.is_valid():
-            contact = form.save()
-
-            # Obtener los datos del formulario
-            name = contact.name
-            email = contact.email
-            phone = contact.phone
-            message = contact.message
-
-            # Construir el mensaje de correo electrónico con los datos del formulario
-            subject = 'Nuevo mensaje de contacto'
-            email_message = f'''
-                Se ha recibido un nuevo mensaje de contacto:
-                Nombre: {name}
-                Correo electrónico: {email}
-                Teléfono: {phone}
-                Mensaje: {message}
-            '''
-            from_email = 'erreapectm@gmail.com'  # Tu dirección de correo electrónico
-            # La dirección de correo electrónico del destinatario
-            to_email = 'dario.vera96@gmail.com'
-            send_mail(subject, email_message, from_email, [to_email])
-
-            # Redireccionar a la página de éxito o cualquier otra página
-            return redirect('contact')
-
-    else:
-        form = ContactForm()
-    data['form'] = form
     return render(request, 'app/contact.html', data)
 
 # product
 
 
-@permission_required('app.add_product')
+# @permission_required('app.add_product')
 def add_product(request):
 
     data = {
@@ -190,9 +155,10 @@ def add_product(request):
     return render(request, 'app/product/add.html', data)
 
 
-@permission_required('app.view_product')
+# @permission_required('app.view_product')
 def list_product(request):
-    products = Product.objects.all()
+    response = requests.get('http://127.0.0.1:8000/api/product/')
+    products = response.json()
     page = request.GET.get('page', 1)
 
     try:
