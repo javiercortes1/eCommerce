@@ -2,11 +2,11 @@ from django.shortcuts import render, redirect, get_object_or_404
 from .forms import ContactForm, ProductForm, CustomUserCreationForm, CategoryForm, RentalForm
 from django.contrib import messages
 from django.contrib.auth import authenticate, login
-from .models import Product, Category, Rental
+from .models import Product, Category, Rental, Contact
 from django.core.paginator import Paginator, EmptyPage
 from django.http import Http404
-from rest_framework import viewsets
-from .serializers import ProductSerializer, CategorySerializer
+from rest_framework import viewsets, generics
+from .serializers import ProductSerializer, CategorySerializer, ContactSerializer
 import requests
 from django.contrib.auth.decorators import login_required, permission_required
 from django.core.cache import cache
@@ -34,6 +34,8 @@ class ProductViewset(viewsets.ModelViewSet):
         featured = self.request.GET.get('featured')
         category = self.request.GET.get('category')
         new = self.request.GET.get('new')
+        min_price = self.request.GET.get('min_price_filter')
+        max_price = self.request.GET.get('max_price_filter')
 
         if name:
             products = products.filter(name__contains=name)
@@ -43,45 +45,78 @@ class ProductViewset(viewsets.ModelViewSet):
             products = products.filter(category=category)
         if new:
             products = products.filter(new=True)
+        if min_price and max_price:
+            products = products.filter(price__range=(min_price, max_price))
+        elif min_price:
+            products = products.filter(price__gte=min_price)
+        elif max_price:
+            products = products.filter(price__lte=max_price)
+
         return products
+    
+class ContactAPIView(generics.CreateAPIView):
+    queryset = Contact.objects.all()
+    serializer_class = ContactSerializer
+
+    def perform_create(self, serializer):
+        contact = serializer.save()
+
+        # Obtener los datos del formulario
+        name = contact.name
+        email = contact.email
+        phone = contact.phone
+        message = contact.message
+
+        # Construir el mensaje de correo electrónico con los datos del formulario
+        subject = 'Nuevo mensaje de contacto'
+        email_message = f'''
+            Se ha recibido un nuevo mensaje de contacto:
+            Nombre: {name}
+            Correo electrónico: {email}
+            Teléfono: {phone}
+            Mensaje: {message}
+        '''
+        from_email = 'erreapectm@gmail.com'  # Tu dirección de correo electrónico
+        # La dirección de correo electrónico del destinatario
+        to_email = 'dario.vera96@gmail.com'
+        send_mail(subject, email_message, from_email, [to_email])
 
 
 def home(request):
-    products = Product.objects.all()
-    data = {
-        'products': products
-    }
-    # response = requests.get('http://127.0.0.1:8000/api/product/?featured=True&new=True').json()
+    # products = Product.objects.all()
     # data = {
-    #      'products': response
-    #  }
+    #     'products': products
+    # }
+    response = requests.get('http://127.0.0.1:8000/api/product/?featured=True&new=True').json()
+    data = {
+         'products': response
+     }
     return render(request, 'app/home.html', data)
 
 
 def catalogue(request):
     name_filter = request.GET.get('name', '')
     category_filter = request.GET.get('category', '')
-    min_price_filter = request.GET.get('min_price', '')
-    max_price_filter = request.GET.get('max_price', '')
+    min_price_filter = request.GET.get('min_price_filter', '')
+    max_price_filter = request.GET.get('max_price_filter', '')
 
-    products = Product.objects.all()
-    categories = Category.objects.all()  # Obtener todas las categorías
+    api_url = 'http://127.0.0.1:8000/api/product/'
 
-    if name_filter:
-        products = products.filter(name__icontains=name_filter)
+    params = {
+        'name': name_filter,
+        'category': category_filter,
+        'min_price_filter': min_price_filter,
+        'max_price_filter': max_price_filter,
+    }
 
-    if category_filter:
-        products = products.filter(category_id=category_filter)
+    response = requests.get(api_url, params=params)
+    products = response.json()
 
-    if min_price_filter:
-        products = products.filter(price__gte=min_price_filter)
-
-    if max_price_filter:
-        products = products.filter(price__lte=max_price_filter)
+    categories = requests.get('http://127.0.0.1:8000/api/category/').json()
 
     if 'clear_filters' in request.GET:
-        # Si se hizo clic en el botón de eliminar filtros, reiniciar los filtros
-        products = Product.objects.all()
+        response = requests.get('http://127.0.0.1:8000/api/product/').json()
+        products = response
 
     data = {
         'products': products,
@@ -114,7 +149,7 @@ def contact(request):
 
             # Construir el mensaje de correo electrónico con los datos del formulario
             subject = 'Nuevo mensaje de contacto'
-            message = f'''
+            email_message = f'''
                 Se ha recibido un nuevo mensaje de contacto:
                 Nombre: {name}
                 Correo electrónico: {email}
@@ -124,13 +159,14 @@ def contact(request):
             from_email = 'erreapectm@gmail.com'  # Tu dirección de correo electrónico
             # La dirección de correo electrónico del destinatario
             to_email = 'dario.vera96@gmail.com'
-            send_mail(subject, message, from_email, [to_email])
+            send_mail(subject, email_message, from_email, [to_email])
 
             # Redireccionar a la página de éxito o cualquier otra página
             return redirect('contact')
 
     else:
         form = ContactForm()
+    data['form'] = form
     return render(request, 'app/contact.html', data)
 
 # product

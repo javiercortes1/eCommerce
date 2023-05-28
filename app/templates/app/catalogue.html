@@ -23,20 +23,20 @@
               <select class="form-select" id="category-filter" name="category">
                 <option value="">Todas las categorías</option>
                 {% for category in categories %}
-                    <option value="{{ category.id }}">{{ category.name }}</option>
+                <option value="{{ category.id }}">{{ category.name }}</option>
                 {% endfor %}
-            </select>
+              </select>
             </div>
             <div class="mb-3">
               <label class="form-label">Precio mínimo</label>
-              <input type="number" class="form-control" placeholder="Ingrese el precio mínimo" name="min_price">
+              <input type="number" class="form-control" placeholder="Ingrese el precio mínimo" name="min_price_filter">
             </div>
             <div class="mb-3">
               <label class="form-label">Precio máximo</label>
-              <input type="number" class="form-control" placeholder="Ingrese el precio máximo" name="max_price">
+              <input type="number" class="form-control" placeholder="Ingrese el precio máximo" name="max_price_filter">
             </div>
             <button type="submit" class="btn bg-primary-3" name="filter_submit">Aplicar filtros</button>
-            {% if request.GET.name or request.GET.category or request.GET.min_price or request.GET.max_price %}
+            {% if request.GET.name or request.GET.category or request.GET.min_price_filter or request.GET.max_price_filter %}
             <button type="submit" class="btn bg-primary-3" name="clear_filters">Eliminar filtros</button>
             {% endif %}
           </form>
@@ -48,7 +48,11 @@
         {% for p in products %}
         <div class="col-6 col-md-4 col-lg-3 mb-4">
           <div class="card h-100">
-            <img src="{{ p.image.url }}" class="card-img-top" alt="{{ product.name }}" style="height: 150px;">
+            {% if p.image %}
+            <img src="{{ p.image }}" class="card-img-top" alt="{{ product.name }}" style="height: 150px;">
+            {% else %}
+            <div class="missing-image">Imagen no disponible</div>
+            {% endif %}
             <div class="card-body text-center">
               <div class="row">
                 <h5 class="card-title">{{ p.name }}</h5>
@@ -61,7 +65,8 @@
               </div>
             </div>
             <div class="card-footer" style="text-align: center;">
-              <a href="{% url 'Add' p.id %}" class="btn btn-default bg-primary-3 view-detail-btn add-to-cart-btn">Agregar al Carrito</a>
+              <a href="{% url 'Add' p.id %}"
+                class="btn btn-default bg-primary-3 view-detail-btn add-to-cart-btn">Agregar al Carrito</a>
             </div>
           </div>
         </div>
