@@ -15,6 +15,8 @@ from django.core.mail import send_mail
 from django.db.models import Q
 from datetime import date
 from rest_framework.response import Response
+from django.conf import settings
+import json
 
 # Create your views here.
 
@@ -62,6 +64,9 @@ class ProductViewset(viewsets.ModelViewSet):
         headers = self.get_success_headers(serializer.data)
         return Response(serializer.data, status=201, headers=headers)
     
+    def perform_create(self, serializer):
+        serializer.save()
+    
 class ContactViewSet(viewsets.ModelViewSet):
     queryset = Contact.objects.all()
     serializer_class = ContactSerializer
@@ -81,7 +86,7 @@ def home(request):
         'new': True
     }
     
-    response = requests.get('http://127.0.0.1:8000/api/product/', params=params).json()
+    response = requests.get(settings.API_BASE_URL + 'product/', params=params).json()
     
     data = {
         'products': response
@@ -139,19 +144,60 @@ def contact(request):
 
 # @permission_required('app.add_product')
 def add_product(request):
-
-    data = {
-        'form': ProductForm()
-    }
-
     if request.method == 'POST':
-        form = ProductForm(data=request.POST, files=request.FILES)
+        form = ProductForm(request.POST, request.FILES)
         if form.is_valid():
-            form.save()
-            messages.success(request, "Producto Agregado")
-            return redirect(to="list_product")
+            # Obtener los datos del formulario
+            name = form.cleaned_data['name']
+            price = form.cleaned_data['price']
+            description = form.cleaned_data['description']
+            new = form.cleaned_data['new']
+            category_id = form.cleaned_data['category'].id  # Obtener el ID de la categoría
+            stock = form.cleaned_data['stock']
+            featured = form.cleaned_data['featured']
+            image = form.cleaned_data['image']
+
+            # Crear un diccionario con los datos del producto
+            product_data = {
+                'name': name,
+                'price': price,
+                'description': description,
+                'new': new,
+                'category': category_id,  # Usar el ID de la categoría
+                'stock': stock,
+                'featured': featured,
+                'image': image
+            }
+
+            # Imprimir los datos del formulario para depuración
+            print(f'Product Data: {product_data}')
+
+            # Convertir los datos en formato JSON
+            json_data = json.dumps(product_data)
+
+            # Realizar una solicitud POST a la API para crear el producto
+            response = requests.post(
+                settings.API_BASE_URL + 'product/',
+                json=product_data  # Enviar los datos como JSON
+)
+
+            if response.status_code == 201:
+                print('Producto creado exitosamente')
+                return redirect('list_product')
+            else:
+                # Manejar el caso de error en la solicitud
+                print(f'Error al crear el producto: {response.content}')
+                error_message = "Error al crear el producto a través de la API"
         else:
-            data["form"] = form
+            error_message = "Error en los datos del formulario"
+        data = {
+            'form': form,
+            'error_message': error_message
+        }
+    else:
+        data = {
+            'form': ProductForm()
+        }
     return render(request, 'app/product/add.html', data)
 
 
