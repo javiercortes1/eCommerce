@@ -68,9 +68,9 @@
           {% endif %}
           <div class="card-body d-flex flex-column align-items-center">
             <div class="text-center">
-              <h5 class="card-title">{{ p.name | capfirst }}</h5>
+              <h5 class="card-title custom-card-title">{{ p.name | capfirst }}</h5>
             </div>
-            {% comment %}<p class="card-text description">{{ p.description }}</p>{% endcomment %}
+            <p class="card-text custom-card-description"></p>
             <div class="mt-auto text-center">
               <p class="card-text price"><b> ${{ p.price | intcomma }}</b></p>
               {% if p.stock > 0 %}
@@ -169,8 +169,9 @@
           {% endif %}
           <div class="card-body d-flex flex-column align-items-center">
             <div class="text-center">
-              <h5 class="card-title">{{ p.name | capfirst }}</h5>
+              <h5 class="card-title custom-card-title">{{ p.name | capfirst }}</h5>
             </div>
+            <p class="card-text custom-card-description"></p>
             <div class="mt-auto text-center">
               <p class="card-text price"><b> ${{ p.price | intcomma }}</b></p>
               {% if p.stock > 0 %}

@@ -178,6 +178,16 @@ footer {
   height: 250px;
 }
 
+.custom-card-title {
+  height: 50px; /* Establece una altura fija para el título */
+  overflow: hidden; /* Oculta el contenido que se desborda */
+}
+
+.custom-card-description {
+  height: 70px; /* Establece una altura fija para la descripción */
+  overflow: hidden; /* Oculta el contenido que se desborda */
+}
+
 /* BOTONES */
 
 .btn-default {
