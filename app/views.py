@@ -17,6 +17,12 @@ from datetime import date
 from rest_framework.response import Response
 from django.conf import settings
 import json
+import base64
+from django.core.files.uploadedfile import InMemoryUploadedFile
+import io
+import logging
+from django.http import QueryDict
+from django.utils.datastructures import MultiValueDict
 
 # Create your views here.
 
@@ -166,20 +172,14 @@ def add_product(request):
                 'category': category_id,  # Usar el ID de la categoría
                 'stock': stock,
                 'featured': featured,
-                'image': image
             }
-
-            # Imprimir los datos del formulario para depuración
-            print(f'Product Data: {product_data}')
-
-            # Convertir los datos en formato JSON
-            json_data = json.dumps(product_data)
 
             # Realizar una solicitud POST a la API para crear el producto
             response = requests.post(
                 settings.API_BASE_URL + 'product/',
-                json=product_data  # Enviar los datos como JSON
-)
+                data=product_data,  # Enviar los datos como formulario
+                files={'image': image}  # Adjuntar el archivo de imagen
+            )
 
             if response.status_code == 201:
                 print('Producto creado exitosamente')
@@ -203,7 +203,7 @@ def add_product(request):
 
 # @permission_required('app.view_product')
 def list_product(request):
-    response = requests.get('http://127.0.0.1:8000/api/product/')
+    response = requests.get(settings.API_BASE_URL + 'product/')
     products = response.json()
     page = request.GET.get('page', 1)
 
@@ -220,43 +220,103 @@ def list_product(request):
     return render(request, 'app/product/list.html', data)
 
 
-@permission_required('app.change_product')
+#@permission_required('app.change_product')
 def update_product(request, id):
-
     product = get_object_or_404(Product, id=id)
 
+    if request.method == 'POST':
+        form = ProductForm(request.POST, request.FILES)
+
+        if form.is_valid():
+            name = form.cleaned_data['name']
+            existing_product = Product.objects.exclude(id=id).filter(name__iexact=name).first()
+            if existing_product:
+                if existing_product.id != product.id:
+                    form.add_error('name', 'Este producto ya existe')
+                    error_message = "Este producto ya existe"  # Agregar definición de error_message
+            else:
+                price = form.cleaned_data['price']
+                description = form.cleaned_data['description']
+                new = form.cleaned_data['new']
+                category_id = form.cleaned_data['category'].id
+                stock = form.cleaned_data['stock']
+                featured = form.cleaned_data['featured']
+                image = form.cleaned_data['image']
+
+                product_data = {
+                    'name': name,
+                    'price': price,
+                    'description': description,
+                    'new': new,
+                    'category': category_id,
+                    'stock': stock,
+                    'featured': featured,
+                }
+
+                response = requests.put(
+                    settings.API_BASE_URL + f'product/{id}/',
+                    data=product_data,
+                    files={'image': image}
+                )
+
+                if response.status_code == 200:
+                    print('Producto actualizado exitosamente')
+                    messages.success(request, "Modificado correctamente")
+                    return redirect(to="list_product")
+                else:
+                    print(f'Error al actualizar el producto: {response.content}')
+                    error_message = "Error al actualizar el producto a través de la API"
+        else:
+            error_message = "Error en los datos del formulario"
+    else:
+        form = ProductForm(instance=product)
+        error_message = ""
+
     data = {
-        'form': ProductForm(instance=product)
+        'form': form,
+        'error_message': error_message
     }
 
-    if request.method == 'POST':
-        form = ProductForm(data=request.POST,
-                           instance=product, files=request.FILES)
-        if form.is_valid():
-            form.save()
-            messages.success(request, "Modificado correctamente")
-            return redirect(to="list_product")
-        data["form"] = form
-
     return render(request, 'app/product/update.html', data)
-
 
 @permission_required('app.delete_product')
 def delete_product(request, id):
     product = get_object_or_404(Product, id=id)
-    product.delete()
-    messages.success(request, "Eliminado correctamente")
-    return redirect(to="list_product")
+
+    # Realizar una solicitud DELETE a la API para eliminar el producto
+    response = requests.delete(settings.API_BASE_URL + f'product/{id}/')
+
+    if response.status_code == 204:
+        product.delete()
+        messages.success(request, "Eliminado correctamente")
+        return redirect(to="list_product")
+    else:
+        # Manejar el caso de error en la solicitud
+        print(f'Error al eliminar el producto: {response.content}')
+        error_message = "Error al eliminar el producto a través de la API"
+        data = {
+            'form': ProductForm(instance=product),
+            'error_message': error_message
+        }
+        return render(request, 'app/product/update.html', data)
 
 
 def product_detail(request, id):
-    product = get_object_or_404(Product, id=id)
+    # Realizar una solicitud GET a la API para obtener los detalles del producto
+    response = requests.get(settings.API_BASE_URL + f'product/{id}/')
 
-    data = {
-        'product': product
-    }
-
-    return render(request, 'app/product/detail.html', data)
+    if response.status_code == 200:
+        product_data = response.json()
+        product = Product(**product_data)
+        data = {
+            'product': product
+        }
+        return render(request, 'app/product/detail.html', data)
+    else:
+        # Manejar el caso de error en la solicitud
+        print(f'Error al obtener los detalles del producto: {response.content}')
+        error_message = "Error al obtener los detalles del producto a través de la API"
+        return render(request, 'app/product/detail.html', {'error_message': error_message})
 
 # register
 
