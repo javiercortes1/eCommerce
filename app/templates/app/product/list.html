@@ -46,11 +46,16 @@
                             <th>Valor</th>
                             <th>Categoria</th>
                             <th>Destacado</th>
-                            <th>Cantidad(cc)</th>
                             <th>Unidades</th>
                             <th>Nuevo</th>
+                            <th>Creacion</th>
+                            {% if perms.app.change_product %}
                             <th>Modificar</th>
+                            {% endif %}
+
+                            {% if perms.app.delete_product %}
                             <th>Eliminar</th>
+                            {% endif %}
                         </tr>
                     </thead>
                     <tbody>
@@ -70,7 +75,6 @@
                         <td>No</td>
                         {% endif %}
 
-                        <td>{{p.cc}}</td>
                         <td>{{p.stock}}</td>
 
                         {% if p.new %}
@@ -79,12 +83,19 @@
                         <td>No</td>
                         {% endif %}
 
+                        <td>{{p.created_at}}</td>
+
+                        {% if perms.app.change_product %}
                         <td>
                             <a href="{% url 'update_product' p.id %}" class="btn btn-info btn-sm">Modificar</a>
                         </td>
+                        {% endif %}
+
+                        {% if perms.app.delete_product %}
                         <td>
                             <a href="#" onclick="delete_Product({{ p.id }})" class="btn btn-danger btn-sm">Eliminar</a>
                         </td>
+                        {% endif %}
                     </tr>
 
                     {% endfor %}
@@ -101,7 +112,7 @@
 
                 <div class="col">
                     <a href="{% url 'home' %}">
-                        <button class="btn bg-primary" type="button">Volver al Inicio</button>
+                        <button class="btn btn-default bg-primary-3" type="button">Volver al Inicio</button>
                     </a>
                 </div>
 
@@ -113,11 +124,14 @@
 
                 </div>
 
+                {% if perms.app.add_product %}
                 <div class="col">
                     <a href="{% url 'add_product' %}">
-                        <button class="btn bg-primary" type="button">Agregar Nuevo</button>
+                        <button class="btn btn-default bg-primary-3" type="button">Agregar Nuevo</button>
                     </a>
                 </div>
+                {% endif %}
+
             </div>
         </div>
     </div>

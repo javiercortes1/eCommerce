@@ -4,10 +4,6 @@
 <title>Catalogo | Conejo Furioso</title>
 {% endblock %}
 
-{% block js %}
-<script src="{% static 'js/catalogue.js' %}"></script>
-{% endblock %}
-
 {% block content %}
 {% load humanize %}
 <br><br><br><br><br><br>
@@ -15,52 +11,57 @@
   <div class="row">
     <div class="col-md-3">
       <div class="card">
-        <div class="card-body">
+        <div class="card-body ">
           <h5 class="card-title">Filtros</h5>
           <form>
             <div class="mb-3">
               <label class="form-label">Buscar por nombre</label>
-              <input type="text" class="form-control" placeholder="Ingrese el nombre">
+              <input type="text" class="form-control" placeholder="Ingrese el nombre" name="name">
             </div>
             <div class="mb-3">
               <label class="form-label">Filtrar por categoría</label>
-              <select class="form-select" id="category-filter">
+              <select class="form-select" id="category-filter" name="category">
                 <option value="">Todas las categorías</option>
                 {% for category in categories %}
-                <option value="{{ category.id }}">{{ category.name }}</option>
+                    <option value="{{ category.id }}">{{ category.name }}</option>
                 {% endfor %}
-              </select>
+            </select>
             </div>
             <div class="mb-3">
               <label class="form-label">Precio mínimo</label>
-              <input type="number" class="form-control" placeholder="Ingrese el precio mínimo">
+              <input type="number" class="form-control" placeholder="Ingrese el precio mínimo" name="min_price">
             </div>
             <div class="mb-3">
               <label class="form-label">Precio máximo</label>
-              <input type="number" class="form-control" placeholder="Ingrese el precio máximo">
+              <input type="number" class="form-control" placeholder="Ingrese el precio máximo" name="max_price">
             </div>
-            <button type="submit" class="btn btn-primary">Aplicar filtros</button>
+            <button type="submit" class="btn bg-primary-3" name="filter_submit">Aplicar filtros</button>
+            {% if request.GET.name or request.GET.category or request.GET.min_price or request.GET.max_price %}
+            <button type="submit" class="btn bg-primary-3" name="clear_filters">Eliminar filtros</button>
+            {% endif %}
           </form>
         </div>
       </div>
     </div>
     <div class="col-md-9">
       <div class="row row-cols-1 row-cols-md-3 g-4">
-        {% for product in products %}
+        {% for p in products %}
         <div class="col-6 col-md-4 col-lg-3 mb-4">
           <div class="card h-100">
-              <img src="{{ product.image.url }}" class="card-img-top" alt="{{ product.name }}" style="height: 150px;">
-            </a>
-            <div class="card-body">
-              <h5 class="card-title">{{ product.name }}</h5>
-              <p class="card-text">{{ product.description }}</p>
-              <p class="card-text">Precio: ${{ product.price }}</p>
-              <div class="d-flex justify-content-between">
-                <button class="btn btn-primary add-to-cart flex-grow-2 flex-sm-grow-1">Agregar al carrito</button>
-                <div class="input-group quantity-input flex-grow-1 flex-sm-grow-2">
-                  <input type="number" class="form-control form-control-sm" value="1">
-                </div>
+            <img src="{{ p.image.url }}" class="card-img-top" alt="{{ product.name }}" style="height: 150px;">
+            <div class="card-body text-center">
+              <div class="row">
+                <h5 class="card-title">{{ p.name }}</h5>
               </div>
+              <div class="row">
+                <p class="card-text description">{{ p.description }}</p>
+              </div>
+              <div class="row">
+                <p class="card-text price">Precio: ${{ p.price }}</p>
+              </div>
+            </div>
+            <div class="card-footer" style="text-align: center;">
+              <a href="{% url 'Add' p.id %}" class="btn btn-default bg-primary-3 view-detail-btn add-to-cart-btn">Agregar al Carrito</a>
             </div>
           </div>
         </div>

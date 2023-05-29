@@ -30,6 +30,9 @@ ALLOWED_HOSTS = ['127.0.0.1', 'darioveram.pythonanywhere.com']
 
 MESSAGE_STORAGE = "django.contrib.messages.storage.cookie.CookieStorage"
 
+LOGIN_REDIRECT_URL = '/'
+LOGOUT_REDIRECT_URL ='/'
+
 # Application definition
 
 INSTALLED_APPS = [
@@ -43,6 +46,8 @@ INSTALLED_APPS = [
     'django.contrib.humanize',
     'crispy_forms',
     'crispy_bootstrap5',
+    'rest_framework',
+    'schedule'
 
 ]
 
@@ -72,12 +77,22 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'app.processor.cart_total'
             ],
         },
     },
 ]
 
 WSGI_APPLICATION = 'conejofurioso.wsgi.application'
+
+# Configuración para el envío de correo electrónico
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_HOST_USER = 'erreapectm@gmail.com'  # Tu dirección de correo electrónico
+EMAIL_HOST_PASSWORD = 'pouwksiilwdoiblc'  # Tu contraseña de correo electrónico
+EMAIL_USE_TLS = True
+DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
 
 
 # Database
@@ -136,3 +151,9 @@ MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
+    }
+}

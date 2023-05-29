@@ -5,6 +5,11 @@
 <title>Conejo Furioso</title>
 {% endblock %}
 
+{% block js %}
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="{% static 'app/js/product_detail.js' %}"></script>
+{% endblock %}
+
 {% block content %}
 <!-- container para el carrousel -->
 <div class="container-fluid mt-3">
@@ -43,37 +48,33 @@
       </button>
     </div>
   </div>
+</div>
   <!-- aca termina el carrousel -->
 
   <!-- seccion cards/productos destacados -->
   {% load humanize %}
   <div class="container">
-    <section class="pb-5 mt-5">
-      <h2 class="text-center pb-4 mb-5">Productos Destacados</h2>
-      <div class="row">
+    <section class="pb-5">
+      <h1 class="text-center py-5">PRODUCTOS DESTACADOS</h1>
+      <div class="row justify-content-center">
         {% for p in products %}
         {% if p.featured %}
-        <div class="col-xxl-2 col-xl-3 col-lg-4 col-md-6">
-          <div class="card">
-            {% if p.image %}
+        <div class="col-xxl-3 col-xl-3 col-lg-4 col-md-6">
+          <div class="card card-home">
             <img src="{{ p.image.url }}" class="card-img-top" alt="...">
-            {% endif %}
-            <div class="card-body featured">
-              <h5 class="card-title">{{p.category | capfirst }} </h5>
-              <h4 class="card-title">{{p.name | capfirst }} </h4>
-              <p class="card-text">{{p.description }}</p>
-              <p class="card-text">Disponible: {{p.stock}}</p>
-              <p class="card-text"><b>CLP ${{ p.price | intcomma }}</b></p>
-              {% if p.stock > 0 %}
-              <div style="display: flex; justify-content: center; align-items: center;">
-                <a href="#" class="btn bg-primary">Agregar al Carrito</a>
+            <div class="card-body d-flex flex-column align-items-center">
+              <div class="text-center">
+                <h5 class="card-title">{{ p.name | capfirst }}</h5>
               </div>
-              {% else %}
-              <div style="display: flex; justify-content: center; align-items: center;">
-                <h5 class="noStock"><b>Sin Stock</b></h5>
+              {% comment %} <p class="card-text description">{{ p.description }}</p> {% endcomment %}
+              <div class="mt-auto text-center">
+                <p class="card-text price"><b> ${{ p.price | intcomma }}</b></p>
+                {% if p.stock > 0 %}
+                <a href="#" class="btn btn-default bg-primary-3 view-detail-btn" data-product-id="{{ p.id }}">Ver Detalle</a>
+                {% else %}
+                <h4 class="text-center"><b>Sin Stock</b></h4>
+                {% endif %}
               </div>
-              {% endif %}
-              <p></p>
             </div>
           </div>
         </div>
@@ -83,83 +84,98 @@
     </section>
   </div>
 
-   <!-- seccion quienes somos -->
+  <!-- seccion quienes somos -->
   <div class="container">
     <section class="pb-5 mt-5">
-      <h1 class="text-center pb-4 mb-5">Quiénes Somos</h1>
-      
-      <div style="display: flex;">
-        <img src="{% static 'app/img/quienes somos.webp' %}" style="float: left; margin-right: 10px; width: 50%;" alt="...">
-        <div>
+      <h1 class="text-center pb-4 mb-5">QUIÉNES SOMOS</h1>
+      <div class="row">
+        <div class="col-xxl-6 col-xl-6 col-lg-6 col-md-12 col-sm-12">
+          <div style="display: flex;">
+            <img src="{% static 'app/img/quienes somos.webp' %}"
+              style="float: left; margin-right: 10px; width: 450px; height: 450px;" alt="...">
+          </div>
+        </div>
+        <div class="col-xxl-6 col-xl-6 col-lg-6 col-md-12 col-sm-12 ">
           <h1>Cervecería artesanal Conejo Furioso</h1>
-          <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Odio voluptate eveniet repellat similique dolore veritatis corporis non nesciunt quisquam alias asperiores odit minima ipsa pariatur corrupti, quaerat itaque sapiente suscipit!
-            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Odio voluptate eveniet repellat similique dolore veritatis corporis non nesciunt quisquam alias asperiores odit minima ipsa pariatur corrupti, quaerat itaque sapiente suscipit!
-            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Odio voluptate eveniet repellat similique dolore veritatis corporis non nesciunt quisquam alias asperiores odit minima ipsa pariatur corrupti, quaerat itaque sapiente suscipit!
-            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Odio voluptate eveniet repellat similique dolore veritatis corporis non nesciunt quisquam alias asperiores odit minima ipsa pariatur corrupti, quaerat itaque sapiente suscipit!
-            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Odio voluptate eveniet repellat similique dolore veritatis corporis non nesciunt quisquam alias asperiores odit minima ipsa pariatur corrupti, quaerat itaque sapiente suscipit!
+          <div class="about-us">
+          <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Odio voluptate eveniet repellat similique
+            dolore veritatis corporis non nesciunt quisquam alias asperiores odit minima ipsa pariatur corrupti,
+            quaerat itaque sapiente suscipit!
+            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Odio voluptate eveniet repellat similique dolore
+            veritatis corporis non nesciunt quisquam alias asperiores odit minima ipsa pariatur corrupti, quaerat
+            itaque sapiente suscipit!
+            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Odio voluptate eveniet repellat similique dolore
+            veritatis corporis non nesciunt quisquam alias asperiores odit minima ipsa pariatur corrupti, quaerat
+            itaque sapiente suscipit!
+            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Odio voluptate eveniet repellat similique dolore
+            veritatis corporis non nesciunt quisquam alias asperiores odit minima ipsa pariatur corrupti, quaerat
+            itaque sapiente suscipit!
+            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Odio voluptate eveniet repellat similique dolore
+            veritatis corporis non nesciunt quisquam alias asperiores odit minima ipsa pariatur corrupti, quaerat
+            itaque sapiente suscipit!
           </p>
+        </div>
         </div>
       </div>
     </section>
   </div>
-   <!-- sección categorías -->
-   <div class="container">
+
+  <div class="container">
+    <section class="pb-5 mt-5" style="display: flex; justify-content: center; align-items: center;">
+      <img src="{% static 'app/img/logo.png' %}" alt="..." style="width: 20%;">
+
+    </section>
+
+  </div>
+  <!-- sección categorías -->
+  <div class="container">
     <section class="pb-5 mt-5">
-      <h1 class="text-center pb-4 mb-5">Explora nuestras distintas categorías</h1>
-      <div style="display: flex; justify-content: space-between;">
-        <div style="width: 30%; background-color: white; padding: 20px; border-radius: 5px;">
+      <h1 class="text-center pb-4 mb-5">EXPLORA NUESTRAS DISTINTAS CATEGORÍAS</h1>
+      <div class="categorycard" style="display: flex; justify-content: space-between;">
+        <div style="width: 30%; padding: 20px; border-radius: 5px;">
           <h2 style="font-family: impact, sans-serif; font-weight: bold;">Lager</h2>
           <p>Chela depana, la misma de siempre</p>
         </div>
-        <div style="width: 30%; background-color: white; padding: 20px; border-radius: 5px;">
+        <div style="width: 30%; padding: 20px; border-radius: 5px;">
           <h2 style="font-family: impact, sans-serif; font-weight: bold;">American Lager</h2>
           <p>Very good beer</p>
         </div>
-        <div style="width: 30%; background-color: white; padding: 20px; border-radius: 5px;">
+        <div style="width: 30%; padding: 20px; border-radius: 5px;">
           <h2 style="font-family: impact, sans-serif; font-weight: bold;">Stout</h2>
           <p>Esta cerveza te volará la cabeza</p>
         </div>
       </div>
-    </section>
-   </div>
-
-   <div class="container">
-    <section class="pb-5 mt-5">
-      <h2 class="text-center pb-4 mb-5">Nuevos Productos(?)</h2>
-      <div class="row">
-        {% for p in products %}
-        {% if p.new %}
-        <div class="col-xxl-2 col-xl-3 col-lg-4 col-md-6">
-          <div class="card">
-            {% if p.image %}
-            <img src="{{ p.image.url }}" class="card-img-top" alt="...">
-            {% endif %}
-            <div class="card-body featured">
-              <h5 class="card-title">{{p.category | capfirst }} </h5>
-              <h4 class="card-title">{{p.name | capfirst }} </h4>
-              <p class="card-text">{{p.description }}</p>
-              <p class="card-text">Disponible: {{p.stock}}</p>
-              <p class="card-text"><b>CLP ${{ p.price | intcomma }}</b></p>
+  </div>
+  </section>
+</div>
+<!-- sección productos nuevos -->
+<div class="container">
+  <section class="pb-5">
+    <h1 class="text-center py-5">PRODUCTOS NUEVOS</h1>
+    <div class="row justify-content-center">
+      {% for p in products %}
+      {% if p.new %}
+      <div class="col-xxl-3 col-xl-3 col-lg-4 col-md-6">
+        <div class="card card-home">
+          <img src="{{ p.image.url }}" class="card-img-top" alt="...">
+          <div class="card-body d-flex flex-column align-items-center">
+            <div class="text-center">
+              <h5 class="card-title">{{ p.name | capfirst }}</h5>
+            </div>
+            <div class="mt-auto text-center">
+              <p class="card-text price"><b> ${{ p.price | intcomma }}</b></p>
               {% if p.stock > 0 %}
-              <div style="display: flex; justify-content: center; align-items: center;">
-                <a href="#" class="btn bg-primary">Agregar al Carrito</a>
-              </div>
+              <a href="#" class="btn btn-default bg-primary-3 view-detail-btn" data-product-id="{{ p.id }}">Ver Detalle</a>
               {% else %}
-              <div style="display: flex; justify-content: center; align-items: center;">
-                <h5 class="noStock"><b>Sin Stock</b></h5>
-              </div>
+              <h4 class="text-center"><b>Sin Stock</b></h4>
               {% endif %}
-              <p></p>
             </div>
           </div>
         </div>
-        {% endif %}
-        {% endfor %}
       </div>
-    </section>
-  </div>
-
-
+      {% endif %}
+      {% endfor %}
+    </div>
+  </section>
 </div>
-
 {% endblock %}
