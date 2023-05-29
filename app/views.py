@@ -183,6 +183,7 @@ def add_product(request):
 
             if response.status_code == 201:
                 print('Producto creado exitosamente')
+                messages.success(request, 'Producto agregado exitosamente.')
                 return redirect('list_product')
             else:
                 # Manejar el caso de error en la solicitud

@@ -23,11 +23,13 @@ class ProductSerializer(serializers.ModelSerializer):
         return formatted_date
     
     def validate_name(self, value):
-        # Obtener el objeto de producto actual en caso de actualización
         instance = self.instance
 
         # Verificar si existe otro producto con el mismo nombre
-        exists = Product.objects.filter(name__iexact=value).exclude(pk=instance.pk).exists()
+        if instance is not None:
+            exists = Product.objects.filter(name__iexact=value).exclude(pk=instance.pk).exists()
+        else:
+            exists = Product.objects.filter(name__iexact=value).exists()
 
         if exists:
             raise serializers.ValidationError("Este producto ya existe 5")
