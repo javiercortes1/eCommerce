@@ -90,8 +90,8 @@ class ContactViewSet(viewsets.ModelViewSet):
 
 def home(request):
     params = {
-        'featured': 'true',
-        'new': 'true'
+        'featured__in': 'true',
+        'new__in': 'true'
     }
     
     response = requests.get(settings.API_BASE_URL + 'product/', params=params).json()
