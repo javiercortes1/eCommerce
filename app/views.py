@@ -44,8 +44,10 @@ class ProductViewset(viewsets.ModelViewSet):
 
 def home(request):
     products = Product.objects.all()
+    categories = Category.objects.all()
     data = {
-        'products': products
+        'products': products,
+        'categories': categories
     }
     # response = requests.get('http://127.0.0.1:8000/api/product/?featured=True&new=True').json()
     # data = {
