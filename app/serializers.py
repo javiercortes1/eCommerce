@@ -32,7 +32,7 @@ class ProductSerializer(serializers.ModelSerializer):
             exists = Product.objects.filter(name__iexact=value).exists()
 
         if exists:
-            raise serializers.ValidationError("Este producto ya existe 5")
+            raise serializers.ValidationError("Este producto ya existe")
 
         return value
 

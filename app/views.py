@@ -48,18 +48,20 @@ class ProductViewset(viewsets.ModelViewSet):
 
         if name:
             products = products.filter(name__contains=name)
-        if featured:
-            products = products.filter(featured=True)
         if category:
             products = products.filter(category=category)
-        if new:
-            products = products.filter(new=True)
         if min_price and max_price:
             products = products.filter(price__range=(min_price, max_price))
         elif min_price:
             products = products.filter(price__gte=min_price)
         elif max_price:
             products = products.filter(price__lte=max_price)
+        
+        # Aplicar los filtros de featured y new
+        if featured:
+            products = products.filter(featured=True)
+        if new:
+            products = products.filter(new=True)
 
         return products
     
@@ -88,8 +90,8 @@ class ContactViewSet(viewsets.ModelViewSet):
 
 def home(request):
     params = {
-        'featured': True,
-        'new': True
+        'featured': 'true',
+        'new': 'true'
     }
     
     response = requests.get(settings.API_BASE_URL + 'product/', params=params).json()
@@ -107,8 +109,6 @@ def catalogue(request):
     min_price_filter = request.GET.get('min_price_filter', '')
     max_price_filter = request.GET.get('max_price_filter', '')
 
-    api_url = 'http://127.0.0.1:8000/api/product/'
-
     params = {
         'name': name_filter,
         'category': category_filter,
@@ -116,13 +116,13 @@ def catalogue(request):
         'max_price_filter': max_price_filter,
     }
 
-    response = requests.get(api_url, params=params)
+    response = requests.get(settings.API_BASE_URL + 'product/', params=params)
     products = response.json()
 
-    categories = requests.get('http://127.0.0.1:8000/api/category/').json()
+    categories = requests.get(settings.API_BASE_URL + 'category/').json()
 
     if 'clear_filters' in request.GET:
-        response = requests.get('http://127.0.0.1:8000/api/product/').json()
+        response = requests.get(settings.API_BASE_URL + 'product/').json()
         products = response
 
     data = {
