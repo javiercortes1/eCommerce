@@ -22,7 +22,7 @@
         </div>
         <div class="card-body">
             <blockquote class="blockquote mb-0">
-                <form action="{% url 'contact' %}" class="form" method="post">
+                <form id="contact-form" class="form">
                     {% csrf_token %}
                     {% for field in form %}
                         <div class="form-group">
@@ -43,5 +43,35 @@
         </div>
     </div>
 </div>
+
+<script>
+    document.getElementById('contact-form').addEventListener('submit', function(event) {
+        event.preventDefault();  // Evitar que el formulario se envíe directamente
+
+        var form = new FormData(this);  // Obtener los datos del formulario
+
+        // Realizar la solicitud POST a la API
+        fetch("{% url 'contact-list' %}", {
+            method: "POST",
+            body: form
+        })
+        .then(response => {
+            if (response.ok) {
+                // La solicitud fue exitosa
+                // Realizar cualquier acción adicional o mostrar un mensaje de éxito
+                alert("Mensaje enviado correctamente");
+            } else {
+                // La solicitud falló
+                // Realizar cualquier acción adicional o mostrar un mensaje de error
+                alert("Error al enviar el mensaje");
+            }
+        })
+        .catch(error => {
+            console.error(error);
+            // Realizar cualquier acción adicional o mostrar un mensaje de error
+            alert("Error al enviar el mensaje");
+        });
+    });
+</script>
 
 {% endblock %}

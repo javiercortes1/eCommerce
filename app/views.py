@@ -2,11 +2,11 @@ from django.shortcuts import render, redirect, get_object_or_404
 from .forms import ContactForm, ProductForm, CustomUserCreationForm, CategoryForm, RentalForm
 from django.contrib import messages
 from django.contrib.auth import authenticate, login
-from .models import Product, Category, Rental
+from .models import Product, Category, Rental, Contact
 from django.core.paginator import Paginator, EmptyPage
 from django.http import Http404
-from rest_framework import viewsets
-from .serializers import ProductSerializer, CategorySerializer
+from rest_framework import viewsets, generics
+from .serializers import ProductSerializer, CategorySerializer, ContactSerializer
 import requests
 from django.contrib.auth.decorators import login_required, permission_required
 from django.core.cache import cache
@@ -14,6 +14,15 @@ from app.cart import Cart
 from django.core.mail import send_mail
 from django.db.models import Q
 from datetime import date
+from rest_framework.response import Response
+from django.conf import settings
+import json
+import base64
+from django.core.files.uploadedfile import InMemoryUploadedFile
+import io
+import logging
+from django.http import QueryDict
+from django.utils.datastructures import MultiValueDict
 
 # Create your views here.
 
@@ -34,6 +43,8 @@ class ProductViewset(viewsets.ModelViewSet):
         featured = self.request.GET.get('featured')
         category = self.request.GET.get('category')
         new = self.request.GET.get('new')
+        min_price = self.request.GET.get('min_price_filter')
+        max_price = self.request.GET.get('max_price_filter')
 
         if name:
             products = products.filter(name__contains=name)
@@ -43,45 +54,76 @@ class ProductViewset(viewsets.ModelViewSet):
             products = products.filter(category=category)
         if new:
             products = products.filter(new=True)
+        if min_price and max_price:
+            products = products.filter(price__range=(min_price, max_price))
+        elif min_price:
+            products = products.filter(price__gte=min_price)
+        elif max_price:
+            products = products.filter(price__lte=max_price)
+
         return products
+    
+    def create(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        self.perform_create(serializer)
+        headers = self.get_success_headers(serializer.data)
+        return Response(serializer.data, status=201, headers=headers)
+    
+    def perform_create(self, serializer):
+        serializer.save()
+    
+class ContactViewSet(viewsets.ModelViewSet):
+    queryset = Contact.objects.all()
+    serializer_class = ContactSerializer
+
+    def create(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        contact = serializer.save()  # Utilizar el método save() del serializador
+
+        headers = self.get_success_headers(serializer.data)
+        return Response(serializer.data, status=201, headers=headers)
 
 
 def home(request):
-    products = Product.objects.all()
-    data = {
-        'products': products
+    params = {
+        'featured': True,
+        'new': True
     }
-    # response = requests.get('http://127.0.0.1:8000/api/product/?featured=True&new=True').json()
-    # data = {
-    #      'products': response
-    #  }
+    
+    response = requests.get(settings.API_BASE_URL + 'product/', params=params).json()
+    
+    data = {
+        'products': response
+    }
+    
     return render(request, 'app/home.html', data)
 
 
 def catalogue(request):
     name_filter = request.GET.get('name', '')
     category_filter = request.GET.get('category', '')
-    min_price_filter = request.GET.get('min_price', '')
-    max_price_filter = request.GET.get('max_price', '')
+    min_price_filter = request.GET.get('min_price_filter', '')
+    max_price_filter = request.GET.get('max_price_filter', '')
 
-    products = Product.objects.all()
-    categories = Category.objects.all()  # Obtener todas las categorías
+    api_url = 'http://127.0.0.1:8000/api/product/'
 
-    if name_filter:
-        products = products.filter(name__icontains=name_filter)
+    params = {
+        'name': name_filter,
+        'category': category_filter,
+        'min_price_filter': min_price_filter,
+        'max_price_filter': max_price_filter,
+    }
 
-    if category_filter:
-        products = products.filter(category_id=category_filter)
+    response = requests.get(api_url, params=params)
+    products = response.json()
 
-    if min_price_filter:
-        products = products.filter(price__gte=min_price_filter)
-
-    if max_price_filter:
-        products = products.filter(price__lte=max_price_filter)
+    categories = requests.get('http://127.0.0.1:8000/api/category/').json()
 
     if 'clear_filters' in request.GET:
-        # Si se hizo clic en el botón de eliminar filtros, reiniciar los filtros
-        products = Product.objects.all()
+        response = requests.get('http://127.0.0.1:8000/api/product/').json()
+        products = response
 
     data = {
         'products': products,
@@ -101,62 +143,68 @@ def contact(request):
         'form': ContactForm()
     }
 
-    if request.method == 'POST':
-        form = ContactForm(request.POST)
-        if form.is_valid():
-            contact = form.save()
-
-            # Obtener los datos del formulario
-            name = contact.name
-            email = contact.email
-            phone = contact.phone
-            message = contact.message
-
-            # Construir el mensaje de correo electrónico con los datos del formulario
-            subject = 'Nuevo mensaje de contacto'
-            message = f'''
-                Se ha recibido un nuevo mensaje de contacto:
-                Nombre: {name}
-                Correo electrónico: {email}
-                Teléfono: {phone}
-                Mensaje: {message}
-            '''
-            from_email = 'erreapectm@gmail.com'  # Tu dirección de correo electrónico
-            # La dirección de correo electrónico del destinatario
-            to_email = 'dario.vera96@gmail.com'
-            send_mail(subject, message, from_email, [to_email])
-
-            # Redireccionar a la página de éxito o cualquier otra página
-            return redirect('contact')
-
-    else:
-        form = ContactForm()
     return render(request, 'app/contact.html', data)
 
 # product
 
 
-@permission_required('app.add_product')
+# @permission_required('app.add_product')
 def add_product(request):
-
-    data = {
-        'form': ProductForm()
-    }
-
     if request.method == 'POST':
-        form = ProductForm(data=request.POST, files=request.FILES)
+        form = ProductForm(request.POST, request.FILES)
         if form.is_valid():
-            form.save()
-            messages.success(request, "Producto Agregado")
-            return redirect(to="list_product")
+            # Obtener los datos del formulario
+            name = form.cleaned_data['name']
+            price = form.cleaned_data['price']
+            description = form.cleaned_data['description']
+            new = form.cleaned_data['new']
+            category_id = form.cleaned_data['category'].id  # Obtener el ID de la categoría
+            stock = form.cleaned_data['stock']
+            featured = form.cleaned_data['featured']
+            image = form.cleaned_data['image']
+
+            # Crear un diccionario con los datos del producto
+            product_data = {
+                'name': name,
+                'price': price,
+                'description': description,
+                'new': new,
+                'category': category_id,  # Usar el ID de la categoría
+                'stock': stock,
+                'featured': featured,
+            }
+
+            # Realizar una solicitud POST a la API para crear el producto
+            response = requests.post(
+                settings.API_BASE_URL + 'product/',
+                data=product_data,  # Enviar los datos como formulario
+                files={'image': image}  # Adjuntar el archivo de imagen
+            )
+
+            if response.status_code == 201:
+                print('Producto creado exitosamente')
+                return redirect('list_product')
+            else:
+                # Manejar el caso de error en la solicitud
+                print(f'Error al crear el producto: {response.content}')
+                error_message = "Error al crear el producto a través de la API"
         else:
-            data["form"] = form
+            error_message = "Error en los datos del formulario"
+        data = {
+            'form': form,
+            'error_message': error_message
+        }
+    else:
+        data = {
+            'form': ProductForm()
+        }
     return render(request, 'app/product/add.html', data)
 
 
-@permission_required('app.view_product')
+# @permission_required('app.view_product')
 def list_product(request):
-    products = Product.objects.all()
+    response = requests.get(settings.API_BASE_URL + 'product/')
+    products = response.json()
     page = request.GET.get('page', 1)
 
     try:
@@ -172,43 +220,103 @@ def list_product(request):
     return render(request, 'app/product/list.html', data)
 
 
-@permission_required('app.change_product')
+#@permission_required('app.change_product')
 def update_product(request, id):
-
     product = get_object_or_404(Product, id=id)
 
+    if request.method == 'POST':
+        form = ProductForm(request.POST, request.FILES)
+
+        if form.is_valid():
+            name = form.cleaned_data['name']
+            existing_product = Product.objects.exclude(id=id).filter(name__iexact=name).first()
+            if existing_product:
+                if existing_product.id != product.id:
+                    form.add_error('name', 'Este producto ya existe')
+                    error_message = "Este producto ya existe"  # Agregar definición de error_message
+            else:
+                price = form.cleaned_data['price']
+                description = form.cleaned_data['description']
+                new = form.cleaned_data['new']
+                category_id = form.cleaned_data['category'].id
+                stock = form.cleaned_data['stock']
+                featured = form.cleaned_data['featured']
+                image = form.cleaned_data['image']
+
+                product_data = {
+                    'name': name,
+                    'price': price,
+                    'description': description,
+                    'new': new,
+                    'category': category_id,
+                    'stock': stock,
+                    'featured': featured,
+                }
+
+                response = requests.put(
+                    settings.API_BASE_URL + f'product/{id}/',
+                    data=product_data,
+                    files={'image': image}
+                )
+
+                if response.status_code == 200:
+                    print('Producto actualizado exitosamente')
+                    messages.success(request, "Modificado correctamente")
+                    return redirect(to="list_product")
+                else:
+                    print(f'Error al actualizar el producto: {response.content}')
+                    error_message = "Error al actualizar el producto a través de la API"
+        else:
+            error_message = "Error en los datos del formulario"
+    else:
+        form = ProductForm(instance=product)
+        error_message = ""
+
     data = {
-        'form': ProductForm(instance=product)
+        'form': form,
+        'error_message': error_message
     }
 
-    if request.method == 'POST':
-        form = ProductForm(data=request.POST,
-                           instance=product, files=request.FILES)
-        if form.is_valid():
-            form.save()
-            messages.success(request, "Modificado correctamente")
-            return redirect(to="list_product")
-        data["form"] = form
-
     return render(request, 'app/product/update.html', data)
-
 
 @permission_required('app.delete_product')
 def delete_product(request, id):
     product = get_object_or_404(Product, id=id)
-    product.delete()
-    messages.success(request, "Eliminado correctamente")
-    return redirect(to="list_product")
+
+    # Realizar una solicitud DELETE a la API para eliminar el producto
+    response = requests.delete(settings.API_BASE_URL + f'product/{id}/')
+
+    if response.status_code == 204:
+        product.delete()
+        messages.success(request, "Eliminado correctamente")
+        return redirect(to="list_product")
+    else:
+        # Manejar el caso de error en la solicitud
+        print(f'Error al eliminar el producto: {response.content}')
+        error_message = "Error al eliminar el producto a través de la API"
+        data = {
+            'form': ProductForm(instance=product),
+            'error_message': error_message
+        }
+        return render(request, 'app/product/update.html', data)
 
 
 def product_detail(request, id):
-    product = get_object_or_404(Product, id=id)
+    # Realizar una solicitud GET a la API para obtener los detalles del producto
+    response = requests.get(settings.API_BASE_URL + f'product/{id}/')
 
-    data = {
-        'product': product
-    }
-
-    return render(request, 'app/product/detail.html', data)
+    if response.status_code == 200:
+        product_data = response.json()
+        product = Product(**product_data)
+        data = {
+            'product': product
+        }
+        return render(request, 'app/product/detail.html', data)
+    else:
+        # Manejar el caso de error en la solicitud
+        print(f'Error al obtener los detalles del producto: {response.content}')
+        error_message = "Error al obtener los detalles del producto a través de la API"
+        return render(request, 'app/product/detail.html', {'error_message': error_message})
 
 # register
 

@@ -5,13 +5,14 @@ from .views import home, services, catalogue, contact,\
     add_prod_cart, del_prod_cart, subtract_product_cart,\
     clean_cart, cart_page, buy_confirm, add_category,\
     list_category, update_category, delete_category, admin_panel,\
-    add_rental, list_rental, update_rental, delete_rental, rental_detail
+    add_rental, list_rental, update_rental, delete_rental, rental_detail, ContactViewSet
 
 from rest_framework import routers
 
 router = routers.DefaultRouter()
 router.register('product', ProductViewset)
 router.register('category', CategoryViewset)
+router.register('contact', ContactViewSet, basename='contact')
 
 
 urlpatterns = [
@@ -44,5 +45,6 @@ urlpatterns = [
     path('update-rental/<id>/', update_rental, name="update_rental"),
     path('delete-rental/<id>/', delete_rental, name="delete_rental"),
     path('rental-detail/<int:id>/', rental_detail, name="rental_detail"),
+    # path('api/contact/', ContactAPIView.as_view(), name='contact_api'),
 
 ]

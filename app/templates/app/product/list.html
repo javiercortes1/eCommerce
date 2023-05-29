@@ -44,11 +44,12 @@
                             <th>Nombre</th>
                             <th>Descripcion</th>
                             <th>Valor</th>
-                            <th>Categoria</th>
+                            <th>Categoría</th>
                             <th>Destacado</th>
                             <th>Unidades</th>
                             <th>Nuevo</th>
                             <th>Creacion</th>
+                            <th>Imagen</th>
                             {% if perms.app.change_product %}
                             <th>Modificar</th>
                             {% endif %}
@@ -67,7 +68,7 @@
                         <td>{{p.name | title }}</td>
                         <td>{{p.description }}</td>
                         <td>${{p.price | intcomma }}</td>
-                        <td>{{p.category | title }}</td>
+                        <td>{{ p.category_name | title }}</td>
 
                         {% if p.featured %}
                         <td>Si</td>
@@ -83,7 +84,14 @@
                         <td>No</td>
                         {% endif %}
 
-                        <td>{{p.created_at}}</td>
+                        <td>{{ p.created_at }}</td>
+                        <td>
+                            {% if p.image %}
+                                <img src="{{ p.image }}" alt="Imagen del producto" style="max-width: 50px; max-height: 50px;">
+                            {% else %}
+                                Sin imagen
+                            {% endif %}
+                        </td>
 
                         {% if perms.app.change_product %}
                         <td>

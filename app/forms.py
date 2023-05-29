@@ -70,33 +70,19 @@ class ContactForm(forms.ModelForm):
 
 
 class ProductForm(forms.ModelForm):
-
-    image = forms.ImageField(required=False, validators=[
-                             MaxSizeFileValidator(20)])
+    image = forms.ImageField(required=False, validators=[MaxSizeFileValidator(20)])
     name = forms.CharField(min_length=3, max_length=50)
     price = forms.IntegerField(min_value=1, max_value=1500000)
 
-    def clean_name(self):
-        name = self.cleaned_data["name"]
-        instance = self.instance  # Obtener la instancia actual del producto
-
-        # Verificar si existe otro producto con el mismo nombre
-        exists = Product.objects.filter(
-            name__iexact=name).exclude(pk=instance.pk).exists()
-
-        if exists:
-            raise ValidationError("Este producto ya existe")
-        return name
 
     class Meta:
         model = Product
-        # fields = ["name", "price", "description", "new", "category", "stock", "featured", "image"]
         fields = '__all__'
         labels = {
             'name': 'Nombre',
-            'description': 'Descripcion',
+            'description': 'Descripción',
             'price': 'Precio',
-            'category': 'Categoria',
+            'category': 'Categoría',
             'stock': 'Unidades',
             'new': '¿Nuevo?',
             'featured': '¿Destacado?',
