@@ -534,9 +534,24 @@ def update_category(request, id):
 @permission_required('app.delete_category')
 def delete_category(request, id):
     category = get_object_or_404(Category, id=id)
-    category.delete()
-    messages.success(request, "Eliminado correctamente")
-    return redirect(to="list_category")
+
+    # Realizar una solicitud DELETE a la API para eliminar el producto
+    response = requests.delete(settings.API_BASE_URL + f'category/{id}/')
+
+    if response.status_code == 204:
+        category.delete()
+        messages.success(request, "Eliminado correctamente")
+        return redirect(to="list_category")
+    else:
+        # Manejar el caso de error en la solicitud
+        print(f'Error al eliminar la categoria: {response.content}')
+        error_message = "Error al eliminar la categoria a través de la API"
+        data = {
+            'form': CategoryForm(instance=category),
+            'error_message': error_message
+        }
+        return render(request, 'app/category/update.html', data)
+
 
 
 def admin_panel(request):

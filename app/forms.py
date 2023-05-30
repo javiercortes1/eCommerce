@@ -101,17 +101,6 @@ class CategoryForm(forms.ModelForm):
                              MaxSizeFileValidator(20)])
     name = forms.CharField(min_length=3, max_length=50)
 
-    def clean_name(self):
-        name = self.cleaned_data["name"]
-        instance = self.instance  # Obtener la instancia actual de la categoría
-
-        # Verificar si existe otra categoría con el mismo nombre
-        exists = Category.objects.filter(
-            name__iexact=name).exclude(pk=instance.pk).exists()
-
-        if exists:
-            raise ValidationError("Esta categoría ya existe")
-        return name
 
     class Meta:
         model = Category
