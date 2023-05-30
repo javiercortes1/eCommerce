@@ -9,7 +9,7 @@ from django.utils import timezone
 class Category(models.Model):
     name = models.CharField(max_length=50)
     description = models.TextField(max_length=200)
-    image = models.ImageField(upload_to="categorys", null=True)
+    image = models.ImageField(upload_to="categories/", blank=True, null=True)
 
     def __str__(self):
         return self.name

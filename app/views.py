@@ -416,7 +416,7 @@ def buy_confirm(request):
 # Category
 
 
-@permission_required('app.add_category')
+#@permission_required('app.add_category')
 def add_category(request):
 
     data = {
@@ -434,9 +434,10 @@ def add_category(request):
     return render(request, 'app/category/add.html', data)
 
 
-@permission_required('app.view_category')
+#@permission_required('app.view_category')
 def list_category(request):
-    categories = Category.objects.all()
+    response = requests.get(settings.API_BASE_URL + 'category/')
+    categories = response.json()
     page = request.GET.get('page', 1)
 
     try:
