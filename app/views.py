@@ -308,7 +308,20 @@ def product_detail(request, id):
 
     if response.status_code == 200:
         product_data = response.json()
+
+        # Obtener la instancia de Category
+        category_id = product_data['category']
+        category = Category.objects.get(id=category_id)
+
+        # Remover el campo 'category_name' del diccionario product_data
+        product_data.pop('category_name', None)
+
+        # Actualizar el campo 'category' en product_data con la instancia de Category
+        product_data['category'] = category
+
+        # Crear el objeto Product con los datos actualizados
         product = Product(**product_data)
+
         data = {
             'product': product
         }
