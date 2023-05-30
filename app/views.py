@@ -485,18 +485,48 @@ def update_category(request, id):
 
     category = get_object_or_404(Category, id=id)
 
-    data = {
-        'form': CategoryForm(instance=category)
-    }
-
     if request.method == 'POST':
-        form = CategoryForm(data=request.POST,
-                            instance=category, files=request.FILES)
+        form = CategoryForm(request.POST, request.FILES)
+
         if form.is_valid():
-            form.save()
-            messages.success(request, "Modificado correctamente")
-            return redirect(to="list_category")
-        data["form"] = form
+            name = form.cleaned_data['name']
+            existing_category = Category.objects.exclude(id=id).filter(name__iexact=name).first()
+            if existing_category:
+                if existing_category.id != category.id:
+                    form.add_error('name', 'Esta categoria ya existe')
+                    error_message = "Esta categoria ya existe"  # Agregar definición de error_message
+            else:
+                description = form.cleaned_data['description']
+                image = form.cleaned_data['image']
+
+                category_data = {
+                    'name': name,
+                    'description': description,
+                }
+
+                response = requests.put(
+                    settings.API_BASE_URL + f'category/{id}/',
+                    data=category_data,
+                    files={'image': image}
+                )
+
+                if response.status_code == 200:
+                    print('Categoria actualizada exitosamente')
+                    messages.success(request, "Modificado correctamente")
+                    return redirect(to="list_category")
+                else:
+                    print(f'Error al actualizar la categoria: {response.content}')
+                    error_message = "Error al actualizar la categoria a través de la API"
+        else:
+            error_message = "Error en los datos del formulario"
+    else:
+        form = CategoryForm(instance=category)
+        error_message = ""
+
+    data = {
+        'form': form,
+        'error_message': error_message
+    }
 
     return render(request, 'app/category/update.html', data)
 
