@@ -5,6 +5,21 @@ from django.utils import timezone
 from django.utils.dateformat import DateFormat
 
 class CategorySerializer(serializers.ModelSerializer):
+
+    def validate_name(self, value):
+        instance = self.instance
+
+        # Verificar si existe otro producto con el mismo nombre
+        if instance is not None:
+            exists = Product.objects.filter(name__iexact=value).exclude(pk=instance.pk).exists()
+        else:
+            exists = Product.objects.filter(name__iexact=value).exists()
+
+        if exists:
+            raise serializers.ValidationError("Esta categoria ya existe")
+
+        return value
+    
     class Meta:
         model = Category
         fields = '__all__'
