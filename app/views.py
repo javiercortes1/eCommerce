@@ -418,19 +418,46 @@ def buy_confirm(request):
 
 #@permission_required('app.add_category')
 def add_category(request):
-
-    data = {
-        'form': CategoryForm()
-    }
-
     if request.method == 'POST':
-        form = CategoryForm(data=request.POST, files=request.FILES)
+        form = CategoryForm(request.POST, request.FILES)
         if form.is_valid():
-            form.save()
-            messages.success(request, "Categoria Agregada")
-            return redirect(to="list_category")
+            # Obtener los datos del formulario
+            name = form.cleaned_data['name']
+            description = form.cleaned_data['description']
+            image = form.cleaned_data['image']
+
+            # Crear un diccionario con los datos del producto
+            category_data = {
+                'name': name,
+                'description': description,
+            }
+
+            # Realizar una solicitud POST a la API para crear el producto
+            response = requests.post(
+                settings.API_BASE_URL + 'category/',
+                data=category_data,  # Enviar los datos como formulario
+                files={'image': image}  # Adjuntar el archivo de imagen
+            )
+
+            if response.status_code == 201:
+                print('Categoria creada exitosamente')
+                messages.success(request, 'Categoria agregada exitosamente.')
+                return redirect('list_category')
+            else:
+                # Manejar el caso de error en la solicitud
+                print(f'Error al crear la categoria: {response.content}')
+                error_message = "Error al crear la categoria a través de la API"
         else:
-            data["form"] = form
+            error_message = "Error en los datos del formulario"
+        data = {
+            'form': form,
+            'error_message': error_message
+        }
+    else:
+        data = {
+            'form': CategoryForm()
+        }
+        
     return render(request, 'app/category/add.html', data)
 
 
