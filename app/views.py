@@ -201,73 +201,64 @@ def list_product(request):
 
 @permission_required('app.change_product')
 def update_product(request, id):
-    # Realizar una solicitud GET a la API para obtener el producto
-    response = requests.get(settings.API_BASE_URL + f'product/{id}/')
+    product = get_object_or_404(Product, id=id)
 
-    if response.status_code == 200:
-        product_data = response.json()  # Obtener los datos del producto de la respuesta de la API
+    if request.method == 'POST':
+        form = ProductForm(request.POST, request.FILES, instance=product)
 
-        if request.method == 'POST':
-            form = ProductForm(request.POST, request.FILES)
-
-            if form.is_valid():
-                name = form.cleaned_data['name']
-                existing_product = Product.objects.exclude(id=id).filter(name__iexact=name).first()
-                if existing_product:
+        if form.is_valid():
+            name = form.cleaned_data['name']
+            existing_product = Product.objects.exclude(id=id).filter(name__iexact=name).first()
+            if existing_product:
+                if existing_product.id != product.id:
                     form.add_error('name', 'Este producto ya existe')
                     error_message = "Este producto ya existe"
-                else:
-                    price = form.cleaned_data['price']
-                    description = form.cleaned_data['description']
-                    new = form.cleaned_data['new']
-                    category_id = form.cleaned_data['category'].id
-                    stock = form.cleaned_data['stock']
-                    featured = form.cleaned_data['featured']
-                    image = form.cleaned_data['image']
-
-                    product_data = {
-                        'name': name,
-                        'price': price,
-                        'description': description,
-                        'new': new,
-                        'category': category_id,
-                        'stock': stock,
-                        'featured': featured,
-                    }
-
-                    response = requests.put(
-                        settings.API_BASE_URL + f'product/{id}/',
-                        data=product_data,
-                        files={'image': image}
-                    )
-
-                    if response.status_code == 200:
-                        print('Producto actualizado exitosamente')
-                        messages.success(request, "Modificado correctamente")
-                        return redirect(to="list_product")
-                    else:
-                        print(f'Error al actualizar el producto: {response.content}')
-                        error_message = "Error al actualizar el producto a través de la API"
             else:
-                error_message = "Error en los datos del formulario"
+
+                description = form.cleaned_data['description']
+                price = form.cleaned_data['price']
+                new = form.cleaned_data['new'],
+                category = form.cleaned_data['category'].id
+                stock = form.cleaned_data['stock']
+                featured = form.cleaned_data['featured']
+                image = form.cleaned_data['image']
+
+                product_data = {
+                    'name': name,
+                    'description': description,
+                    'price': price,
+                    'new': new,
+                    'category': category,
+                    'stock': stock,
+                    'featured': featured,
+                }
+
+                # Realizar una solicitud PUT a la API para actualizar el producto
+                response = requests.put(
+                    settings.API_BASE_URL + f'product/{id}/',
+                    data=product_data,
+                    files={'image': image}
+                )
+
+                if response.status_code == 200:
+                    print('Producto actualizado exitosamente')
+                    messages.success(request, "Modificado correctamente")
+                    return redirect(to="list_product")
+                else:
+                    print(f'Error al actualizar el producto: {response.content}')
+                    error_message = "Error al actualizar el producto a través de la API"
         else:
-            form = ProductForm(initial=product_data)  # Usar los datos del producto como valores iniciales del formulario
-            error_message = ""
-
-        data = {
-            'form': form,
-            'error_message': error_message
-        }
-
-        return render(request, 'app/product/update.html', data)
+            error_message = "Error en los datos del formulario"
     else:
-        # Manejar el caso de error en la solicitud GET
-        print(f'Error al obtener el producto: {response.content}')
-        error_message = "Error al obtener el producto a través de la API"
-        data = {
-            'error_message': error_message
-        }
-        return render(request, 'app/product/update.html', data)
+        form = ProductForm(instance=product)
+        error_message = ""
+
+    data = {
+        'form': form,
+        'error_message': error_message
+    }
+
+    return render(request, 'app/product/update.html', data)
 
 @permission_required('app.delete_product')
 def delete_product(request, id):
