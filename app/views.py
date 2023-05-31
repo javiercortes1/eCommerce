@@ -128,6 +128,16 @@ def contact(request):
     return render(request, 'app/contact.html', data)
 
 #VISTAS DE PRODUCT
+def get_object_product(id):
+    response = requests.get(settings.API_BASE_URL + f'product/{id}/')
+
+    if response.status_code == 200:
+        product_data = response.json()
+        return product_data
+    else:
+        print(f'Error al obtener el producto: {response.content}')
+        return None
+    
 @permission_required('app.add_product')
 def add_product(request):
     if request.method == 'POST':
@@ -201,81 +211,70 @@ def list_product(request):
 
 @permission_required('app.change_product')
 def update_product(request, id):
-    # Realizar una solicitud GET a la API para obtener el producto
-    response = requests.get(settings.API_BASE_URL + f'product/{id}/')
+    product = get_object_or_404(Product, id=id)
 
-    if response.status_code == 200:
-        product_data = response.json()  # Obtener los datos del producto de la respuesta de la API
+    if request.method == 'POST':
+        form = ProductForm(request.POST, request.FILES, instance=product)
 
-        if request.method == 'POST':
-            form = ProductForm(request.POST, request.FILES)
-
-            if form.is_valid():
-                name = form.cleaned_data['name']
-                existing_product = Product.objects.exclude(id=id).filter(name__iexact=name).first()
-                if existing_product:
+        if form.is_valid():
+            name = form.cleaned_data['name']
+            existing_product = Product.objects.exclude(id=id).filter(name__iexact=name).first()
+            if existing_product:
+                if existing_product.id != product.id:
                     form.add_error('name', 'Este producto ya existe')
                     error_message = "Este producto ya existe"
-                else:
-                    price = form.cleaned_data['price']
-                    description = form.cleaned_data['description']
-                    new = form.cleaned_data['new']
-                    category_id = form.cleaned_data['category'].id
-                    stock = form.cleaned_data['stock']
-                    featured = form.cleaned_data['featured']
-                    image = form.cleaned_data['image']
-
-                    product_data = {
-                        'name': name,
-                        'price': price,
-                        'description': description,
-                        'new': new,
-                        'category': category_id,
-                        'stock': stock,
-                        'featured': featured,
-                    }
-
-                    response = requests.put(
-                        settings.API_BASE_URL + f'product/{id}/',
-                        data=product_data,
-                        files={'image': image}
-                    )
-
-                    if response.status_code == 200:
-                        print('Producto actualizado exitosamente')
-                        messages.success(request, "Modificado correctamente")
-                        return redirect(to="list_product")
-                    else:
-                        print(f'Error al actualizar el producto: {response.content}')
-                        error_message = "Error al actualizar el producto a través de la API"
             else:
-                error_message = "Error en los datos del formulario"
+
+                description = form.cleaned_data['description']
+                price = form.cleaned_data['price']
+                new = form.cleaned_data['new'],
+                category = form.cleaned_data['category'].id
+                stock = form.cleaned_data['stock']
+                featured = form.cleaned_data['featured']
+                image = form.cleaned_data['image']
+
+                product_data = {
+                    'name': name,
+                    'description': description,
+                    'price': price,
+                    'new': new,
+                    'category': category,
+                    'stock': stock,
+                    'featured': featured,
+                }
+
+                # Realizar una solicitud PUT a la API para actualizar el producto
+                response = requests.put(
+                    settings.API_BASE_URL + f'product/{id}/',
+                    data=product_data,
+                    files={'image': image}
+                )
+
+                if response.status_code == 200:
+                    print('Producto actualizado exitosamente')
+                    messages.success(request, "Modificado correctamente")
+                    return redirect(to="list_product")
+                else:
+                    print(f'Error al actualizar el producto: {response.content}')
+                    error_message = "Error al actualizar el producto a través de la API"
         else:
-            form = ProductForm(initial=product_data)  # Usar los datos del producto como valores iniciales del formulario
-            error_message = ""
-
-        data = {
-            'form': form,
-            'error_message': error_message
-        }
-
-        return render(request, 'app/product/update.html', data)
+            error_message = "Error en los datos del formulario"
     else:
-        # Manejar el caso de error en la solicitud GET
-        print(f'Error al obtener el producto: {response.content}')
-        error_message = "Error al obtener el producto a través de la API"
-        data = {
-            'error_message': error_message
-        }
-        return render(request, 'app/product/update.html', data)
+        form = ProductForm(instance=product)
+        error_message = ""
+
+    data = {
+        'form': form,
+        'error_message': error_message
+    }
+
+    return render(request, 'app/product/update.html', data)
 
 @permission_required('app.delete_product')
 def delete_product(request, id):
-    # Realizar una solicitud GET a la API para obtener el producto
-    response = requests.get(settings.API_BASE_URL + f'product/{id}/')
+    product_data = get_object_product(id)
 
-    if response.status_code == 200:
-        product_data = response.json()  # Obtener los datos del producto de la respuesta de la API
+    if product_data:
         product = Product(id=product_data['id'])  # Crear una instancia de Product solo con el ID
 
         # Realizar una solicitud DELETE a la API para eliminar el producto
@@ -295,8 +294,7 @@ def delete_product(request, id):
             }
             return render(request, 'app/product/update.html', data)
     else:
-        # Manejar el caso de error en la solicitud GET
-        print(f'Error al obtener el producto: {response.content}')
+        # Manejar el caso de error al obtener el producto
         error_message = "Error al obtener el producto a través de la API"
         data = {
             'error_message': error_message
@@ -398,6 +396,16 @@ def buy_confirm(request):
     return redirect('cart')
 
 #VISTAS CATEGORY
+def get_object_category(id):
+    response = requests.get(settings.API_BASE_URL + f'category/{id}/')
+
+    if response.status_code == 200:
+        product_data = response.json()
+        return product_data
+    else:
+        print(f'Error al obtener la categoria: {response.content}')
+        return None
+    
 @permission_required('app.add_category')
 def add_category(request):
     if request.method == 'POST':
@@ -512,21 +520,31 @@ def update_category(request, id):
 
 @permission_required('app.delete_category')
 def delete_category(request, id):
-    category = get_object_or_404(Category, id=id)
+    category_data = get_object_category(id)
 
-    # Realizar una solicitud DELETE a la API para eliminar el producto
-    response = requests.delete(settings.API_BASE_URL + f'category/{id}/')
+    if category_data:
+        category = Category(id=category_data['id'])  # Crear una instancia de Product solo con el ID
 
-    if response.status_code == 204:
-        category.delete()
-        messages.success(request, "Eliminado correctamente")
-        return redirect(to="list_category")
+        # Realizar una solicitud DELETE a la API para eliminar el producto
+        delete_response = requests.delete(settings.API_BASE_URL + f'category/{id}/')
+
+        if delete_response.status_code == 204:
+            category.delete()
+            messages.success(request, "Eliminado correctamente")
+            return redirect(to="list_category")
+        else:
+            # Manejar el caso de error en la solicitud DELETE
+            print(f'Error al eliminar la categoria: {delete_response.content}')
+            error_message = "Error al eliminar la categoria a través de la API"
+            data = {
+                'form': CategoryForm(instance=category),
+                'error_message': error_message
+            }
+            return render(request, 'app/category/update.html', data)
     else:
-        # Manejar el caso de error en la solicitud
-        print(f'Error al eliminar la categoria: {response.content}')
-        error_message = "Error al eliminar la categoria a través de la API"
+        # Manejar el caso de error al obtener el producto
+        error_message = "Error al obtener la categoria a través de la API"
         data = {
-            'form': CategoryForm(instance=category),
             'error_message': error_message
         }
         return render(request, 'app/category/update.html', data)

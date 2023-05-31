@@ -68,7 +68,6 @@ class ContactForm(forms.ModelForm):
             except forms.ValidationError as e:
                 self.add_error('phone', e.message)
 
-
 class ProductForm(forms.ModelForm):
     image = forms.ImageField(required=False, validators=[MaxSizeFileValidator(20)])
     name = forms.CharField(min_length=3, max_length=50)
@@ -86,14 +85,11 @@ class ProductForm(forms.ModelForm):
             'stock': 'Unidades',
             'new': '¿Nuevo?',
             'featured': '¿Destacado?',
-            'rental_product': '¿Arrendable?',
             'image': 'Imagen'
         }
 
-
 class CustomUserCreationForm(UserCreationForm):
     pass
-
 
 class CategoryForm(forms.ModelForm):
 
@@ -111,7 +107,6 @@ class CategoryForm(forms.ModelForm):
             'description': 'Descripcion',
             'image': 'Imagen'
         }
-
 
 class RentalForm(forms.ModelForm):
     start_date = forms.DateField(widget=AdminDateWidget)
