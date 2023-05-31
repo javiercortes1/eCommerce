@@ -128,6 +128,16 @@ def contact(request):
     return render(request, 'app/contact.html', data)
 
 #VISTAS DE PRODUCT
+def get_object_product(id):
+    response = requests.get(settings.API_BASE_URL + f'product/{id}/')
+
+    if response.status_code == 200:
+        product_data = response.json()
+        return product_data
+    else:
+        print(f'Error al obtener el producto: {response.content}')
+        return None
+    
 @permission_required('app.add_product')
 def add_product(request):
     if request.method == 'POST':
@@ -262,11 +272,9 @@ def update_product(request, id):
 
 @permission_required('app.delete_product')
 def delete_product(request, id):
-    # Realizar una solicitud GET a la API para obtener el producto
-    response = requests.get(settings.API_BASE_URL + f'product/{id}/')
+    product_data = get_object_product(id)
 
-    if response.status_code == 200:
-        product_data = response.json()  # Obtener los datos del producto de la respuesta de la API
+    if product_data:
         product = Product(id=product_data['id'])  # Crear una instancia de Product solo con el ID
 
         # Realizar una solicitud DELETE a la API para eliminar el producto
@@ -286,8 +294,7 @@ def delete_product(request, id):
             }
             return render(request, 'app/product/update.html', data)
     else:
-        # Manejar el caso de error en la solicitud GET
-        print(f'Error al obtener el producto: {response.content}')
+        # Manejar el caso de error al obtener el producto
         error_message = "Error al obtener el producto a través de la API"
         data = {
             'error_message': error_message
