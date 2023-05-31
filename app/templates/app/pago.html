@@ -4,11 +4,22 @@
 
 {% block css %}
 <title>Conejo Furioso</title>
+<style>
+    .cart-table {
+      border: 12px solid hwb(6 6% 16%);
+    }
+  </style>
 {% endblock %}
 
 {% block content %}
+<style>
+    .cart-table {
+      border: 12px solid hwb(90 58% 9%);
+    }
+  </style>
 <div class="alert alert-secondary my-5" role="alert"></div>
-<table class="table table-bordered table-hover table-responsive-sm">
+<table class="table table-bordered table-hover table-responsive-sm cart-table">
+   
     <thead>
         <tr>
             <h2 style="text-align: center; justify-content: center;" class="my-2">Informacion de Pago</h1>
@@ -48,12 +59,8 @@
         </tr>
     </tbody>
 </table>
-
-<hr>
-
 </div>
-
-<br><br><br><br><br><br>
+<br><br>
     <div class="container">
         <div class="row">
             <div class="col">
