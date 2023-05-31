@@ -5,7 +5,7 @@ from .views import home, services, catalogue, contact,\
     add_prod_cart, del_prod_cart, subtract_product_cart,\
     clean_cart, cart_page, buy_confirm, add_category,\
     list_category, update_category, delete_category, admin_panel,\
-    add_rental, list_rental, update_rental, delete_rental, rental_detail, ContactViewSet
+    add_rental, list_rental, update_rental, delete_rental, rental_detail, ContactViewSet,pago
 
 from rest_framework import routers
 
@@ -46,5 +46,5 @@ urlpatterns = [
     path('delete-rental/<id>/', delete_rental, name="delete_rental"),
     path('rental-detail/<int:id>/', rental_detail, name="rental_detail"),
     # path('api/contact/', ContactAPIView.as_view(), name='contact_api'),
-
+    path('pago/', pago, name="pago"),
 ]
