@@ -396,6 +396,16 @@ def buy_confirm(request):
     return redirect('cart')
 
 #VISTAS CATEGORY
+def get_object_category(id):
+    response = requests.get(settings.API_BASE_URL + f'category/{id}/')
+
+    if response.status_code == 200:
+        product_data = response.json()
+        return product_data
+    else:
+        print(f'Error al obtener la categoria: {response.content}')
+        return None
+    
 @permission_required('app.add_category')
 def add_category(request):
     if request.method == 'POST':
@@ -510,21 +520,31 @@ def update_category(request, id):
 
 @permission_required('app.delete_category')
 def delete_category(request, id):
-    category = get_object_or_404(Category, id=id)
+    category_data = get_object_category(id)
 
-    # Realizar una solicitud DELETE a la API para eliminar el producto
-    response = requests.delete(settings.API_BASE_URL + f'category/{id}/')
+    if category_data:
+        category = Category(id=category_data['id'])  # Crear una instancia de Product solo con el ID
 
-    if response.status_code == 204:
-        category.delete()
-        messages.success(request, "Eliminado correctamente")
-        return redirect(to="list_category")
+        # Realizar una solicitud DELETE a la API para eliminar el producto
+        delete_response = requests.delete(settings.API_BASE_URL + f'category/{id}/')
+
+        if delete_response.status_code == 204:
+            category.delete()
+            messages.success(request, "Eliminado correctamente")
+            return redirect(to="list_category")
+        else:
+            # Manejar el caso de error en la solicitud DELETE
+            print(f'Error al eliminar la categoria: {delete_response.content}')
+            error_message = "Error al eliminar la categoria a través de la API"
+            data = {
+                'form': CategoryForm(instance=category),
+                'error_message': error_message
+            }
+            return render(request, 'app/category/update.html', data)
     else:
-        # Manejar el caso de error en la solicitud
-        print(f'Error al eliminar la categoria: {response.content}')
-        error_message = "Error al eliminar la categoria a través de la API"
+        # Manejar el caso de error al obtener el producto
+        error_message = "Error al obtener la categoria a través de la API"
         data = {
-            'form': CategoryForm(instance=category),
             'error_message': error_message
         }
         return render(request, 'app/category/update.html', data)
