@@ -7,15 +7,11 @@
 {% endblock %}
 
 {% block content %}
-
-
-
-
-
+<div class="alert alert-secondary my-5" role="alert"></div>
 <table class="table table-bordered table-hover table-responsive-sm">
     <thead>
         <tr>
-            <h2 style="text-align: center; justify-content: center;" class="my-2">Carrito</h1>
+            <h2 style="text-align: center; justify-content: center;" class="my-2">Informacion de Pago</h1>
                 <br>
         </tr>
         <tr>
@@ -29,11 +25,10 @@
         {% if request.session.cart.items %}
         {% for key, value in request.session.cart.items %}
         <tr>
-            <td><strong>{{value.product_name}}</strong></td>
-            <td>{{value.product_price}}</td>
-            <td>{{value.amount}}
-            </td>
-            <td>{{value.accumulated}}</td>
+            <td><strong>{{ value.product_name }}</strong></td>
+            <td>{{ value.product_price }}</td>
+            <td>{{ value.amount }}</td>
+            <td>{{ value.accumulated }}</td>
         </tr>
         {% endfor %}
         {% else %}
@@ -43,29 +38,22 @@
             </td>
         </tr>
         {% endif %}
-            <tr>
-                <th colspan="3" class="text-right">Total Compra:</th>
-                <th>$ {{cart_total}}</th>
-            </tr>
+        <tr>
+            <th colspan="3" class="text-right">Total Compra (CLP):</th>
+            <th id="cart-total-clp">{{ cart_total }}</th>
+        </tr>
+        <tr>
+            <th colspan="3" class="text-right">Total Compra (USD):</th>
+            <th id="cart-total">{{ cart_total }}</th>
+        </tr>
     </tbody>
 </table>
+
 <hr>
-<div class="row text-center">
 
 </div>
-</div>
 
-
-
-<br><br><br><br><br><br><br><br>
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-</head>
-<body>
+<br><br><br><br><br><br>
     <div class="container">
         <div class="row">
             <div class="col">
@@ -114,7 +102,7 @@
                         return actions.order.create({
                             purchase_units: [{
                             amount: {
-                                value: '{{cart_total}}' // Can also reference a variable or function
+                                value: convertToUSD('{{ cart_total }}' )// Can also reference a variable or function
                             }
                             }]
                         });
@@ -139,14 +127,30 @@
         </div>
 
     </div>
-    
-    
-    
 
 <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
-    
-</body>
+
+<script>
+// Función para convertir el total de CLP a dólares
+function convertToUSD(totalCLP) {
+    // Tasa de conversión: 1 CLP = 0.0014 USD (valor de ejemplo)
+    var conversionRate = 0.00124;
+    var totalUSD = totalCLP * conversionRate;
+    return totalUSD.toFixed(2);
+}
+
+// Obtener el total en CLP desde la variable de contexto
+var totalCLP = parseInt("{{ cart_total }}");
+
+// Calcular el total en USD llamando a la función de conversión
+var totalUSD = convertToUSD(totalCLP);
+
+// Mostrar los totales en la página
+document.getElementById("cart-total-clp").textContent = totalCLP;
+document.getElementById("cart-total").textContent = totalUSD;
+</script>
+
 </html>
 {% endblock %}
