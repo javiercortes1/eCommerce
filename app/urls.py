@@ -46,5 +46,5 @@ urlpatterns = [
     path('delete-rental/<id>/', delete_rental, name="delete_rental"),
     path('rental-detail/<int:id>/', rental_detail, name="rental_detail"),
     # path('api/contact/', ContactAPIView.as_view(), name='contact_api'),
-     path('pago/', pago, name="pago"),
+    path('pago/', pago, name="pago"),
 ]
