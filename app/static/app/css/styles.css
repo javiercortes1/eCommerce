@@ -1,36 +1,35 @@
 /* COLORES */
 
 :root {
-    /* color navbar y footer */
-    --color-primary: #96D6EF;
+  /* color navbar y footer */
+  --color-primary: #96d6ef;
 
-    /* fondo body*/
-    --color-primary-2: rgb(246, 241, 241);
+  /* fondo body*/
+  --color-primary-2: rgb(246, 241, 241);
 
-    /* color para buttons */
-    --color-primary-3: #19A7CE;
+  /* color para buttons */
+  --color-primary-3: #19a7ce;
 
-    /* color hover y navbar toggler */
-    --color-secondary: #ffffff;
+  /* color hover y navbar toggler */
+  --color-secondary: #ffffff;
 
-    /* fondo cards */
-    --color-tres: #b7dae7ad;
-
+  /* fondo cards */
+  --color-tres: #b7dae7ad;
 }
 
 .bg-primary {
-    background-color: var(--color-primary) !important;
+  background-color: var(--color-primary) !important;
 }
 
 .bg-primary-3 {
-    background-color: var(--color-primary-3) !important;
+  background-color: var(--color-primary-3) !important;
 }
 
 body {
-    background-color: var(--color-primary-2) !important;
-    display: flex;
-    flex-direction: column;
-    min-height: 100vh;
+  background-color: var(--color-primary-2) !important;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
 }
 
 /* CARACTERÍSTICAS GENERALES DEL DOCUMENTO */
@@ -44,7 +43,7 @@ h1 {
 }
 
 a {
-    text-decoration: none;
+  text-decoration: none;
 }
 
 .featured a {
@@ -71,27 +70,27 @@ h5.noStock {
 /* NAVBAR */
 
 .nav-item a {
-    color: #000000;
-    margin-right: calc(8px*2);
-    font-weight: bold;
+  color: #000000;
+  margin-right: calc(8px * 2);
+  font-weight: bold;
 }
 
 .services a {
-    margin-right: 32px;
+  margin-right: 32px;
 }
 
 .nav-link:hover {
-    color: var(--color-secondary);
+  color: var(--color-secondary);
 }
 
 .navbar-toggler {
-    background-color: var(--color-secondary);
+  background-color: var(--color-secondary);
 }
 
 /* CARRUSEL */
 
 .carrousel {
-    padding-top: 96px;
+  padding-top: 96px;
 }
 
 /* FOOTER */
@@ -106,13 +105,13 @@ footer {
 }
 
 .ft-item a {
-    color: #ffffff;
-    margin-right: calc(8px*2);
-    height: auto;
+  color: #ffffff;
+  margin-right: calc(8px * 2);
+  height: auto;
 }
 
 .ft-link:hover {
-    color: var(--color-secondary);
+  color: var(--color-secondary);
 }
 
 .about-us p {
@@ -153,7 +152,7 @@ footer {
 .card-img-top {
     /* border-top-left-radius: 1rem;
     border-top-right-radius: 1rem; */
-    height: 180px;
+    height: 200px;
 }
 
 .card-form {
@@ -161,7 +160,7 @@ footer {
 }
 
 .categorycard {
-    background-color: var(--color-tres) !important;
+  background-color: var(--color-tres) !important;
 }
 
 .card-text.description {
@@ -170,19 +169,23 @@ footer {
 }
 
 .card-text.price {
-    height: 25px;
-    overflow: hidden;
-    margin-top: 8px;
+  height: 25px;
+  overflow: hidden;
+  margin-top: 8px;
 }
 
 .card-body-featured {
-    height: 250px;
+  height: 250px;
 }
 
-.card-title {
-    font-weight: bold;
-    height: 50px;
-    overflow: auto;
+.custom-card-title {
+  height: 50px; /* Establece una altura fija para el título */
+  overflow: hidden; /* Oculta el contenido que se desborda */
+}
+
+.custom-card-description {
+  height: 70px; /* Establece una altura fija para la descripción */
+  overflow: hidden; /* Oculta el contenido que se desborda */
 }
 
 /* BOTONES */
@@ -228,3 +231,27 @@ footer {
     color: var(--color-secondary);
 }
 
+.cart-container {
+  display: none;
+  position: fixed;
+  top: 0;
+  right: 0;
+  width: 430px; /* Ancho del carrito */
+  height: 100%; /* Altura del carrito (puede ajustarse según sea necesario) */
+  background-color: white; /* Color de fondo del carrito */
+  z-index: 9999; /* Asegura que el carrito se muestre por encima de otros elementos */
+  padding: 10px; /* Agrega un espacio interno al carrito */
+}
+
+.cart-close-button {
+  position: absolute;
+  top: 5px;
+  left: 5px;
+  width: 30px;
+  height: 30px;
+  border: none;
+  background-color: transparent;
+  font-size: 20px;
+  cursor: pointer;
+  /* Otros estilos adicionales para el botón "X" */
+}
