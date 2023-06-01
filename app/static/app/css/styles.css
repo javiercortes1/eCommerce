@@ -202,6 +202,7 @@ footer {
     background-color: black;
     box-shadow: 0 0.4rem 1rem rgba(0, 0, 0, 0.26);
     color: var(--color-secondary) !important;
+    border-color: #000000;
 }
 
 .list-buttons button.bg-primary {
@@ -254,4 +255,37 @@ footer {
   font-size: 20px;
   cursor: pointer;
   /* Otros estilos adicionales para el botón "X" */
+}
+
+/* PAGINATOR*/ 
+
+.pagination-container .page-item .page-link {
+  background-color: var(--color-primary-3) !important;
+  border-width: 2px;
+  border-color: #000000;
+  color: #000000!important;
+}
+
+.pagination-container .page-item .page-link:hover {
+  background-color: black;
+  box-shadow: 0 0.4rem 1rem rgba(0, 0, 0, 0.26);
+  border-color: #000000;
+}
+
+.pagination-container .page-item.active .page-link {
+  background-color: var(--color-primary-3) !important;
+  color: white !important;
+  border-color: #000000;
+}
+
+/*CARRITO*/
+.table-custom {
+  background-color:#96d6ef !important;
+}
+
+.modal-dialog.modal-dialog-right {
+  width: 600px;
+  max-width: 90%;
+  height: 400px;
+  max-height: 90%;
 }

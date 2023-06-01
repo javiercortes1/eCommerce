@@ -1,5 +1,7 @@
 {% extends 'app/base.html' %}
-
+{% block css %}
+<title>Conejo Furioso | Administración</title>
+{% endblock %}
 {% block js %}
 <script>
     function delete_Category(id){
@@ -34,7 +36,7 @@
     <div class="card">
         <div class="card-body">
             <center>
-                <h2>Lista de Categorias</h2>
+                <h2>Lista de Categorías</h2>
             </center>
             <hr>
             <div class="table-responsive">
@@ -42,7 +44,7 @@
                     <thead>
                         <tr>
                             <th>Nombre</th>
-                            <th>Descripcion</th>
+                            <th>Descripción</th>
                             <th>Imagen</th>
                             {% if perms.app.change_category %}
                             <th>Modificar</th>
@@ -71,13 +73,13 @@
 
                         {% if perms.app.change_category %}
                         <td>
-                            <a href="{% url 'update_category' c.id %}" class="btn btn-info btn-sm">Modificar</a>
+                            <a href="{% url 'update_category' c.id %}" class="btn btn-default bg-primary-3 btn-sm">Modificar</a>
                         </td>
                         {% endif %}
 
                         {% if perms.app.delete_category %}
                         <td>
-                            <a href="#" onclick="delete_Category({{ c.id }})" class="btn btn-danger btn-sm">Eliminar</a>
+                            <a href="#" onclick="delete_Category({{ c.id }})" class="btn btn-danger btn-sm" style="border-color: black; border-width: 2px;">Eliminar</a>
                         </td>
                         {% endif %}
                     </tr>

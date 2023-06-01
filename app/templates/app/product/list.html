@@ -1,5 +1,7 @@
 {% extends 'app/base.html' %}
-
+{% block css %}
+<title>Conejo Furioso | Administración</title>
+{% endblock %}
 {% block js %}
 <script>
     function delete_Product(id){
@@ -42,13 +44,13 @@
                     <thead>
                         <tr>
                             <th>Nombre</th>
-                            <th>Descripcion</th>
+                            <th>Descripción</th>
                             <th>Valor</th>
                             <th>Categoría</th>
                             <th>Destacado</th>
                             <th>Unidades</th>
                             <th>Nuevo</th>
-                            <th>Creacion</th>
+                            <th>Creación</th>
                             <th>Imagen</th>
                             {% if perms.app.change_product %}
                             <th>Modificar</th>
@@ -95,13 +97,13 @@
 
                         {% if perms.app.change_product %}
                         <td>
-                            <a href="{% url 'update_product' p.id %}" class="btn btn-info btn-sm">Modificar</a>
+                            <a href="{% url 'update_product' p.id %}" class="btn btn-default bg-primary-3 btn-sm">Modificar</a>
                         </td>
                         {% endif %}
 
                         {% if perms.app.delete_product %}
                         <td>
-                            <a href="#" onclick="delete_Product({{ p.id }})" class="btn btn-danger btn-sm">Eliminar</a>
+                            <a href="#" onclick="delete_Product({{ p.id }})" class="btn btn-danger btn-sm" style="border-color: black; border-width: 2px;">Eliminar</a>
                         </td>
                         {% endif %}
                     </tr>
@@ -133,7 +135,7 @@
                 </div>
 
                 {% if perms.app.add_product %}
-                <div class="col">
+                <div class="col text-end">
                     <a href="{% url 'add_product' %}">
                         <button class="btn btn-default bg-primary-3" type="button">Agregar Nuevo</button>
                     </a>

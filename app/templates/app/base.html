@@ -73,7 +73,11 @@
             </div>
           </div>
           {% endif %}
-          <button id="cart-toggle">Mostrar Carrito</button>
+          <div class="nav-item cart">
+            <a class="nav-link" data-toggle="modal" data-target="#cartModal">
+            CARRITO
+          </button>
+        </div>
         </div>
   </div>
   </nav>
@@ -81,58 +85,64 @@
   </div>
 
   <main class="bg-primary-2">
-
-    <div id="cart" class="cart-container">
-      <button id="cart-close" class="cart-close-button">X</button>
-      <div class="alert alert-secondary my-5" role="alert">
-        <table class="table table-bordered table-hover table-responsive-sm">
-          <thead>
-            <tr>
-              <h2 style="text-align: center; justify-content: center;" class="my-2">Carrito</h1>
-                <br>
-            </tr>
-            <tr>
-              <th>Nombre</th>
-              <th>Precio</th>
-              <th>Cantidad</th>
-              <th>Total</th>
-            </tr>
-          </thead>
-          <tbody>
-            {% if request.session.cart.items %}
-            {% for key, value in request.session.cart.items %}
-            <tr>
-              <td><strong>{{value.product_name}}</strong></td>
-              <td>{{value.product_price}}</td>
-              <td>{{value.amount}}
-                <a href="{% url 'Add' value.product_id %}" class="badge btn btn-dark badge-dark">+</a>
-                <a href="{% url 'Sub' value.product_id %}" class="badge btn btn-dark badge-dark">-</a>
-              </td>
-              <td>{{value.accumulated}}</td>
-            </tr>
-            {% endfor %}
-            {% else %}
-            <tr>
-              <td colspan="4">
-                <div class="alert alert-danger text-center">Sin Productos</div>
-              </td>
-            </tr>
-            {% endif %}
-            <tr>
-              <th colspan="3" class="text-right">Total Compra:</th>
-              <th>$ {{cart_total}}</th>
-            </tr>
-          </tbody>
-          
-        </table>
-        <hr>
-        <div class="row text-center">
-          <div class="col-6"><a href="{% url 'Clean' %}" class="btn btn-danger">Limpiar</a></div>
-          <div class="col-6"><a href="{% url 'pago' %}" class="btn btn-warning">Pagar</a></div>
+    <div class="modal fade" id="cartModal" tabindex="-1" role="dialog" aria-labelledby="cartModalLabel"
+      aria-hidden="true">
+      <div class="modal-dialog modal-dialog-right modal-lg" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <table class="table table-bordered table-hover table-responsive-sm table-custom">
+              <thead>
+                <tr>
+                  <h1 style="text-align: center; justify-content: center;">Carrito</h1>
+                    <br>
+                </tr>
+                <tr>
+                  <th>Nombre</th>
+                  <th>Precio</th>
+                  <th>Cantidad</th>
+                  <th>Total</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% if request.session.cart.items %}
+                {% for key, value in request.session.cart.items %}
+                <tr>
+                  <td><strong>{{value.product_name}}</strong></td>
+                  <td>{{value.product_price}}</td>
+                  <td>{{value.amount}}
+                    <a href="{% url 'Add' value.product_id %}" class="badge btn btn-dark badge-dark">+</a>
+                    <a href="{% url 'Sub' value.product_id %}" class="badge btn btn-dark badge-dark">-</a>
+                  </td>
+                  <td>{{value.accumulated}}</td>
+                </tr>
+                {% endfor %}
+                {% else %}
+                <tr>
+                  <td colspan="4">
+                    <div class="alert alert-danger text-center">Sin Productos</div>
+                  </td>
+                </tr>
+                {% endif %}
+                <tr>
+                  <th colspan="3" class="text-right">Total Compra:</th>
+                  <th>$ {{cart_total}}</th>
+                </tr>
+              </tbody>
+              <!-- Contenido de la tabla -->
+            </table>
+          </div>
+          <div class="modal-footer">
+            <a href="{% url 'Clean' %}" class="btn btn-danger">Limpiar</a>
+            <a href="{% url 'pago' %}" class="btn btn-warning">Pagar</a>
+          </div>
         </div>
       </div>
     </div>
-
     {% block content %}
     {% endblock %}
 
@@ -197,7 +207,9 @@
 
   {% block js %}
   {% endblock %}
-
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
   <script src="{% static 'app/js/base.js' %}"></script>
 </body>
 
