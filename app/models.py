@@ -57,10 +57,12 @@ class Contact(models.Model):
         return self.name
 
 # modelo para objeto arrendable
-class Rentable(models.Model):
+class RentableProduct(models.Model):
     name = models.CharField(max_length=50)
+    price = models.IntegerField()
     description = models.TextField(max_length=200)
-    available = models.BooleanField(default=True)
+    stock = models.IntegerField()
+    image = models.ImageField(upload_to='rentable_products/', blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
@@ -69,24 +71,10 @@ class Rentable(models.Model):
 # modelo para el arriendo
 class Rental(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    rentables = models.ManyToManyField(Rentable)
-    start_date = models.DateField()
-    end_date = models.DateField()
+    rentables = models.ManyToManyField(RentableProduct)
     status = models.CharField(max_length=20)
     deposit_paid = models.BooleanField(default=False)
-
-    def clean(self):
-        if self.start_date > self.end_date:
-            raise ValidationError(
-                "La fecha de inicio no puede ser posterior a la fecha de finalización.")
-
-    def get_duration(self):
-        return (self.end_date - self.start_date).days
-
-    @property
-    def is_active(self):
-        today = timezone.now().date()
-        return self.start_date <= today <= self.end_date
+    delivery_date = models.DateField()
 
     def __str__(self):
         return f"{self.user.username} - Rental {self.pk}"

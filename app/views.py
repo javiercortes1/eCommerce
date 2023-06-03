@@ -2,11 +2,11 @@ from django.shortcuts import render, redirect, get_object_or_404
 from .forms import ContactForm, ProductForm, CustomUserCreationForm, CategoryForm, RentalForm
 from django.contrib import messages
 from django.contrib.auth import authenticate, login
-from .models import Product, Category, Rental, Contact, QueryType
+from .models import Product, Category, Rental, Contact, QueryType, RentableProduct
 from django.core.paginator import Paginator, EmptyPage
 from django.http import Http404
 from rest_framework import viewsets
-from .serializers import ProductSerializer, CategorySerializer, ContactSerializer, QueryTypeSerializer
+from .serializers import ProductSerializer, CategorySerializer, ContactSerializer, QueryTypeSerializer,RentableProductSerializer, RentalSerializer
 import requests
 from django.contrib.auth.decorators import login_required, permission_required
 from app.cart import Cart
@@ -71,6 +71,14 @@ class ContactViewSet(viewsets.ModelViewSet):
 class QueryTypeViewset(viewsets.ModelViewSet):
     queryset = QueryType.objects.all()
     serializer_class = QueryTypeSerializer
+
+class RentableProductViewSet(viewsets.ModelViewSet):
+    queryset = RentableProduct.objects.all()
+    serializer_class = RentableProductSerializer
+
+class RentalViewSet(viewsets.ModelViewSet):
+    queryset = Rental.objects.all()
+    serializer_class = RentalSerializer
 
 #VISTAS INICIALES
 def home(request):

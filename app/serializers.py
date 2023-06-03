@@ -1,4 +1,4 @@
-from .models import Product, Category, Contact, QueryType
+from .models import Product, Category, Contact, QueryType, RentableProduct, Rental
 from rest_framework import serializers
 from django.core.mail import send_mail
 from django.utils import timezone
@@ -107,3 +107,15 @@ class QueryTypeSerializer(serializers.ModelSerializer):
     class Meta:
         model = QueryType
         fields = '__all__'
+    
+class RentableProductSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = RentableProduct
+        fields = ['id', 'name', 'price', 'description', 'stock', 'image', 'created_at']
+
+class RentalSerializer(serializers.ModelSerializer):
+    rentables = RentableProductSerializer(many=True)
+
+    class Meta:
+        model = Rental
+        fields = ['id', 'user', 'rentables', 'status', 'deposit_paid', 'delivery_date']
