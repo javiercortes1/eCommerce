@@ -47,11 +47,18 @@ class QueryType(models.Model):
 
 #consulta
 class Contact(models.Model):
+    STATUS_CHOICES = (
+        ('Nuevo', 'Nuevo'),
+        ('En progreso', 'En progreso'),
+        ('Finalizado', 'Finalizado'),
+    )
+
     name = models.CharField(max_length=50)
     email = models.EmailField()
     phone = models.IntegerField()
     message = models.TextField(max_length=200)
     queryType = models.ForeignKey(QueryType, on_delete=models.PROTECT)
+    status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='Nuevo')
 
     def __str__(self):
         return self.name
