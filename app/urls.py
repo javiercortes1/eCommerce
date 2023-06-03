@@ -5,7 +5,8 @@ from .views import home, services, catalogue, contact,\
     add_prod_cart, del_prod_cart, subtract_product_cart,\
     clean_cart, cart_page, buy_confirm, add_category,\
     list_category, update_category, delete_category, admin_panel,\
-    add_rental, list_rental, update_rental, delete_rental, rental_detail, ContactViewSet,pago
+    add_rental, list_rental, update_rental, delete_rental, rental_detail, ContactViewSet,pago, list_contact,\
+    QueryTypeViewset
 
 from rest_framework import routers
 
@@ -13,6 +14,7 @@ router = routers.DefaultRouter()
 router.register('product', ProductViewset)
 router.register('category', CategoryViewset)
 router.register('contact', ContactViewSet, basename='contact')
+router.register('queryType', QueryTypeViewset, basename='queryType')
 
 
 urlpatterns = [
@@ -20,6 +22,7 @@ urlpatterns = [
     path('catalogue/', catalogue, name="catalogue"),
     path('services/', services, name="services"),
     path('contact/', contact, name="contact"),
+    path('list-contact/', list_contact, name="list_contact"),
     path('add-product/', add_product, name="add_product"),
     path('list-product/', list_product, name="list_product"),
     path('update-product/<id>/', update_product, name="update_product"),
