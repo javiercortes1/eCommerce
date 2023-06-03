@@ -2,11 +2,11 @@ from django.shortcuts import render, redirect, get_object_or_404
 from .forms import ContactForm, ProductForm, CustomUserCreationForm, CategoryForm, RentalForm
 from django.contrib import messages
 from django.contrib.auth import authenticate, login
-from .models import Product, Category, Rental, Contact
+from .models import Product, Category, Rental, Contact, QueryType, RentableProduct
 from django.core.paginator import Paginator, EmptyPage
 from django.http import Http404
 from rest_framework import viewsets
-from .serializers import ProductSerializer, CategorySerializer, ContactSerializer
+from .serializers import ProductSerializer, CategorySerializer, ContactSerializer, QueryTypeSerializer,RentableProductSerializer, RentalSerializer
 import requests
 from django.contrib.auth.decorators import login_required, permission_required
 from app.cart import Cart
@@ -68,6 +68,18 @@ class ContactViewSet(viewsets.ModelViewSet):
     queryset = Contact.objects.all()
     serializer_class = ContactSerializer
 
+class QueryTypeViewset(viewsets.ModelViewSet):
+    queryset = QueryType.objects.all()
+    serializer_class = QueryTypeSerializer
+
+class RentableProductViewSet(viewsets.ModelViewSet):
+    queryset = RentableProduct.objects.all()
+    serializer_class = RentableProductSerializer
+
+class RentalViewSet(viewsets.ModelViewSet):
+    queryset = Rental.objects.all()
+    serializer_class = RentalSerializer
+
 #VISTAS INICIALES
 def home(request):
     #Definimos los parametros para filtrar productos
@@ -119,13 +131,31 @@ def catalogue(request):
 def services(request):
 
     return render(request, 'app/services.html')
-
+#CONTATO
 def contact(request):
     data = {
         'form': ContactForm()
     }
 
-    return render(request, 'app/contact.html', data)
+    return render(request, 'app/contact/contact.html', data)
+
+@permission_required('app.view_contact')
+def list_contact(request):
+    response = requests.get(settings.API_BASE_URL + 'contact/')
+    contacts = response.json()
+    page = request.GET.get('page', 1)
+
+    try:
+        paginator = Paginator(contacts, 5)
+        contacts = paginator.page(page)
+    except:
+        raise Http404
+
+    data = {
+        'entity': contacts,
+        'paginator': paginator
+    }
+    return render(request, 'app/contact/list.html', data)
 
 #VISTAS DE PRODUCT
 def get_object_product(id):
@@ -632,5 +662,6 @@ def delete_rental(request, id):
     rental.delete()
     messages.success(request, "Eliminado correctamente")
     return redirect(to="list_rental")
+
 def pago(request):
     return render(request, "app/pago.html")

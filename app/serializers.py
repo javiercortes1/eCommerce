@@ -1,4 +1,4 @@
-from .models import Product, Category, Contact
+from .models import Product, Category, Contact, QueryType, RentableProduct, Rental
 from rest_framework import serializers
 from django.core.mail import send_mail
 from django.utils import timezone
@@ -11,9 +11,9 @@ class CategorySerializer(serializers.ModelSerializer):
 
         # Verificar si existe otro producto con el mismo nombre
         if instance is not None:
-            exists = Product.objects.filter(name__iexact=value).exclude(pk=instance.pk).exists()
+            exists = Category.objects.filter(name__iexact=value).exclude(pk=instance.pk).exists()
         else:
-            exists = Product.objects.filter(name__iexact=value).exists()
+            exists = Category.objects.filter(name__iexact=value).exists()
 
         if exists:
             raise serializers.ValidationError("Esta categoria ya existe")
@@ -56,6 +56,8 @@ class ProductSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 class ContactSerializer(serializers.ModelSerializer):
+    queryType_name = serializers.CharField(read_only=True, source="queryType.name")
+
     class Meta:
         model = Contact
         fields = '__all__'
@@ -85,3 +87,35 @@ class ContactSerializer(serializers.ModelSerializer):
         send_mail(subject, email_message, from_email, [to_email])
 
         return contact
+
+class QueryTypeSerializer(serializers.ModelSerializer):
+
+    def validate_name(self, value):
+        instance = self.instance
+
+        # Verificar si existe otro producto con el mismo nombre
+        if instance is not None:
+            exists = QueryType.objects.filter(name__iexact=value).exclude(pk=instance.pk).exists()
+        else:
+            exists = QueryType.objects.filter(name__iexact=value).exists()
+
+        if exists:
+            raise serializers.ValidationError("Este tipo de contacto ya existe")
+
+        return value
+    
+    class Meta:
+        model = QueryType
+        fields = '__all__'
+    
+class RentableProductSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = RentableProduct
+        fields = ['id', 'name', 'price', 'description', 'stock', 'image', 'created_at']
+
+class RentalSerializer(serializers.ModelSerializer):
+    rentables = RentableProductSerializer(many=True)
+
+    class Meta:
+        model = Rental
+        fields = ['id', 'user', 'rentables', 'status', 'deposit_paid', 'delivery_date']
