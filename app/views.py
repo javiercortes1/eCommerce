@@ -329,18 +329,13 @@ def delete_product(request, id):
             # Manejar el caso de error en la solicitud DELETE
             print(f'Error al eliminar el producto: {delete_response.content}')
             error_message = "Error al eliminar el producto a través de la API"
-            data = {
-                'form': ProductForm(instance=product),
-                'error_message': error_message
-            }
-            return render(request, 'app/product/update.html', data)
+            messages.error(request, error_message)
+            return redirect(to="list_product")  # Redireccionar a la página de listado con mensaje de error
     else:
         # Manejar el caso de error al obtener el producto
         error_message = "Error al obtener el producto a través de la API"
-        data = {
-            'error_message': error_message
-        }
-        return render(request, 'app/product/update.html', data)
+        messages.error(request, error_message)
+        return redirect(to="list_product")  # Redireccionar a la página de listado con mensaje de error
 
 def product_detail(request, id):
     # Realizar una solicitud GET a la API para obtener los detalles del producto

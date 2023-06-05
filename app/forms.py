@@ -5,7 +5,7 @@ from crispy_forms.layout import Layout, Submit
 from django.contrib.auth.forms import UserCreationForm
 from .validators import MaxSizeFileValidator
 from django.forms import ValidationError
-from django.core.validators import validate_email
+from django.core.validators import validate_email, MinValueValidator
 from django.core.exceptions import ValidationError
 from django.contrib.admin.widgets import AdminDateWidget
 
@@ -72,6 +72,7 @@ class ProductForm(forms.ModelForm):
     image = forms.ImageField(required=False, validators=[MaxSizeFileValidator(20)])
     name = forms.CharField(min_length=3, max_length=50)
     price = forms.IntegerField(min_value=1, max_value=1500000)
+    stock = forms.IntegerField(validators=[MinValueValidator(0)])
 
 
     class Meta:
