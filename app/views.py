@@ -163,6 +163,7 @@ def get_object_product(id):
 
     if response.status_code == 200:
         product_data = response.json()
+        product_data.pop('image', None)  # Eliminar el campo de imagen del JSON
         return product_data
     else:
         print(f'Error al obtener el producto: {response.content}')
@@ -275,12 +276,16 @@ def update_product(request, id):
                     files = {}
                     if image:
                         files['image'] = image  # Agregar la imagen a los archivos adjuntos
-    
-                    response = requests.put(
-                        settings.API_BASE_URL + f'product/{id}/',
-                        data=product_data,
-                        files=files
-                    )
+                        response = requests.put(
+                            settings.API_BASE_URL + f'product/{id}/',
+                            data=product_data,
+                            files=files
+                        )
+                    else:
+                        response = requests.put(
+                            settings.API_BASE_URL + f'product/{id}/',
+                            json=product_data
+                        )
     
                     if response.status_code == 200:
                         print('Producto actualizado exitosamente')
