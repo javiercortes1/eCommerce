@@ -349,23 +349,31 @@ def product_detail(request, id):
     if response.status_code == 200:
         product_data = response.json()
 
-        # Obtener la instancia de Category
+        # Obtener la instancia de Category a través de la API
         category_id = product_data['category']
-        category = Category.objects.get(id=category_id)
+        category_data = get_object_category(category_id)
 
-        # Remover el campo 'category_name' del diccionario product_data
-        product_data.pop('category_name', None)
+        if category_data:
+            # Crear el objeto Category con los datos obtenidos de la API
+            category = Category(**category_data)
 
-        # Actualizar el campo 'category' en product_data con la instancia de Category
-        product_data['category'] = category
+            # Remover el campo 'category_name' del diccionario product_data
+            product_data.pop('category_name', None)
 
-        # Crear el objeto Product con los datos actualizados
-        product = Product(**product_data)
+            # Actualizar el campo 'category' en product_data con la instancia de Category
+            product_data['category'] = category
 
-        data = {
-            'product': product
-        }
-        return render(request, 'app/product/detail.html', data)
+            # Crear el objeto Product con los datos actualizados
+            product = Product(**product_data)
+
+            data = {
+                'product': product
+            }
+            return render(request, 'app/product/detail.html', data)
+        else:
+            # Manejar el caso si no se puede obtener la categoría de la API
+            error_message = "Error al obtener la categoría de la API"
+            return render(request, 'app/product/detail.html', {'error_message': error_message})
     else:
         # Manejar el caso de error en la solicitud
         print(f'Error al obtener los detalles del producto: {response.content}')
