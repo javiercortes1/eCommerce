@@ -5,7 +5,7 @@ from django.contrib.auth import authenticate, login
 from .models import Product, Category, Rental, Contact, QueryType, RentableProduct
 from django.core.paginator import Paginator, EmptyPage
 from django.http import Http404
-from rest_framework import viewsets
+from rest_framework import viewsets, serializers
 from .serializers import ProductSerializer, CategorySerializer, ContactSerializer, QueryTypeSerializer,RentableProductSerializer, RentalSerializer
 import requests
 from django.contrib.auth.decorators import login_required, permission_required
@@ -169,48 +169,57 @@ def get_object_product(id):
         print(f'Error al obtener el producto: {response.content}')
         return None
     
-@permission_required('app.add_product')
+@permission_required('app.add_product') 
 def add_product(request):
     if request.method == 'POST':
         form = ProductForm(request.POST, request.FILES)
         if form.is_valid():
             name = form.cleaned_data['name']
-            existing_product = Product.objects.filter(name__iexact=name).first()
-            if existing_product:
-                form.add_error('name', 'Este producto ya existe')
-                error_message = "Este producto ya existe"
-            else:
-                price = form.cleaned_data['price']
-                description = form.cleaned_data['description']
-                new = form.cleaned_data['new']
-                category_id = form.cleaned_data['category'].id
-                stock = form.cleaned_data['stock']
-                featured = form.cleaned_data['featured']
-                image = form.cleaned_data['image']
 
-                product_data = {
-                    'name': name,
-                    'price': price,
-                    'description': description,
-                    'new': new,
-                    'category': category_id,
-                    'stock': stock,
-                    'featured': featured,
-                }
+            # Verificar si existe un producto con el mismo nombre a través de la API
+            response = requests.get(settings.API_BASE_URL + f'product/?name={name}')
 
-                response = requests.post(
-                    settings.API_BASE_URL + 'product/',
-                    data=product_data,
-                    files={'image': image}
-                )
+            if response.status_code == 200:
+                existing_products = response.json()
 
-                if response.status_code == 201:
-                    print('Producto creado exitosamente')
-                    messages.success(request, 'Producto agregado exitosamente.')
-                    return redirect('list_product')
+                if existing_products:
+                    form.add_error('name', 'Este producto ya existe')
+                    error_message = "Este producto ya existe"
                 else:
-                    print(f'Error al crear el producto: {response.content}')
-                    error_message = "Error al crear el producto a través de la API"
+                    price = form.cleaned_data['price']
+                    description = form.cleaned_data['description']
+                    new = form.cleaned_data['new']
+                    category_id = form.cleaned_data['category'].id
+                    stock = form.cleaned_data['stock']
+                    featured = form.cleaned_data['featured']
+                    image = form.cleaned_data['image']
+
+                    product_data = {
+                        'name': name,
+                        'price': price,
+                        'description': description,
+                        'new': new,
+                        'category': category_id,
+                        'stock': stock,
+                        'featured': featured,
+                    }
+
+                    response = requests.post(
+                        settings.API_BASE_URL + 'product/',
+                        data=product_data,
+                        files={'image': image}
+                    )
+
+                    if response.status_code == 201:
+                        print('Producto creado exitosamente')
+                        messages.success(request, 'Producto agregado exitosamente.')
+                        return redirect('list_product')
+                    else:
+                        print(f'Error al crear el producto: {response.content}')
+                        error_message = "Error al crear el producto a través de la API"
+            else:
+                print(f'Error al verificar la existencia del producto: {response.content}')
+                error_message = "Error al verificar la existencia del producto a través de la API"
         else:
             error_message = "Error en los datos del formulario"
         data = {
@@ -457,33 +466,14 @@ def add_category(request):
     if request.method == 'POST':
         form = CategoryForm(request.POST, request.FILES)
         if form.is_valid():
-            name = form.cleaned_data['name']
-            existing_category = Category.objects.filter(name__iexact=name).first()
-            if existing_category:
-                form.add_error('name', 'Esta categoría ya existe')
-                error_message = "Esta categoría ya existe"
-            else:
-                description = form.cleaned_data['description']
-                image = form.cleaned_data['image']
-
-                category_data = {
-                    'name': name,
-                    'description': description,
-                }
-
-                response = requests.post(
-                    settings.API_BASE_URL + 'category/',
-                    data=category_data,
-                    files={'image': image}
-                )
-
-                if response.status_code == 201:
-                    print('Categoría creada exitosamente')
-                    messages.success(request, 'Categoría agregada exitosamente.')
-                    return redirect('list_category')
-                else:
-                    print(f'Error al crear la categoría: {response.content}')
-                    error_message = "Error al crear la categoría a través de la API"
+            try:
+                serializer = CategorySerializer(data=form.cleaned_data)
+                serializer.is_valid(raise_exception=True)
+                serializer.save()
+                messages.success(request, 'Categoría agregada exitosamente.')
+                return redirect('list_category')
+            except serializers.ValidationError as e:
+                error_message = e.detail['name'][0]  # Mensaje de error específico del campo 'name'
         else:
             error_message = "Error en los datos del formulario"
         data = {
@@ -494,7 +484,7 @@ def add_category(request):
         data = {
             'form': CategoryForm()
         }
-        
+
     return render(request, 'app/category/add.html', data)
 
 @permission_required('app.view_category')
