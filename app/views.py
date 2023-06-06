@@ -260,50 +260,60 @@ def update_product(request, id):
     
             if form.is_valid():
                 name = form.cleaned_data['name']
-                existing_product = Product.objects.exclude(id=id).filter(name__iexact=name).first()
-                if existing_product:
-                    if existing_product.id != id:
-                        form.add_error('name', 'Este producto ya existe')
-                        error_message = "Este producto ya existe"
+    
+                # Verificar si existe un producto con el mismo nombre a través de la API
+                response = requests.get(settings.API_BASE_URL + f'product/?name={name}')
+    
+                if response.status_code == 200:
+                    existing_products = response.json()
+    
+                    if existing_products:
+                        existing_product = existing_products[0]  # Obtener el primer producto existente
+                        if existing_product['id'] != id:
+                            form.add_error('name', 'Este producto ya existe')
+                            error_message = "Este producto ya existe"
+                    else:
+                        description = form.cleaned_data['description']
+                        price = form.cleaned_data['price']
+                        new = form.cleaned_data['new']
+                        category_id = form.cleaned_data['category'].id
+                        stock = form.cleaned_data['stock']
+                        featured = form.cleaned_data['featured']
+                        image = form.cleaned_data['image']
+    
+                        product_data['name'] = name
+                        product_data['description'] = description
+                        product_data['price'] = price
+                        product_data['new'] = new
+                        product_data['category'] = category_id
+                        product_data['stock'] = stock
+                        product_data['featured'] = featured
+    
+                        # Realizar una solicitud PUT a la API para actualizar el producto
+                        files = {}
+                        if image:
+                            files['image'] = image
+                            response = requests.put(
+                                settings.API_BASE_URL + f'product/{id}/',
+                                data=product_data,
+                                files=files
+                            )
+                        else:
+                            response = requests.put(
+                                settings.API_BASE_URL + f'product/{id}/',
+                                json=product_data
+                            )
+    
+                        if response.status_code == 200:
+                            print('Producto actualizado exitosamente')
+                            messages.success(request, "Modificado correctamente")
+                            return redirect(to="list_product")
+                        else:
+                            print(f'Error al actualizar el producto: {response.content}')
+                            error_message = "Error al actualizar el producto a través de la API"
                 else:
-                    description = form.cleaned_data['description']
-                    price = form.cleaned_data['price']
-                    new = form.cleaned_data['new']
-                    category_id = form.cleaned_data['category'].id  # Obtener solo el ID de la categoría
-                    stock = form.cleaned_data['stock']
-                    featured = form.cleaned_data['featured']
-                    image = form.cleaned_data['image']
-    
-                    product_data['name'] = name
-                    product_data['description'] = description
-                    product_data['price'] = price
-                    product_data['new'] = new
-                    product_data['category'] = category_id  # Usar el ID de la categoría
-                    product_data['stock'] = stock
-                    product_data['featured'] = featured
-    
-                    # Realizar una solicitud PUT a la API para actualizar el producto
-                    files = {}
-                    if image:
-                        files['image'] = image  # Agregar la imagen a los archivos adjuntos
-                        response = requests.put(
-                            settings.API_BASE_URL + f'product/{id}/',
-                            data=product_data,
-                            files=files
-                        )
-                    else:
-                        response = requests.put(
-                            settings.API_BASE_URL + f'product/{id}/',
-                            json=product_data
-                        )
-    
-                    if response.status_code == 200:
-                        print('Producto actualizado exitosamente')
-                        messages.success(request, "Modificado correctamente")
-                        return redirect(to="list_product")
-                    else:
-                        print(f'Error al actualizar el producto: {response.content}')
-                        error_message = "Error al actualizar el producto a través de la API"
+                    print(f'Error al verificar la existencia del producto: {response.content}')
+                    error_message = "Error al verificar la existencia del producto a través de la API"
             else:
                 error_message = "Error en los datos del formulario"
         else:
@@ -460,12 +470,14 @@ def get_object_category(id):
     else:
         print(f'Error al obtener la categoria: {response.content}')
         return None
-    
+
+#add category con serializer    
 @permission_required('app.add_category')
 def add_category(request):
     if request.method == 'POST':
         form = CategoryForm(request.POST, request.FILES)
         if form.is_valid():
+            error_message = None  # Inicializamos la variable error_message
             try:
                 serializer = CategorySerializer(data=form.cleaned_data)
                 serializer.is_valid(raise_exception=True)
@@ -473,7 +485,7 @@ def add_category(request):
                 messages.success(request, 'Categoría agregada exitosamente.')
                 return redirect('list_category')
             except serializers.ValidationError as e:
-                error_message = e.detail['name'][0]  # Mensaje de error específico del campo 'name'
+                form.add_error('name', e.detail['name'][0])  # Agregar mensaje de error al campo 'name'
         else:
             error_message = "Error en los datos del formulario"
         data = {
