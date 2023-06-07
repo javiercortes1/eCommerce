@@ -95,11 +95,13 @@ def home(request):
         'featured__in': 'true',
         'new__in': 'true'
     }
-    #obtenemos los productos desde la API
-    response = requests.get(settings.API_BASE_URL + 'product/', params=params).json()
+    #obtenemos los productos y categorias desde la API
+    product_response = requests.get(settings.API_BASE_URL + 'product/', params=params).json()
+    categories_response = requests.get(settings.API_BASE_URL + 'category/').json()
     
     data = {
-        'products': response
+        'products': product_response,
+        'categories': categories_response
     }
     
     return render(request, 'app/home.html', data)
