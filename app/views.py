@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from .forms import ContactForm, ProductForm, CustomUserCreationForm, CategoryForm, RentalForm
+from .forms import ContactForm, ProductForm, CustomUserCreationForm, CategoryForm, RentalForm, QueryTypeForm
 from django.contrib import messages
 from django.contrib.auth import authenticate, login
 from .models import Product, Category, Rental, Contact, QueryType, RentableProduct
@@ -174,6 +174,158 @@ def list_contact(request):
         'paginator': paginator
     }
     return render(request, 'app/contact/list.html', data)
+
+#VISTAS DE QUERYTYPE
+def get_object_query_type(id):
+    response = requests.get(settings.API_BASE_URL + f'query-type/{id}/')
+
+    if response.status_code == 200:
+        query_type_data = response.json()
+        return query_type_data
+    else:
+        print(f'Error al obtener el tipo de consulta: {response.content}')
+        return None
+    
+def add_query_type(request):
+    if request.method == 'POST':
+        form = QueryTypeForm(request.POST, request.FILES)
+        if form.is_valid():
+            error_message = None  # Inicializamos la variable error_message
+            try:
+                serializer = QueryTypeSerializer(data=form.cleaned_data)
+                serializer.is_valid(raise_exception=True)
+                serializer.save()
+                messages.success(request, 'Tipo de consulta agregada exitosamente.')
+                return redirect('list_query_type')
+            except serializers.ValidationError as e:
+                form.add_error('name', e.detail['name'][0])  # Agregar mensaje de error al campo 'name'
+        else:
+            error_message = "Error en los datos del formulario"
+        data = {
+            'form': form,
+            'error_message': error_message
+        }
+    else:
+        data = {
+            'form': QueryTypeForm()
+        }
+
+    return render(request, 'app/querytype/add.html', data)
+
+def list_query_type(request):
+    response = requests.get(settings.API_BASE_URL + 'query-type/')
+    query_types = response.json()
+    page = request.GET.get('page', 1)
+
+    try:
+        paginator = Paginator(query_types, 5)
+        query_types = paginator.page(page)
+    except:
+        raise Http404
+
+    data = {
+        'entity': query_types,
+        'paginator': paginator
+    }
+    return render(request, 'app/querytype/list.html', data)
+
+def update_query_type(request, id):
+    querytype_data = get_object_query_type(id)
+
+    if querytype_data:
+        error_message = ""
+
+        if request.method == 'POST':
+            form = QueryTypeForm(request.POST)
+
+            if form.is_valid():
+                name = form.cleaned_data['name']
+
+                # Verificar si existe una categoría con el mismo nombre a través de la API
+                response = requests.get(settings.API_BASE_URL + f'query-type/?name={name}')
+
+                if response.status_code == 200:
+                    existing_querytype = response.json()
+
+                    if existing_querytype:
+                        # Verificar si alguna categoría tiene un nombre diferente al nombre actual
+                        for existing_querytype in existing_querytype:
+                            if existing_querytype['name'] == name and existing_querytype['id'] != int(id):
+                                form.add_error('name', 'Este tipo de consulta ya existe')
+                                error_message = "Este tipo de consulta ya existe"
+                                print("existing_querytype['name']: ", existing_querytype['name'])
+                                print("name: ", name)
+                                break  # Salir del bucle si se encuentra una categoría existente
+
+                    if not error_message:
+                        description = form.cleaned_data['description']
+
+                        # Crear un nuevo diccionario con los datos actualizados
+                        updated_data = {
+                            'name': name,
+                            'description': description
+                        }
+
+                        # Actualizar la categoría a través de la API
+                        update_url = settings.API_BASE_URL + f'query-type/{id}/'
+                        response = requests.put(update_url, data=updated_data)
+
+                        if response.status_code == 200:
+                            print('Tipo de consulta actualizado exitosamente')
+                            messages.success(request, "Modificado correctamente")
+                            return redirect(to="list_query_type")
+                        else:
+                            print(f'Error al actualizar el tipo de consulta: {response.content}')
+                            error_message = "Error al actualizar el tipo de consulta a través de la API"
+                else:
+                    print(f'Error al verificar la existencia de el tipo de consulta: {response.content}')
+                    error_message = "Error al verificar la existencia de el tipo de consulta a través de la API"
+            else:
+                error_message = "Error en los datos del formulario"
+        else:
+            form = QueryTypeForm(initial=querytype_data)
+            error_message = ""
+
+        data = {
+            'form': form,
+            'error_message': error_message
+        }
+
+        return render(request, 'app/querytype/update.html', data)
+    else:
+        # Manejar el caso si no se puede obtener la categoría de la API
+        messages.error(request, "Error al obtener el tipo de consulta de la API")
+        return redirect(to="list_query_type")
+    
+def delete_query_type(request, id):
+    querytype_data = get_object_query_type(id)
+
+    if querytype_data:
+        querytype = QueryType(id=querytype_data['id'])  # Crear una instancia de Product solo con el ID
+
+        # Realizar una solicitud DELETE a la API para eliminar el producto
+        delete_response = requests.delete(settings.API_BASE_URL + f'query-type/{id}/')
+
+        if delete_response.status_code == 204:
+            querytype.delete()
+            messages.success(request, "Eliminado correctamente")
+            return redirect(to="list_query_type")
+        else:
+            # Manejar el caso de error en la solicitud DELETE
+            print(f'Error al eliminar el tipo de consulta: {delete_response.content}')
+            error_message = "Error al eliminar el tipo de consulta a través de la API"
+            data = {
+                'form': QueryTypeForm(instance=querytype),
+                'error_message': error_message
+            }
+            return render(request, 'app/query-type/update.html', data)
+    else:
+        # Manejar el caso de error al obtener el producto
+        error_message = "Error al obtener el tipo de consulta a través de la API"
+        data = {
+            'error_message': error_message
+        }
+        return render(request, 'app/query-type/update.html', data)
 
 #VISTAS DE PRODUCT
 def get_object_product(id):
@@ -517,7 +669,6 @@ def get_object_category(id):
         print(f'Error al obtener la categoria: {response.content}')
         return None
 
-#add category con serializer    
 @permission_required('app.add_category')
 def add_category(request):
     if request.method == 'POST':

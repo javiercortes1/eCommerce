@@ -6,7 +6,7 @@ from .views import home, services, catalogue, contact,\
     clean_cart, cart_page, buy_confirm, add_category,\
     list_category, update_category, delete_category, admin_panel,\
     add_rental, list_rental, update_rental, delete_rental, rental_detail, ContactViewSet,pago, list_contact,\
-    QueryTypeViewset, RentableProductViewSet, RentalViewSet, update_contact_status
+    QueryTypeViewset, RentableProductViewSet, RentalViewSet, update_contact_status, add_query_type, list_query_type, update_query_type, delete_query_type
 
 from rest_framework import routers
 
@@ -14,7 +14,7 @@ router = routers.DefaultRouter()
 router.register('product', ProductViewset)
 router.register('category', CategoryViewset)
 router.register('contact', ContactViewSet, basename='contact')
-router.register('queryType', QueryTypeViewset, basename='queryType')
+router.register('query-type', QueryTypeViewset, basename='query-type')
 router.register(r'rentableproducts', RentableProductViewSet)
 router.register(r'rentals', RentalViewSet)
 
@@ -26,6 +26,10 @@ urlpatterns = [
     path('contact/', contact, name="contact"),
     path('list-contact/', list_contact, name="list_contact"),
     path('update-status/<int:contact_id>/', update_contact_status, name='update_status'),
+    path('add-query-type/', add_query_type, name="add_query_type"),
+    path('list-query-type/', list_query_type, name="list_query_type"),
+    path('update-query-type/<int:id>/', update_query_type, name="update_query_type"),
+    path('delete-query-type/<id>/', delete_query_type, name="delete_query_type"),
     path('add-product/', add_product, name="add_product"),
     path('list-product/', list_product, name="list_product"),
     path('update-product/<int:id>/', update_product, name="update_product"),
