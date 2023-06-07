@@ -236,18 +236,12 @@ def add_product(request):
 def list_product(request):
     name_filter = request.GET.get('name', '')
     category_filter = request.GET.get('category', '')
-    new_filter = request.GET.get('new', '') == 'true'
-    featured_filter = request.GET.get('featured', '') == 'true'
 
     params = {}
     if name_filter:
         params['name'] = name_filter
     if category_filter:
         params['category'] = category_filter
-    if new_filter:
-        params['new'] = 'true'
-    if featured_filter:
-        params['featured'] = 'true'
 
     response = requests.get(settings.API_BASE_URL + 'product/', params=params)
     if response.status_code == 200:
@@ -273,8 +267,6 @@ def list_product(request):
         'paginator': paginator,
         'name_filter': name_filter,
         'category_filter': category_filter,
-        'new_filter': new_filter,
-        'featured_filter': featured_filter,
         'categories': categories,
     }
     return render(request, 'app/product/list.html', data)
@@ -282,26 +274,33 @@ def list_product(request):
 @permission_required('app.change_product')
 def update_product(request, id):
     product_data = get_object_product(id)
-    
+
     if product_data:
+        error_message = ""
+
         if request.method == 'POST':
             form = ProductForm(request.POST, request.FILES)
-    
+
             if form.is_valid():
                 name = form.cleaned_data['name']
-    
+
                 # Verificar si existe un producto con el mismo nombre a través de la API
                 response = requests.get(settings.API_BASE_URL + f'product/?name={name}')
-    
+
                 if response.status_code == 200:
                     existing_products = response.json()
-    
+
                     if existing_products:
-                        existing_product = existing_products[0]  # Obtener el primer producto existente
-                        if existing_product['id'] != id:
-                            form.add_error('name', 'Este producto ya existe')
-                            error_message = "Este producto ya existe"
-                    else:
+                        # Verificar si algún producto tiene un nombre diferente al nombre actual
+                        for existing_product in existing_products:
+                            if existing_product['name'] == name and existing_product['id'] != id:
+                                form.add_error('name', 'Este producto ya existe')
+                                error_message = "Este producto ya existe"
+                                print("existing_product['name']: ", existing_product['name'])
+                                print("name: ", name)
+                                break  # Salir del bucle si se encuentra un producto existente
+
+                    if not error_message:
                         description = form.cleaned_data['description']
                         price = form.cleaned_data['price']
                         new = form.cleaned_data['new']
@@ -309,30 +308,23 @@ def update_product(request, id):
                         stock = form.cleaned_data['stock']
                         featured = form.cleaned_data['featured']
                         image = form.cleaned_data['image']
-    
-                        product_data['name'] = name
-                        product_data['description'] = description
-                        product_data['price'] = price
-                        product_data['new'] = new
-                        product_data['category'] = category_id
-                        product_data['stock'] = stock
-                        product_data['featured'] = featured
-    
-                        # Realizar una solicitud PUT a la API para actualizar el producto
-                        files = {}
-                        if image:
-                            files['image'] = image
-                            response = requests.put(
-                                settings.API_BASE_URL + f'product/{id}/',
-                                data=product_data,
-                                files=files
-                            )
-                        else:
-                            response = requests.put(
-                                settings.API_BASE_URL + f'product/{id}/',
-                                json=product_data
-                            )
-    
+
+                        # Crear un nuevo diccionario con los datos actualizados
+                        updated_data = {
+                            'name': name,
+                            'description': description,
+                            'price': price,
+                            'new': new,
+                            'category': category_id,
+                            'stock': stock,
+                            'featured': featured
+                        }
+
+                        # Actualizar el producto a través de la API
+                        update_url = settings.API_BASE_URL + f'product/{id}/'
+                        files = {'image': image}  # Archivo adjunto
+                        response = requests.put(update_url, data=updated_data, files=files)
+
                         if response.status_code == 200:
                             print('Producto actualizado exitosamente')
                             messages.success(request, "Modificado correctamente")
@@ -348,12 +340,12 @@ def update_product(request, id):
         else:
             form = ProductForm(initial=product_data)
             error_message = ""
-    
+
         data = {
             'form': form,
             'error_message': error_message
         }
-    
+
         return render(request, 'app/product/update.html', data)
     else:
         # Manejar el caso si no se puede obtener el producto de la API
