@@ -3,7 +3,7 @@ from .forms import ContactForm, ProductForm, CustomUserCreationForm, CategoryFor
 from django.contrib import messages
 from django.contrib.auth import authenticate, login
 from .models import Product, Category, Rental, Contact, QueryType, RentableProduct
-from django.core.paginator import Paginator, EmptyPage
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.http import Http404
 from rest_framework import viewsets, serializers
 from .serializers import ProductSerializer, CategorySerializer, ContactSerializer, QueryTypeSerializer,RentableProductSerializer, RentalSerializer
@@ -234,19 +234,48 @@ def add_product(request):
 
 @permission_required('app.view_product')
 def list_product(request):
-    response = requests.get(settings.API_BASE_URL + 'product/')
-    products = response.json()
-    page = request.GET.get('page', 1)
+    name_filter = request.GET.get('name', '')
+    category_filter = request.GET.get('category', '')
+    new_filter = request.GET.get('new', '') == 'true'
+    featured_filter = request.GET.get('featured', '') == 'true'
+
+    params = {}
+    if name_filter:
+        params['name'] = name_filter
+    if category_filter:
+        params['category'] = category_filter
+    if new_filter:
+        params['new'] = 'true'
+    if featured_filter:
+        params['featured'] = 'true'
+
+    response = requests.get(settings.API_BASE_URL + 'product/', params=params)
+    if response.status_code == 200:
+        products = response.json()
+    else:
+        products = []
+
+    paginator = Paginator(products, 5)
+    page = request.GET.get('page')
 
     try:
-        paginator = Paginator(products, 5)
         products = paginator.page(page)
-    except:
-        raise Http404
+    except PageNotAnInteger:
+        products = paginator.page(1)
+    except EmptyPage:
+        products = paginator.page(paginator.num_pages)
+
+    response = requests.get(settings.API_BASE_URL + 'category/')
+    categories = response.json()
 
     data = {
         'entity': products,
-        'paginator': paginator
+        'paginator': paginator,
+        'name_filter': name_filter,
+        'category_filter': category_filter,
+        'new_filter': new_filter,
+        'featured_filter': featured_filter,
+        'categories': categories,
     }
     return render(request, 'app/product/list.html', data)
 
