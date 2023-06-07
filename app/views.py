@@ -522,36 +522,55 @@ def update_category(request, id):
     category_data = get_object_category(id)
 
     if category_data:
+        error_message = ""
+
         if request.method == 'POST':
             form = CategoryForm(request.POST, request.FILES)
 
             if form.is_valid():
                 name = form.cleaned_data['name']
-                existing_category = Category.objects.exclude(id=id).filter(name__iexact=name).first()
-                if existing_category:
-                    if existing_category.id != id:
-                        form.add_error('name', 'Esta categoría ya existe')
-                        error_message = "Esta categoría ya existe"
+
+                # Verificar si existe una categoría con el mismo nombre a través de la API
+                response = requests.get(settings.API_BASE_URL + f'category/?name={name}')
+
+                if response.status_code == 200:
+                    existing_categories = response.json()
+
+                    if existing_categories:
+                        # Verificar si alguna categoría tiene un nombre diferente al nombre actual
+                        for existing_category in existing_categories:
+                            if existing_category['name'] == name and existing_category['id'] != int(id):
+                                form.add_error('name', 'Esta categoría ya existe')
+                                error_message = "Esta categoría ya existe"
+                                print("existing_category['name']: ", existing_category['name'])
+                                print("name: ", name)
+                                break  # Salir del bucle si se encuentra una categoría existente
+
+                    if not error_message:
+                        description = form.cleaned_data['description']
+                        image = form.cleaned_data['image']
+
+                        # Crear un nuevo diccionario con los datos actualizados
+                        updated_data = {
+                            'name': name,
+                            'description': description
+                        }
+
+                        # Actualizar la categoría a través de la API
+                        update_url = settings.API_BASE_URL + f'category/{id}/'
+                        files = {'image': image}  # Archivo adjunto
+                        response = requests.put(update_url, data=updated_data, files=files)
+
+                        if response.status_code == 200:
+                            print('Categoría actualizada exitosamente')
+                            messages.success(request, "Modificado correctamente")
+                            return redirect(to="list_category")
+                        else:
+                            print(f'Error al actualizar la categoría: {response.content}')
+                            error_message = "Error al actualizar la categoría a través de la API"
                 else:
-                    description = form.cleaned_data['description']
-                    image = form.cleaned_data['image']
-
-                    category_data['name'] = name
-                    category_data['description'] = description
-
-                    response = requests.put(
-                        settings.API_BASE_URL + f'category/{id}/',
-                        data=category_data,
-                        files={'image': image}
-                    )
-
-                    if response.status_code == 200:
-                        print('Categoría actualizada exitosamente')
-                        messages.success(request, "Modificado correctamente")
-                        return redirect(to="list_category")
-                    else:
-                        print(f'Error al actualizar la categoría: {response.content}')
-                        error_message = "Error al actualizar la categoría a través de la API"
+                    print(f'Error al verificar la existencia de la categoría: {response.content}')
+                    error_message = "Error al verificar la existencia de la categoría a través de la API"
             else:
                 error_message = "Error en los datos del formulario"
         else:
@@ -568,7 +587,7 @@ def update_category(request, id):
         # Manejar el caso si no se puede obtener la categoría de la API
         messages.error(request, "Error al obtener la categoría de la API")
         return redirect(to="list_category")
-
+    
 @permission_required('app.delete_category')
 def delete_category(request, id):
     category_data = get_object_category(id)
