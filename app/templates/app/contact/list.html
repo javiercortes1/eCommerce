@@ -54,16 +54,23 @@
                     </tbody>
 
                     {% for c in entity %}
-
                     <tr>
-                        <td>{{c.name | title }}</td>
-                        <td>{{c.email }}</td>
-                        <td>{{c.phone }}</td>
-                        <td>{{c.message }}</td>
-                        <td>{{c.queryType_name }}</td>
-                        <td>{{c.status }}</td>
+                        <td>{{ c.name | title }}</td>
+                        <td>{{ c.email }}</td>
+                        <td>{{ c.phone }}</td>
+                        <td>{{ c.message }}</td>
+                        <td>{{ c.queryType_name }}</td>
+                        <td>
+                            <form method="POST" action="{% url 'update_status' c.id %}">
+                                {% csrf_token %}
+                                <select name="status" onchange="this.form.submit()">
+                                    <option value="Nuevo" {% if c.status == 'Nuevo' %}selected{% endif %}>Nuevo</option>
+                                    <option value="En progreso" {% if c.status == 'En progreso' %}selected{% endif %}>En progreso</option>
+                                    <option value="Finalizado" {% if c.status == 'Finalizado' %}selected{% endif %}>Finalizado</option>
+                                </select>
+                            </form>
+                        </td>
                     </tr>
-
                     {% endfor %}
 
                 </table>
@@ -96,7 +103,27 @@
 </div>
 
 <script src="{% static 'core/js/jquery-3.6.0.js'%}"></script>
-<!-- <script src="{% static 'core/js/listarProducto.js'%}"></script> -->
+<script>
+    $(document).ready(function () {
+        $('.update-status-btn').click(function () {
+            var contactId = $(this).data('contact-id');
+            var newStatus = $(this).data('status');
+
+            $.ajax({
+                url: '/api/contact/' + contactId + '/',
+                method: 'PATCH',
+                data: { 'status': newStatus },
+                success: function (response) {
+                    // Actualizar el estado en la tabla
+                    $('[data-contact-id="' + contactId + '"]').closest('tr').find('td:eq(5)').text(newStatus);
+                },
+                error: function (xhr, status, error) {
+                    console.log(error);
+                }
+            });
+        });
+    });
+</script>
 
 
 {% endblock %}

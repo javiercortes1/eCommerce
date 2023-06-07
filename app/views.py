@@ -68,6 +68,14 @@ class ContactViewSet(viewsets.ModelViewSet):
     queryset = Contact.objects.all()
     serializer_class = ContactSerializer
 
+    def partial_update(self, request, *args, **kwargs):
+        instance = self.get_object()
+        status = request.data.get('status')
+        instance.status = status
+        instance.save()
+        serializer = self.get_serializer(instance)
+        return Response(serializer.data)
+
 class QueryTypeViewset(viewsets.ModelViewSet):
     queryset = QueryType.objects.all()
     serializer_class = QueryTypeSerializer
@@ -139,6 +147,16 @@ def contact(request):
 
     return render(request, 'app/contact/contact.html', data)
 
+def update_contact_status(request, contact_id):
+    if request.method == 'POST':
+        status = request.POST.get('status')
+        data = {
+            'status': status
+        }
+        response = requests.patch(settings.API_BASE_URL + f'contact/{contact_id}/', data=data)
+
+    return redirect('list_contact')
+
 @permission_required('app.view_contact')
 def list_contact(request):
     response = requests.get(settings.API_BASE_URL + 'contact/')
@@ -172,6 +190,7 @@ def get_object_product(id):
 @permission_required('app.add_product') 
 def add_product(request):
     if request.method == 'POST':
+        error_message = ""
         form = ProductForm(request.POST, request.FILES)
         if form.is_valid():
             name = form.cleaned_data['name']
@@ -183,9 +202,15 @@ def add_product(request):
                 existing_products = response.json()
 
                 if existing_products:
-                    form.add_error('name', 'Este producto ya existe')
-                    error_message = "Este producto ya existe"
-                else:
+                        # Verificar si algún producto tiene un nombre diferente al nombre actual
+                        for existing_product in existing_products:
+                            if existing_product['name'] == name and existing_product['id'] != id:
+                                form.add_error('name', 'Este producto ya existe')
+                                error_message = "Este producto ya existe"
+                                print("existing_product['name']: ", existing_product['name'])
+                                print("name: ", name)
+                                break  # Salir del bucle si se encuentra un producto existente
+                if not error_message:
                     price = form.cleaned_data['price']
                     description = form.cleaned_data['description']
                     new = form.cleaned_data['new']
