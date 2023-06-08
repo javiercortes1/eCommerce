@@ -58,7 +58,7 @@
     <h1 class="text-center py-5">PRODUCTOS DESTACADOS</h1>
     <div class="row justify-content-center">
       {% for p in products %}
-      {% if p.featured %}
+      {% if p.is_featured %}
       <div class="col-xxl-3 col-xl-3 col-lg-4 col-md-6">
         <div class="card card-home">
           {% if p.image %}
@@ -180,7 +180,7 @@
     <h1 class="text-center py-5">PRODUCTOS NUEVOS</h1>
     <div class="row justify-content-center">
       {% for p in products %}
-      {% if p.new %}
+      {% if p.is_new %}
       <div class="col-xxl-3 col-xl-3 col-lg-4 col-md-6">
         <div class="card card-home">
           {% if p.image %}

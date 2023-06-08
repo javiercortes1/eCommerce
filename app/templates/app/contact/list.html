@@ -59,7 +59,7 @@
                         <td>{{ c.email }}</td>
                         <td>{{ c.phone }}</td>
                         <td>{{ c.message }}</td>
-                        <td>{{ c.queryType_name }}</td>
+                        <td>{{ c.query_type_name }}</td>
                         <td>
                             <form method="POST" action="{% url 'update_status' c.id %}">
                                 {% csrf_token %}

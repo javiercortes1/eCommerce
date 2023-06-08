@@ -29,9 +29,9 @@ class ProductViewset(viewsets.ModelViewSet):
         products = Product.objects.all()
 
         name = self.request.GET.get('name')
-        featured = self.request.GET.get('featured')
+        is_featured = self.request.GET.get('is_featured')
         category = self.request.GET.get('category')
-        new = self.request.GET.get('new')
+        is_new = self.request.GET.get('is_new')
         min_price = self.request.GET.get('min_price_filter')
         max_price = self.request.GET.get('max_price_filter')
 
@@ -47,10 +47,10 @@ class ProductViewset(viewsets.ModelViewSet):
             products = products.filter(price__lte=max_price)
         
         # Aplicar los filtros de featured y new
-        if featured:
-            products = products.filter(featured=True)
-        if new:
-            products = products.filter(new=True)
+        if is_featured:
+            products = products.filter(is_featured=True)
+        if is_new:
+            products = products.filter(is_new=True)
 
         return products
     
@@ -92,8 +92,8 @@ class RentalViewSet(viewsets.ModelViewSet):
 def home(request):
     #Definimos los parametros para filtrar productos
     params = {
-        'featured__in': 'true',
-        'new__in': 'true'
+        'is_featured__in': 'true',
+        'is_new__in': 'true'
     }
     #obtenemos los productos y categorias desde la API
     product_response = requests.get(settings.API_BASE_URL + 'product/', params=params).json()
@@ -367,20 +367,20 @@ def add_product(request):
                 if not error_message:
                     price = form.cleaned_data['price']
                     description = form.cleaned_data['description']
-                    new = form.cleaned_data['new']
+                    is_new = form.cleaned_data['is_new']
                     category_id = form.cleaned_data['category'].id
                     stock = form.cleaned_data['stock']
-                    featured = form.cleaned_data['featured']
+                    is_featured = form.cleaned_data['is_featured']
                     image = form.cleaned_data['image']
 
                     product_data = {
                         'name': name,
                         'price': price,
                         'description': description,
-                        'new': new,
+                        'is_new': is_new,
                         'category': category_id,
                         'stock': stock,
-                        'featured': featured,
+                        'is_featured': is_featured,
                     }
 
                     response = requests.post(
@@ -482,10 +482,10 @@ def update_product(request, id):
                     if not error_message:
                         description = form.cleaned_data['description']
                         price = form.cleaned_data['price']
-                        new = form.cleaned_data['new']
+                        is_new = form.cleaned_data['is_new']
                         category_id = form.cleaned_data['category'].id
                         stock = form.cleaned_data['stock']
-                        featured = form.cleaned_data['featured']
+                        is_featured = form.cleaned_data['is_featured']
                         image = form.cleaned_data['image']
 
                         # Crear un nuevo diccionario con los datos actualizados
@@ -493,10 +493,10 @@ def update_product(request, id):
                             'name': name,
                             'description': description,
                             'price': price,
-                            'new': new,
+                            'is_new': is_new,
                             'category': category_id,
                             'stock': stock,
-                            'featured': featured
+                            'is_featured': is_featured
                         }
 
                         # Actualizar el producto a través de la API

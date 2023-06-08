@@ -27,10 +27,10 @@ class Product(models.Model):
     name = models.CharField(max_length=50)
     price = models.IntegerField()
     description = models.TextField(max_length=200)
-    new = models.BooleanField(default=True)
+    is_new = models.BooleanField(default=True)
     category = models.ForeignKey(Category, on_delete=models.SET_NULL, null=True, blank=True)
     stock = models.IntegerField()
-    featured = models.BooleanField(default=False)
+    is_featured = models.BooleanField(default=False)
     image = models.ImageField(upload_to='products/', blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
 
@@ -57,7 +57,7 @@ class Contact(models.Model):
     email = models.EmailField()
     phone = models.IntegerField()
     message = models.TextField(max_length=200)
-    queryType = models.ForeignKey(QueryType, on_delete=models.PROTECT)
+    query_type = models.ForeignKey(QueryType, on_delete=models.PROTECT)
     status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='Nuevo')
 
     def __str__(self):
@@ -77,9 +77,14 @@ class RentableProduct(models.Model):
 
 # modelo para el arriendo
 class Rental(models.Model):
+    STATUS_CHOICES = (
+    ('En progreso', 'En progreso'),
+    ('Finalizado', 'Finalizado'),
+)
+    
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     rentables = models.ManyToManyField(RentableProduct)
-    status = models.CharField(max_length=20)
+    status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='En progreso')
     deposit_paid = models.BooleanField(default=False)
     delivery_date = models.DateField()
 

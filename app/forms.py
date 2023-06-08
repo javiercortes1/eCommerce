@@ -17,18 +17,18 @@ class ContactForm(forms.ModelForm):
     phone = forms.IntegerField(
         label='Teléfono', min_value=100000000, max_value=999999999)
     message = forms.CharField(required=True, max_length=200, label='Mensaje', widget=forms.Textarea)
-    queryType = forms.ModelChoiceField(
+    query_type = forms.ModelChoiceField(
         queryset=QueryType.objects.all(), required=True, label='Tipo de consulta')
 
     class Meta:
         model = Contact
-        fields = ["name", "email", "phone", "message", "queryType"]
+        fields = ["name", "email", "phone", "message", "query_type"]
         labels = {
             'name': 'Nombre completo',
             'email': 'Correo electrónico',
             'phone': 'Teléfono',
             'message': 'Mensaje',
-            'queryType': 'Tipo de consulta'
+            'query_type': 'Tipo de consulta'
         }
 
     def clean_email(self):
@@ -96,8 +96,8 @@ class ProductForm(forms.ModelForm):
             'price': 'Precio',
             'category': 'Categoría',
             'stock': 'Unidades',
-            'new': '¿Nuevo?',
-            'featured': '¿Destacado?',
+            'is_new': '¿Nuevo?',
+            'is_featured': '¿Destacado?',
             'image': 'Imagen'
         }
 
@@ -113,7 +113,6 @@ class CategoryForm(forms.ModelForm):
 
     class Meta:
         model = Category
-        # fields = ["name", "price", "description", "new", "category","cc", "stock", "featured", "image"]
         fields = '__all__'
         labels = {
             'name': 'Nombre',

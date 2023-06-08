@@ -52,7 +52,7 @@
                         </div>
                         <div class="col-md-3 mt-4">
                             <button type="submit" class="btn btn-primary">Aplicar filtros</button>
-                            {% if name_filter or category_filter or new_filter or featured_filter %}
+                            {% if name_filter or category_filter %}
                             <a href="{% url 'list_product' %}" class="btn btn-secondary">Limpiar filtros</a>
                             {% endif %}
                         </div>
@@ -68,9 +68,9 @@
                             <th>Descripción</th>
                             <th>Valor</th>
                             <th>Categoría</th>
-                            <th>Destacado</th>
-                            <th>Unidades</th>
                             <th>Nuevo</th>
+                            <th>Unidades</th>
+                            <th>Destacado</th>
                             <th>Creación</th>
                             <th>Imagen</th>
                             {% if perms.app.change_product %}
@@ -93,7 +93,7 @@
                         <td>${{ p.price | intcomma }}</td>
                         <td>{{ p.category_name | title }}</td>
 
-                        {% if p.featured %}
+                        {% if p.is_new %}
                         <td>Si</td>
                         {% else %}
                         <td>No</td>
@@ -101,7 +101,7 @@
 
                         <td>{{ p.stock }}</td>
 
-                        {% if p.new %}
+                        {% if p.is_featured %}
                         <td>Si</td>
                         {% else %}
                         <td>No</td>
