@@ -5,8 +5,8 @@ from .views import home, services, catalogue, contact,\
     add_prod_cart, del_prod_cart, subtract_product_cart,\
     clean_cart, cart_page, buy_confirm, add_category,\
     list_category, update_category, delete_category, admin_panel,\
-    add_rental, list_rental, update_rental, delete_rental, rental_detail, ContactViewSet,pago, list_contact,\
-    QueryTypeViewset, RentableProductViewSet, RentalViewSet, update_contact_status, add_query_type, list_query_type, update_query_type, delete_query_type
+    ContactViewSet,pago, list_contact,\
+    QueryTypeViewset, update_contact_status, add_query_type, list_query_type, update_query_type, delete_query_type
 
 from rest_framework import routers
 
@@ -15,8 +15,6 @@ router.register('product', ProductViewset)
 router.register('category', CategoryViewset)
 router.register('contact', ContactViewSet, basename='contact')
 router.register('query-type', QueryTypeViewset, basename='query-type')
-router.register(r'rentableproducts', RentableProductViewSet)
-router.register(r'rentals', RentalViewSet)
 
 
 urlpatterns = [
@@ -50,11 +48,5 @@ urlpatterns = [
     path("buy-confirm/", buy_confirm, name="buy_confirm"),
     path("admin-panel/", admin_panel, name="admin_panel"),
     # path("success-payment/", pago_exitoso, name="pago_exitoso"),
-    path('add-rental/', add_rental, name="add_rental"),
-    path('list-rental/', list_rental, name="list_rental"),
-    path('update-rental/<id>/', update_rental, name="update_rental"),
-    path('delete-rental/<id>/', delete_rental, name="delete_rental"),
-    path('rental-detail/<int:id>/', rental_detail, name="rental_detail"),
-    # path('api/contact/', ContactAPIView.as_view(), name='contact_api'),
     path('pago/', pago, name="pago"),
 ]

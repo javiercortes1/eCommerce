@@ -105,14 +105,3 @@ class QueryTypeSerializer(serializers.ModelSerializer):
         model = QueryType
         fields = '__all__'
     
-class RentableProductSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = RentableProduct
-        fields = ['id', 'name', 'price', 'description', 'stock', 'image', 'created_at']
-
-class RentalSerializer(serializers.ModelSerializer):
-    rentables = RentableProductSerializer(many=True)
-
-    class Meta:
-        model = Rental
-        fields = '__all__'
