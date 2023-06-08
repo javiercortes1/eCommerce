@@ -7,6 +7,24 @@ from .views import home, services, catalogue, contact,\
     list_category, update_category, delete_category, admin_panel,\
     add_rental, list_rental, update_rental, delete_rental, rental_detail, ContactViewSet,pago
 
+
+from unicodedata import name
+from . import views
+#from .views import index
+
+from .views import Registrar
+
+from .views import Recuperar
+from .views import user_login
+from django.views.generic import TemplateView
+from django.contrib.auth.views import LogoutView
+from django.conf import settings
+from django.conf.urls.static import static
+
+
+
+
+
 from rest_framework import routers
 
 router = routers.DefaultRouter()
@@ -47,4 +65,11 @@ urlpatterns = [
     path('rental-detail/<int:id>/', rental_detail, name="rental_detail"),
     # path('api/contact/', ContactAPIView.as_view(), name='contact_api'),
     path('pago/', pago, name="pago"),
+    path('login/', user_login, name='login'),
+    path('accounts/', include('allauth.urls')),
+    path('', TemplateView.as_view(template_name="login")),
+    path('logout', LogoutView.as_view()),
+    path('Recuperar/', Recuperar, name='Recuperar'),
+    path('Registrar/', Registrar, name='Registrar'),
+    
 ]

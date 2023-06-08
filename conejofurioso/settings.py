@@ -30,7 +30,7 @@ ALLOWED_HOSTS = ['127.0.0.1', 'darioveram.pythonanywhere.com']
 
 MESSAGE_STORAGE = "django.contrib.messages.storage.cookie.CookieStorage"
 
-LOGIN_REDIRECT_URL = '/'
+
 LOGOUT_REDIRECT_URL ='/'
 
 # Application definition
@@ -47,13 +47,38 @@ INSTALLED_APPS = [
     'crispy_forms',
     'crispy_bootstrap5',
     'rest_framework',
-    'schedule'
+    'schedule',
+    'rest_framework.authtoken', 
+    'django.contrib.sites',
+    'allauth',
+    'allauth.account',
+    'allauth.socialaccount',
+    'allauth.socialaccount.providers.google',
 
 ]
 
 CRISPY_ALLOWED_TEMPLATE_PACKS = 'bootstrap5'
 CRISPY_TEMPLATE_PACK = 'bootstrap5'
 
+AUTHENTICATION_BACKENDS = [
+    'django.contrib.auth.backends.ModelBackend',
+    'allauth.account.auth_backends.AuthenticationBackend'
+]
+
+SITE_ID = 1
+LOGIN_REDIRECT_URL = "http://127.0.0.1:8000/"
+
+SOCIALACCOUNT_PROVIDERS = {
+    'google': {
+        'SCOPE': [
+            'profile',
+            'email',
+        ],
+        'AUTH_PARAMS': {
+            'access_type': 'online',
+        }
+    }
+}
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -138,6 +163,19 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 
 
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES':[
+        'rest_framework.authentication.SessionAuthentication',
+        'rest_framework.authentication.TokenAuthentication',
+    ],
+    'DEFAULT_PARSER_CLASSES': (
+    'rest_framework.parsers.JSONParser',
+    'rest_framework.parsers.FormParser',
+    'rest_framework.parsers.MultiPartParser',
+),
+}
+
+
 # Internationalization
 # https://docs.djangoproject.com/en/4.2/topics/i18n/
 
@@ -170,3 +208,11 @@ CACHES = {
         'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
     }
 }
+
+
+STATIC_URL = 'static/'
+
+# Default primary key field type
+# https://docs.djangoproject.com/en/4.0/ref/settings/#default-auto-field
+
+

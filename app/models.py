@@ -90,3 +90,14 @@ class Rental(models.Model):
 
     def __str__(self):
         return f"{self.user.username} - Rental {self.pk}"
+    
+class Usuarios(models.Model):
+    usrN= models.CharField(max_length=30,verbose_name="Nombre de Usuario")
+    pswrdN= models.CharField(max_length=15, verbose_name="Contraseña")
+    pswrdN2=models.CharField(max_length=15, verbose_name="Contraseña2")
+#fin modelos para usuarios
+
+#se crea modelo de token
+class Tokens(models.Model):
+    token= models.CharField(max_length=256)
+    user = models.CharField(max_length=256)    
