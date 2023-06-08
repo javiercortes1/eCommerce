@@ -73,6 +73,7 @@
                             <th>Destacado</th>
                             <th>Creación</th>
                             <th>Imagen</th>
+                            <th>Arrendable</th>
                             {% if perms.app.change_product %}
                             <th>Modificar</th>
                             {% endif %}
@@ -115,6 +116,12 @@
                                 Sin imagen
                             {% endif %}
                         </td>
+
+                        {% if p.is_rentable %}
+                        <td>Si</td>
+                        {% else %}
+                        <td>No</td>
+                        {% endif %}
 
                         {% if perms.app.change_product %}
                         <td>

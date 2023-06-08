@@ -1,4 +1,4 @@
-from .models import Product, Category, Contact, QueryType, RentableProduct, Rental
+from .models import Product, Category, Contact, QueryType
 from rest_framework import serializers
 from django.core.mail import send_mail
 from django.utils import timezone

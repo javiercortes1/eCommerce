@@ -1,5 +1,5 @@
 from django import forms
-from .models import Contact, Product, Category, QueryType, Rental, RentableProduct
+from .models import Contact, Product, Category, QueryType
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Layout, Submit
 from django.contrib.auth.forms import UserCreationForm
