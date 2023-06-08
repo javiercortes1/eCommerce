@@ -61,7 +61,7 @@
             {% if user.is_authenticated %}
             <input type="hidden" id="is-authenticated" value="{{ user.is_authenticated }}">
             <div class="nav-item logout">
-              <button class="btn btn-outline-success my-2 my-sm-0"><a href="{% url 'desconectar' %}">
+              <a id="logout-link" class="nav-link" href="{% url 'logout' %}">CERRAR SESIÓN</a>
             </div>
 
             <div class="nav-item username">
