@@ -33,6 +33,7 @@ class Product(models.Model):
     is_featured = models.BooleanField(default=False)
     image = models.ImageField(upload_to='products/', blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
+    is_rentable = models.BooleanField(default=False)
 
     def __str__(self):
         return self.name
@@ -62,31 +63,3 @@ class Contact(models.Model):
 
     def __str__(self):
         return self.name
-
-# modelo para objeto arrendable
-class RentableProduct(models.Model):
-    name = models.CharField(max_length=50)
-    price = models.IntegerField()
-    description = models.TextField(max_length=200)
-    stock = models.IntegerField()
-    image = models.ImageField(upload_to='rentable_products/', blank=True, null=True)
-    created_at = models.DateTimeField(auto_now_add=True)
-
-    def __str__(self):
-        return self.name
-
-# modelo para el arriendo
-class Rental(models.Model):
-    STATUS_CHOICES = (
-    ('En progreso', 'En progreso'),
-    ('Finalizado', 'Finalizado'),
-)
-    
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
-    rentables = models.ManyToManyField(RentableProduct)
-    status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='En progreso')
-    deposit_paid = models.BooleanField(default=False)
-    delivery_date = models.DateField()
-
-    def __str__(self):
-        return f"{self.user.username} - Rental {self.pk}"

@@ -1,12 +1,12 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from .forms import ContactForm, ProductForm, CustomUserCreationForm, CategoryForm, RentalForm, QueryTypeForm
+from .forms import ContactForm, ProductForm, CustomUserCreationForm, CategoryForm, QueryTypeForm
 from django.contrib import messages
 from django.contrib.auth import authenticate, login
-from .models import Product, Category, Rental, Contact, QueryType, RentableProduct
+from .models import Product, Category, Contact, QueryType
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.http import Http404
 from rest_framework import viewsets, serializers
-from .serializers import ProductSerializer, CategorySerializer, ContactSerializer, QueryTypeSerializer,RentableProductSerializer, RentalSerializer
+from .serializers import ProductSerializer, CategorySerializer, ContactSerializer, QueryTypeSerializer
 import requests
 from django.contrib.auth.decorators import login_required, permission_required
 from app.cart import Cart
@@ -34,6 +34,7 @@ class ProductViewset(viewsets.ModelViewSet):
         is_new = self.request.GET.get('is_new')
         min_price = self.request.GET.get('min_price_filter')
         max_price = self.request.GET.get('max_price_filter')
+        is_rentable = self.request.GET.get('is_rentable')
 
         if name:
             products = products.filter(name__contains=name)
@@ -51,6 +52,9 @@ class ProductViewset(viewsets.ModelViewSet):
             products = products.filter(is_featured=True)
         if is_new:
             products = products.filter(is_new=True)
+        #filtro para rentable
+        if is_rentable:
+            products = products.filter(is_rentable=True)
 
         return products
     
@@ -79,14 +83,6 @@ class ContactViewSet(viewsets.ModelViewSet):
 class QueryTypeViewset(viewsets.ModelViewSet):
     queryset = QueryType.objects.all()
     serializer_class = QueryTypeSerializer
-
-class RentableProductViewSet(viewsets.ModelViewSet):
-    queryset = RentableProduct.objects.all()
-    serializer_class = RentableProductSerializer
-
-class RentalViewSet(viewsets.ModelViewSet):
-    queryset = Rental.objects.all()
-    serializer_class = RentalSerializer
 
 #VISTAS INICIALES
 def home(request):
@@ -372,6 +368,7 @@ def add_product(request):
                     stock = form.cleaned_data['stock']
                     is_featured = form.cleaned_data['is_featured']
                     image = form.cleaned_data['image']
+                    is_rentable = form.cleaned_data['is_rentable']
 
                     product_data = {
                         'name': name,
@@ -381,6 +378,7 @@ def add_product(request):
                         'category': category_id,
                         'stock': stock,
                         'is_featured': is_featured,
+                        'is_rentable': is_rentable,
                     }
 
                     response = requests.post(
@@ -487,6 +485,7 @@ def update_product(request, id):
                         stock = form.cleaned_data['stock']
                         is_featured = form.cleaned_data['is_featured']
                         image = form.cleaned_data['image']
+                        is_rentable = form.cleaned_data['is_rentable']
 
                         # Crear un nuevo diccionario con los datos actualizados
                         updated_data = {
@@ -496,7 +495,8 @@ def update_product(request, id):
                             'is_new': is_new,
                             'category': category_id,
                             'stock': stock,
-                            'is_featured': is_featured
+                            'is_featured': is_featured,
+                            'is_rentable': is_rentable
                         }
 
                         # Actualizar el producto a través de la API
@@ -822,85 +822,6 @@ def delete_category(request, id):
 def admin_panel(request):
 
     return render(request, 'app/admin_panel.html')
-
-#VISTAS RENTAL
-def list_rental(request):
-    rentals = Rental.objects.all()
-    page = request.GET.get('page', 1)
-
-    paginator = Paginator(rentals, 5)
-
-    try:
-        rentals = paginator.page(page)
-    except EmptyPage:
-        # Si el número de página es mayor que el número total de páginas,
-        # redirigir al usuario a la última página válida
-        rentals = paginator.page(paginator.num_pages)
-
-    data = {
-        'entity': rentals,
-        'paginator': paginator
-    }
-    return render(request, 'app/rental/list.html', data)
-
-def rental_detail(request, id):
-    rental = get_object_or_404(Rental, id=id)
-
-    data = {
-        'rental': rental
-    }
-
-    return render(request, 'app/rental/detail.html', data)
-
-def add_rental(request):
-    data = {
-        'form': RentalForm()
-    }
-
-    if request.method == 'POST':
-        form = RentalForm(data=request.POST)
-        if form.is_valid():
-            form.save()
-            messages.success(request, "Arriendo agregado")
-            return redirect(to="list_rental")
-        else:
-            # Mostrar mensajes de error al usuario
-            for field, errors in form.errors.items():
-                for error in errors:
-                    messages.error(request, f"{field}: {error}")
-
-            data["form"] = form
-
-    return render(request, 'app/rental/add.html', data)
-
-def update_rental(request, id):
-    rental = get_object_or_404(Rental, id=id)
-
-    data = {
-        'form': RentalForm(instance=rental)
-    }
-
-    if request.method == 'POST':
-        form = RentalForm(data=request.POST, instance=rental)
-        if form.is_valid():
-            form.save()
-            messages.success(request, "Arriendo modificado correctamente")
-            return redirect(to="list_rental")
-        else:
-            # Mostrar mensajes de error al usuario
-            for field, errors in form.errors.items():
-                for error in errors:
-                    messages.error(request, f"{field}: {error}")
-
-            data["form"] = form
-
-    return render(request, 'app/rental/update.html', data)
-
-def delete_rental(request, id):
-    rental = get_object_or_404(Rental, id=id)
-    rental.delete()
-    messages.success(request, "Eliminado correctamente")
-    return redirect(to="list_rental")
 
 def pago(request):
     return render(request, "app/pago.html")

@@ -1,5 +1,5 @@
 from django import forms
-from .models import Contact, Product, Category, QueryType, Rental, RentableProduct
+from .models import Contact, Product, Category, QueryType
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Layout, Submit
 from django.contrib.auth.forms import UserCreationForm
@@ -98,7 +98,8 @@ class ProductForm(forms.ModelForm):
             'stock': 'Unidades',
             'is_new': '¿Nuevo?',
             'is_featured': '¿Destacado?',
-            'image': 'Imagen'
+            'image': 'Imagen',
+            'is_rentable': '¿Arrendable?'
         }
 
 class CustomUserCreationForm(UserCreationForm):
@@ -120,37 +121,3 @@ class CategoryForm(forms.ModelForm):
             'image': 'Imagen'
         }
 
-class RentalForm(forms.ModelForm):
-    delivery_date = forms.DateField(widget=AdminDateWidget)
-
-    class Meta:
-        model = Rental
-        fields = ['user', 'rentables',  'status', 'deposit_paid', 'delivery_date']
-        labels = {
-            'user': 'Usuario',
-            'rentables': 'Arrendables',
-            'status': 'Estado',
-            'deposit_paid': 'Depósito pagado',
-            'delivery_date': 'Fecha de delivery'
-        }
-        widgets = {
-            'user': forms.HiddenInput(),
-            'rentables': forms.CheckboxSelectMultiple(),
-            'status': forms.HiddenInput(),
-            'deposit_paid': forms.HiddenInput()
-        }
-
-class RentableProductForm(forms.ModelForm):
-    class Meta:
-        model = RentableProduct
-        fields = ['name', 'price', 'description', 'stock', 'image']
-        labels = {
-            'name': 'Nombre',
-            'price': 'Precio',
-            'description': 'Descripción',
-            'stock': 'Stock',
-            'image': 'Imagen'
-        }
-        widgets = {
-            'description': forms.Textarea(attrs={'rows': 4}),
-        }
