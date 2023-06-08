@@ -51,6 +51,7 @@
         var form = new FormData(this);  // Obtener los datos del formulario
 
         // Realizar la solicitud POST a la API
+        // la url es generada automaticamente por el router de contact
         fetch("{% url 'contact-list' %}", {
             method: "POST",
             body: form

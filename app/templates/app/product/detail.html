@@ -2,9 +2,9 @@
 
 {% load static %}
 {% block css %}
-<title>Conejo Furioso | {{ product.name | capfirst }}</title>
+<title>Conejo Furioso</title>
 {% endblock %}
-
+<img src="" alt="">
 
 {% block content %}
 {% load humanize %}
@@ -32,18 +32,19 @@
                         <br>
                         <h2>Descripción del producto</h2>
                         <h3>{{ product.description }}</h3>
-                        <h3>Categoría: {{ product.category}}</h3>
+                        <h3>Categoría: {{ product.category.name }}</h3>
                         <h3>Volumen: 330 cc.</h3>
                         <h2><b>${{ product.price | intcomma }}</b></h2>
                     </div>
                     {% if product.stock > 0 %}
                     <div>
-                        <a href="{% url  'Add' product.id %}" class="btn btn-default bg-primary-3">Agregar al Carrito</a>
-
-                        {% else %}
-                        <h4 class="text-center"><b>Sin Stock</b></h4>
-                        {% endif %}
+                        <a href="{% url  'Add' product.id %}" class="btn btn-primary">Agregar al Carrito</a>
                     </div>
+                    {% else %}
+                    <div>
+                        <h4 class="text-center"><b>Sin Stock</b></h4>
+                    </div>
+                    {% endif %}
                 </div>
             </div>
         </div>

@@ -27,12 +27,13 @@ class Product(models.Model):
     name = models.CharField(max_length=50)
     price = models.IntegerField()
     description = models.TextField(max_length=200)
-    new = models.BooleanField(default=True)
+    is_new = models.BooleanField(default=True)
     category = models.ForeignKey(Category, on_delete=models.SET_NULL, null=True, blank=True)
     stock = models.IntegerField()
-    featured = models.BooleanField(default=False)
+    is_featured = models.BooleanField(default=False)
     image = models.ImageField(upload_to='products/', blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
+    is_rentable = models.BooleanField(default=False)
 
     def __str__(self):
         return self.name
@@ -47,46 +48,18 @@ class QueryType(models.Model):
 
 #consulta
 class Contact(models.Model):
+    STATUS_CHOICES = (
+        ('Nuevo', 'Nuevo'),
+        ('En progreso', 'En progreso'),
+        ('Finalizado', 'Finalizado'),
+    )
+
     name = models.CharField(max_length=50)
     email = models.EmailField()
     phone = models.IntegerField()
     message = models.TextField(max_length=200)
-    queryType = models.ForeignKey(QueryType, on_delete=models.PROTECT)
+    query_type = models.ForeignKey(QueryType, on_delete=models.PROTECT)
+    status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='Nuevo')
 
     def __str__(self):
         return self.name
-
-# modelo para objeto arrendable
-class Rentable(models.Model):
-    name = models.CharField(max_length=50)
-    description = models.TextField(max_length=200)
-    available = models.BooleanField(default=True)
-    created_at = models.DateTimeField(auto_now_add=True)
-
-    def __str__(self):
-        return self.name
-
-# modelo para el arriendo
-class Rental(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
-    rentables = models.ManyToManyField(Rentable)
-    start_date = models.DateField()
-    end_date = models.DateField()
-    status = models.CharField(max_length=20)
-    deposit_paid = models.BooleanField(default=False)
-
-    def clean(self):
-        if self.start_date > self.end_date:
-            raise ValidationError(
-                "La fecha de inicio no puede ser posterior a la fecha de finalización.")
-
-    def get_duration(self):
-        return (self.end_date - self.start_date).days
-
-    @property
-    def is_active(self):
-        today = timezone.now().date()
-        return self.start_date <= today <= self.end_date
-
-    def __str__(self):
-        return f"{self.user.username} - Rental {self.pk}"
