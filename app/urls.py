@@ -64,11 +64,10 @@ urlpatterns = [
     path('delete-rental/<id>/', delete_rental, name="delete_rental"),
     path('rental-detail/<int:id>/', rental_detail, name="rental_detail"),
     # path('api/contact/', ContactAPIView.as_view(), name='contact_api'),
+    path('accounts/', include('django.contrib.auth.urls')),
     path('pago/', pago, name="pago"),
     path('login/', user_login, name='login'),
     path('accounts/', include('allauth.urls')),
-    path('', TemplateView.as_view(template_name="login")),
-    path('logout', LogoutView.as_view()),
     path('Recuperar/', Recuperar, name='Recuperar'),
     path('Registrar/', Registrar, name='Registrar'),
     
