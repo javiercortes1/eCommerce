@@ -27,9 +27,6 @@ class CategorySerializer(serializers.ModelSerializer):
 class ProductSerializer(serializers.ModelSerializer):
     category_name = serializers.CharField(read_only=True, source="category.name")
     created_at = serializers.SerializerMethodField()
-    # category = CategorySerializer(read_only=True)
-    # category_id = serializers.PrimaryKeyRelatedField(queryset=Category.objects.all(), source="category")
-    # name = serializers.CharField(required=True, min_length=3)
 
     def get_created_at(self, obj):
         # Obtener la fecha y hora en el formato deseado
@@ -56,7 +53,7 @@ class ProductSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 class ContactSerializer(serializers.ModelSerializer):
-    queryType_name = serializers.CharField(read_only=True, source="queryType.name")
+    query_type_name = serializers.CharField(read_only=True, source="query_type.name")
 
     class Meta:
         model = Contact
@@ -118,4 +115,4 @@ class RentalSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Rental
-        fields = ['id', 'user', 'rentables', 'status', 'deposit_paid', 'delivery_date']
+        fields = '__all__'

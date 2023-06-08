@@ -5,7 +5,7 @@ from crispy_forms.layout import Layout, Submit
 from django.contrib.auth.forms import UserCreationForm
 from .validators import MaxSizeFileValidator
 from django.forms import ValidationError
-from django.core.validators import validate_email
+from django.core.validators import validate_email, MinValueValidator
 from django.core.exceptions import ValidationError
 from django.contrib.admin.widgets import AdminDateWidget
 
@@ -16,19 +16,19 @@ class ContactForm(forms.ModelForm):
     email = forms.EmailField(required=True, label='Correo electrónico')
     phone = forms.IntegerField(
         label='Teléfono', min_value=100000000, max_value=999999999)
-    message = forms.CharField(max_length=200, label='Mensaje')
-    queryType = forms.ModelChoiceField(
+    message = forms.CharField(required=True, max_length=200, label='Mensaje', widget=forms.Textarea)
+    query_type = forms.ModelChoiceField(
         queryset=QueryType.objects.all(), required=True, label='Tipo de consulta')
 
     class Meta:
         model = Contact
-        fields = ["name", "email", "phone", "message", "queryType"]
+        fields = ["name", "email", "phone", "message", "query_type"]
         labels = {
             'name': 'Nombre completo',
             'email': 'Correo electrónico',
             'phone': 'Teléfono',
             'message': 'Mensaje',
-            'queryType': 'Tipo de consulta'
+            'query_type': 'Tipo de consulta'
         }
 
     def clean_email(self):
@@ -68,10 +68,23 @@ class ContactForm(forms.ModelForm):
             except forms.ValidationError as e:
                 self.add_error('phone', e.message)
 
+class QueryTypeForm(forms.ModelForm):
+    name = forms.CharField(min_length=3, max_length=50)
+
+
+    class Meta:
+        model = QueryType
+        fields = '__all__'
+        labels = {
+            'name': 'Nombre',
+            'description': 'Descripcion',
+        }
+
 class ProductForm(forms.ModelForm):
     image = forms.ImageField(required=False, validators=[MaxSizeFileValidator(20)])
     name = forms.CharField(min_length=3, max_length=50)
     price = forms.IntegerField(min_value=1, max_value=1500000)
+    stock = forms.IntegerField(validators=[MinValueValidator(0)])
 
 
     class Meta:
@@ -83,8 +96,8 @@ class ProductForm(forms.ModelForm):
             'price': 'Precio',
             'category': 'Categoría',
             'stock': 'Unidades',
-            'new': '¿Nuevo?',
-            'featured': '¿Destacado?',
+            'is_new': '¿Nuevo?',
+            'is_featured': '¿Destacado?',
             'image': 'Imagen'
         }
 
@@ -100,7 +113,6 @@ class CategoryForm(forms.ModelForm):
 
     class Meta:
         model = Category
-        # fields = ["name", "price", "description", "new", "category","cc", "stock", "featured", "image"]
         fields = '__all__'
         labels = {
             'name': 'Nombre',
