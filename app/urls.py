@@ -1,5 +1,5 @@
 from django.urls import path, include
-from .views import home, services, catalogue, contact,\
+from .views import home, rental_service, catalogue, contact,\
     add_product, list_product, update_product, delete_product,\
     ProductViewset, CategoryViewset, register, product_detail,\
     add_prod_cart, del_prod_cart, subtract_product_cart,\
@@ -20,7 +20,7 @@ router.register('query-type', QueryTypeViewset, basename='query-type')
 urlpatterns = [
     path('', home, name="home"),
     path('catalogue/', catalogue, name="catalogue"),
-    path('services/', services, name="services"),
+    path('rental-service/', rental_service, name="rental_service"),
     path('contact/', contact, name="contact"),
     path('list-contact/', list_contact, name="list_contact"),
     path('update-status/<int:contact_id>/', update_contact_status, name='update_status'),

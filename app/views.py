@@ -134,9 +134,20 @@ def catalogue(request):
 
     return render(request, 'app/catalogue.html', data)
 
-def services(request):
+def rental_service(request):
 
-    return render(request, 'app/services.html')
+    #Definimos los parametros para filtrar productos
+    params = {
+        'is_rentable__in': 'true',
+    }
+    #obtenemos los productos y categorias desde la API
+    product_response = requests.get(settings.API_BASE_URL + 'product/', params=params).json()
+    
+    data = {
+        'products': product_response
+    }
+
+    return render(request, 'app/rental_service.html', data)
 #CONTATO
 def contact(request):
     data = {
