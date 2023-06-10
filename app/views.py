@@ -86,59 +86,67 @@ class QueryTypeViewset(viewsets.ModelViewSet):
 
 #VISTAS INICIALES
 def home(request):
-    #Definimos los parametros para filtrar productos
+    # Definimos los parámetros para filtrar productos
     params = {
-        'is_featured__in': 'true',
-        'is_new__in': 'true'
+        'is_new__in': 'true,false',
+        'is_featured__in': 'true,false',
     }
-    #obtenemos los productos y categorias desde la API
+    # Obtenemos los productos desde la API aplicando los filtros
     product_response = requests.get(settings.API_BASE_URL + 'product/', params=params).json()
+    # Filtrar los productos para excluir los que tienen is_rentable=True
+    filtered_products = [product for product in product_response if not product['is_rentable']]
+    
     categories_response = requests.get(settings.API_BASE_URL + 'category/').json()
     
     data = {
-        'products': product_response,
+        'products': filtered_products,
         'categories': categories_response
     }
     
     return render(request, 'app/home.html', data)
 
 def catalogue(request):
-    #Obtenemos los filtros desde el html
+    # Obtenemos los filtros desde el html
     name_filter = request.GET.get('name', '')
     category_filter = request.GET.get('category', '')
     min_price_filter = request.GET.get('min_price_filter', '')
     max_price_filter = request.GET.get('max_price_filter', '')
 
-    #Definimos los parametros para filtrar
+    # Definimos los parámetros para filtrar productos
     params = {
         'name': name_filter,
         'category': category_filter,
         'min_price_filter': min_price_filter,
         'max_price_filter': max_price_filter,
     }
-    #Obtenemos los productos desde la API 
+
+    # Obtenemos los productos desde la API aplicando los filtros
     response = requests.get(settings.API_BASE_URL + 'product/', params=params)
     products = response.json()
+    # Filtrar los productos para excluir los que tienen is_rentable=True
+    filtered_products = [product for product in products if not product['is_rentable']]
 
-    #Obtenemos las categorias desde la API
+    # Obtenemos las categorías desde la API
     categories = requests.get(settings.API_BASE_URL + 'category/').json()
-    #Para limpiar los filtros
+    
+    # Para limpiar los filtros
     if 'clear_filters' in request.GET:
         response = requests.get(settings.API_BASE_URL + 'product/').json()
         products = response
 
     data = {
-        'products': products,
+        'products': filtered_products,
         'categories': categories,
     }
 
     return render(request, 'app/catalogue.html', data)
 
+
 def rental_service(request):
 
     #Definimos los parametros para filtrar productos
     params = {
-        'is_rentable__in': 'true',
+        'is_rentable__in': 'true'
     }
     #obtenemos los productos y categorias desde la API
     product_response = requests.get(settings.API_BASE_URL + 'product/', params=params).json()
