@@ -1,0 +1,408 @@
+2023-06-11 12:04:45,965 [INFO] Watching for file changes with StatReloader
+2023-06-11 12:04:47,021 [DEBUG] Starting new HTTP connection (1): 127.0.0.1:8000
+2023-06-11 12:04:47,042 [DEBUG] http://127.0.0.1:8000 "GET /api/product/?is_new__in=true%2Cfalse&is_featured__in=true%2Cfalse HTTP/1.1" 200 2936
+2023-06-11 12:04:47,045 [DEBUG] Starting new HTTP connection (1): 127.0.0.1:8000
+2023-06-11 12:04:47,051 [DEBUG] http://127.0.0.1:8000 "GET /api/category/ HTTP/1.1" 200 500
+2023-06-11 12:04:47,162 [WARNING] Not Found: /ruta/imagen_cerveza.jpg
+2023-06-11 12:04:47,165 [WARNING] Not Found: /ruta/imagen_poleras.jpg
+2023-06-11 12:04:47,166 [WARNING] Not Found: /ruta/imagen_barril.jpg
+2023-06-11 12:04:48,602 [DEBUG] Starting new HTTP connection (1): 127.0.0.1:8000
+2023-06-11 12:04:48,609 [DEBUG] http://127.0.0.1:8000 "GET /api/product/?is_rentable=true HTTP/1.1" 200 1341
+2023-06-11 12:04:48,922 [WARNING] Not Found: /serviceworker.js
+2023-06-11 12:04:50,275 [WARNING] Not Found: /serviceworker.js
+2023-06-11 12:04:56,465 [WARNING] Bad Request: /api/rental-orders/
+2023-06-11 12:04:58,109 [WARNING] Not Found: /serviceworker.js
+2023-06-11 12:05:27,586 [WARNING] Not Found: /serviceworker.js
+2023-06-11 12:06:20,879 [DEBUG] Starting new HTTP connection (1): 127.0.0.1:8000
+2023-06-11 12:06:20,892 [DEBUG] http://127.0.0.1:8000 "GET /api/product/?is_new__in=true%2Cfalse&is_featured__in=true%2Cfalse HTTP/1.1" 200 2936
+2023-06-11 12:06:20,895 [DEBUG] Starting new HTTP connection (1): 127.0.0.1:8000
+2023-06-11 12:06:20,899 [DEBUG] http://127.0.0.1:8000 "GET /api/category/ HTTP/1.1" 200 500
+2023-06-11 12:06:20,956 [WARNING] Not Found: /ruta/imagen_cerveza.jpg
+2023-06-11 12:06:20,959 [WARNING] Not Found: /ruta/imagen_barril.jpg
+2023-06-11 12:06:20,962 [WARNING] Not Found: /ruta/imagen_poleras.jpg
+2023-06-11 12:06:21,540 [DEBUG] Starting new HTTP connection (1): 127.0.0.1:8000
+2023-06-11 12:06:21,546 [DEBUG] http://127.0.0.1:8000 "GET /api/product/?is_rentable=true HTTP/1.1" 200 1341
+2023-06-11 12:06:23,180 [WARNING] Not Found: /serviceworker.js
+2023-06-11 12:06:31,621 [WARNING] Bad Request: /api/rental-orders/
+2023-06-11 12:06:33,295 [WARNING] Not Found: /serviceworker.js
+2023-06-11 12:07:02,734 [WARNING] Not Found: /serviceworker.js
+2023-06-11 12:07:26,369 [WARNING] Not Found: /serviceworker.js
+2023-06-11 12:07:55,853 [WARNING] Not Found: /serviceworker.js
+2023-06-11 12:15:19,983 [INFO] C:\Users\daril\Desktop\conejofurioso\app\views.py changed, reloading.
+2023-06-11 12:15:20,531 [INFO] Watching for file changes with StatReloader
+2023-06-11 12:16:16,452 [INFO] C:\Users\daril\Desktop\conejofurioso\app\views.py changed, reloading.
+2023-06-11 12:16:17,001 [INFO] Watching for file changes with StatReloader
+2023-06-11 12:16:51,644 [INFO] C:\Users\daril\Desktop\conejofurioso\app\views.py changed, reloading.
+2023-06-11 12:16:52,225 [INFO] Watching for file changes with StatReloader
+2023-06-11 12:17:02,363 [INFO] C:\Users\daril\Desktop\conejofurioso\app\views.py changed, reloading.
+2023-06-11 12:17:02,968 [INFO] Watching for file changes with StatReloader
+2023-06-11 12:17:05,750 [INFO] C:\Users\daril\Desktop\conejofurioso\app\views.py changed, reloading.
+2023-06-11 12:17:06,305 [INFO] Watching for file changes with StatReloader
+2023-06-11 12:17:11,122 [INFO] C:\Users\daril\Desktop\conejofurioso\app\views.py changed, reloading.
+2023-06-11 12:17:11,694 [INFO] Watching for file changes with StatReloader
+2023-06-11 12:17:15,477 [INFO] C:\Users\daril\Desktop\conejofurioso\app\views.py changed, reloading.
+2023-06-11 12:17:16,077 [INFO] Watching for file changes with StatReloader
+2023-06-11 12:17:23,044 [INFO] C:\Users\daril\Desktop\conejofurioso\app\views.py changed, reloading.
+2023-06-11 12:17:23,603 [INFO] Watching for file changes with StatReloader
+2023-06-11 12:17:30,629 [INFO] C:\Users\daril\Desktop\conejofurioso\app\views.py changed, reloading.
+2023-06-11 12:17:31,229 [INFO] Watching for file changes with StatReloader
+2023-06-11 12:17:36,077 [INFO] C:\Users\daril\Desktop\conejofurioso\app\views.py changed, reloading.
+2023-06-11 12:17:36,626 [INFO] Watching for file changes with StatReloader
+2023-06-11 12:17:45,011 [DEBUG] Starting new HTTP connection (1): 127.0.0.1:8000
+2023-06-11 12:17:45,026 [DEBUG] http://127.0.0.1:8000 "GET /api/product/?is_rentable=true HTTP/1.1" 200 1341
+2023-06-11 12:17:45,441 [WARNING] Not Found: /serviceworker.js
+2023-06-11 12:17:46,680 [WARNING] Not Found: /serviceworker.js
+2023-06-11 12:17:53,677 [WARNING] Bad Request: /api/rental-orders/
+2023-06-11 12:17:55,402 [WARNING] Not Found: /serviceworker.js
+2023-06-11 12:18:24,798 [WARNING] Not Found: /serviceworker.js
+2023-06-11 12:20:01,107 [INFO] C:\Users\daril\Desktop\conejofurioso\app\views.py changed, reloading.
+2023-06-11 12:20:01,678 [INFO] Watching for file changes with StatReloader
+2023-06-11 12:20:47,004 [INFO] C:\Users\daril\Desktop\conejofurioso\app\views.py changed, reloading.
+2023-06-11 12:20:47,558 [INFO] Watching for file changes with StatReloader
+2023-06-11 12:20:52,460 [DEBUG] Starting new HTTP connection (1): 127.0.0.1:8000
+2023-06-11 12:20:52,475 [DEBUG] http://127.0.0.1:8000 "GET /api/product/?is_rentable=true HTTP/1.1" 200 1341
+2023-06-11 12:20:53,381 [DEBUG] Starting new HTTP connection (1): 127.0.0.1:8000
+2023-06-11 12:20:53,389 [DEBUG] http://127.0.0.1:8000 "GET /api/product/?is_rentable=true HTTP/1.1" 200 1341
+2023-06-11 12:20:55,027 [WARNING] Not Found: /serviceworker.js
+2023-06-11 12:21:02,860 [WARNING] Not Found: /serviceworker.js
+2023-06-11 12:21:32,218 [WARNING] Not Found: /serviceworker.js
+2023-06-11 12:23:47,735 [DEBUG] Starting new HTTP connection (1): 127.0.0.1:8000
+2023-06-11 12:23:47,746 [DEBUG] http://127.0.0.1:8000 "GET /api/product/?is_new__in=true%2Cfalse&is_featured__in=true%2Cfalse HTTP/1.1" 200 2936
+2023-06-11 12:23:47,749 [DEBUG] Starting new HTTP connection (1): 127.0.0.1:8000
+2023-06-11 12:23:47,753 [DEBUG] http://127.0.0.1:8000 "GET /api/category/ HTTP/1.1" 200 500
+2023-06-11 12:23:47,809 [WARNING] Not Found: /ruta/imagen_cerveza.jpg
+2023-06-11 12:23:47,812 [WARNING] Not Found: /ruta/imagen_poleras.jpg
+2023-06-11 12:23:47,814 [WARNING] Not Found: /ruta/imagen_barril.jpg
+2023-06-11 12:23:48,842 [DEBUG] Starting new HTTP connection (1): 127.0.0.1:8000
+2023-06-11 12:23:48,849 [DEBUG] http://127.0.0.1:8000 "GET /api/product/?is_rentable=true HTTP/1.1" 200 1341
+2023-06-11 12:23:49,468 [WARNING] Not Found: /serviceworker.js
+2023-06-11 12:23:50,507 [WARNING] Not Found: /serviceworker.js
+2023-06-11 12:24:00,517 [WARNING] Bad Request: /api/rental-orders/
+2023-06-11 12:24:02,382 [WARNING] Not Found: /serviceworker.js
+2023-06-11 12:24:04,309 [DEBUG] Starting new HTTP connection (1): 127.0.0.1:8000
+2023-06-11 12:24:04,316 [DEBUG] http://127.0.0.1:8000 "GET /api/product/?is_rentable=true HTTP/1.1" 200 1341
+2023-06-11 12:24:05,938 [WARNING] Not Found: /serviceworker.js
+2023-06-11 12:24:13,653 [WARNING] Not Found: /serviceworker.js
+2023-06-11 12:24:43,127 [WARNING] Not Found: /serviceworker.js
+2023-06-11 12:26:09,245 [INFO] C:\Users\daril\Desktop\conejofurioso\app\views.py changed, reloading.
+2023-06-11 12:26:09,885 [INFO] Watching for file changes with StatReloader
+2023-06-11 12:26:13,293 [DEBUG] Starting new HTTP connection (1): 127.0.0.1:8000
+2023-06-11 12:26:13,308 [DEBUG] http://127.0.0.1:8000 "GET /api/product/?is_rentable=true HTTP/1.1" 200 1341
+2023-06-11 12:26:14,963 [WARNING] Not Found: /serviceworker.js
+2023-06-11 12:26:24,043 [WARNING] Not Found: /serviceworker.js
+2023-06-11 12:26:25,479 [DEBUG] Starting new HTTP connection (1): 127.0.0.1:8000
+2023-06-11 12:26:25,489 [DEBUG] http://127.0.0.1:8000 "GET /api/product/?is_rentable=true HTTP/1.1" 200 1341
+2023-06-11 12:26:25,886 [DEBUG] Starting new HTTP connection (1): 127.0.0.1:8000
+2023-06-11 12:26:25,893 [DEBUG] http://127.0.0.1:8000 "GET /api/product/?is_rentable=true HTTP/1.1" 200 1341
+2023-06-11 12:26:27,482 [WARNING] Not Found: /serviceworker.js
+2023-06-11 12:26:32,996 [WARNING] Bad Request: /api/rental-orders/
+2023-06-11 12:26:35,022 [WARNING] Not Found: /serviceworker.js
+2023-06-11 12:26:36,159 [DEBUG] Starting new HTTP connection (1): 127.0.0.1:8000
+2023-06-11 12:26:36,166 [DEBUG] http://127.0.0.1:8000 "GET /api/product/?is_rentable=true HTTP/1.1" 200 1341
+2023-06-11 12:26:37,847 [WARNING] Not Found: /serviceworker.js
+2023-06-11 12:26:44,567 [WARNING] Not Found: /serviceworker.js
+2023-06-11 12:26:46,034 [DEBUG] Starting new HTTP connection (1): 127.0.0.1:8000
+2023-06-11 12:26:46,042 [DEBUG] http://127.0.0.1:8000 "GET /api/product/?is_rentable=true HTTP/1.1" 200 1341
+2023-06-11 12:26:47,668 [WARNING] Not Found: /serviceworker.js
+2023-06-11 12:27:17,114 [WARNING] Not Found: /serviceworker.js
+2023-06-11 12:27:39,457 [WARNING] Bad Request: /api/rental-orders/
+2023-06-11 12:27:41,092 [WARNING] Not Found: /serviceworker.js
+2023-06-11 12:28:10,578 [WARNING] Not Found: /serviceworker.js
+2023-06-11 12:29:52,985 [INFO] C:\Users\daril\Desktop\conejofurioso\app\views.py changed, reloading.
+2023-06-11 12:29:53,533 [INFO] Watching for file changes with StatReloader
+2023-06-11 12:30:32,211 [WARNING] Bad Request: /api/rental-orders/
+2023-06-11 12:30:33,827 [WARNING] Not Found: /serviceworker.js
+2023-06-11 12:30:34,825 [DEBUG] Starting new HTTP connection (1): 127.0.0.1:8000
+2023-06-11 12:30:34,839 [DEBUG] http://127.0.0.1:8000 "GET /api/product/?is_new__in=true%2Cfalse&is_featured__in=true%2Cfalse HTTP/1.1" 200 2936
+2023-06-11 12:30:34,842 [DEBUG] Starting new HTTP connection (1): 127.0.0.1:8000
+2023-06-11 12:30:34,847 [DEBUG] http://127.0.0.1:8000 "GET /api/category/ HTTP/1.1" 200 500
+2023-06-11 12:30:34,908 [WARNING] Not Found: /ruta/imagen_cerveza.jpg
+2023-06-11 12:30:34,910 [WARNING] Not Found: /ruta/imagen_poleras.jpg
+2023-06-11 12:30:34,917 [WARNING] Not Found: /ruta/imagen_barril.jpg
+2023-06-11 12:30:35,800 [DEBUG] Starting new HTTP connection (1): 127.0.0.1:8000
+2023-06-11 12:30:35,807 [DEBUG] http://127.0.0.1:8000 "GET /api/product/?is_rentable=true HTTP/1.1" 200 1341
+2023-06-11 12:30:37,456 [WARNING] Not Found: /serviceworker.js
+2023-06-11 12:30:44,808 [WARNING] Not Found: /serviceworker.js
+2023-06-11 12:30:45,864 [DEBUG] Starting new HTTP connection (1): 127.0.0.1:8000
+2023-06-11 12:30:45,875 [DEBUG] http://127.0.0.1:8000 "GET /api/product/?is_new__in=true%2Cfalse&is_featured__in=true%2Cfalse HTTP/1.1" 200 2936
+2023-06-11 12:30:45,877 [DEBUG] Starting new HTTP connection (1): 127.0.0.1:8000
+2023-06-11 12:30:45,882 [DEBUG] http://127.0.0.1:8000 "GET /api/category/ HTTP/1.1" 200 500
+2023-06-11 12:30:45,929 [WARNING] Not Found: /ruta/imagen_cerveza.jpg
+2023-06-11 12:30:45,932 [WARNING] Not Found: /ruta/imagen_poleras.jpg
+2023-06-11 12:30:45,936 [WARNING] Not Found: /ruta/imagen_barril.jpg
+2023-06-11 12:30:46,794 [DEBUG] Starting new HTTP connection (1): 127.0.0.1:8000
+2023-06-11 12:30:46,803 [DEBUG] http://127.0.0.1:8000 "GET /api/product/?is_rentable=true HTTP/1.1" 200 1341
+2023-06-11 12:30:48,477 [WARNING] Not Found: /serviceworker.js
+2023-06-11 12:30:54,241 [WARNING] Bad Request: /api/rental-orders/
+2023-06-11 12:30:55,933 [WARNING] Not Found: /serviceworker.js
+2023-06-11 12:31:25,357 [WARNING] Not Found: /serviceworker.js
+2023-06-11 12:33:22,224 [INFO] C:\Users\daril\Desktop\conejofurioso\app\views.py changed, reloading.
+2023-06-11 12:33:22,783 [INFO] Watching for file changes with StatReloader
+2023-06-11 12:33:26,505 [DEBUG] Starting new HTTP connection (1): 127.0.0.1:8000
+2023-06-11 12:33:26,525 [DEBUG] http://127.0.0.1:8000 "GET /api/product/?is_new__in=true%2Cfalse&is_featured__in=true%2Cfalse HTTP/1.1" 200 2936
+2023-06-11 12:33:26,527 [DEBUG] Starting new HTTP connection (1): 127.0.0.1:8000
+2023-06-11 12:33:26,532 [DEBUG] http://127.0.0.1:8000 "GET /api/category/ HTTP/1.1" 200 500
+2023-06-11 12:33:26,607 [WARNING] Not Found: /ruta/imagen_cerveza.jpg
+2023-06-11 12:33:26,611 [WARNING] Not Found: /ruta/imagen_barril.jpg
+2023-06-11 12:33:26,613 [WARNING] Not Found: /ruta/imagen_poleras.jpg
+2023-06-11 12:33:27,332 [DEBUG] Starting new HTTP connection (1): 127.0.0.1:8000
+2023-06-11 12:33:27,339 [DEBUG] http://127.0.0.1:8000 "GET /api/product/?is_rentable=true HTTP/1.1" 200 1341
+2023-06-11 12:33:27,448 [ERROR] Internal Server Error: /rental-service/
+Traceback (most recent call last):
+  File "C:\Users\daril\AppData\Local\Programs\Python\Python311\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\daril\AppData\Local\Programs\Python\Python311\Lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\daril\Desktop\conejofurioso\app\views.py", line 201, in rental_service
+    return render(request, 'app/rental_service.html', data)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\daril\AppData\Local\Programs\Python\Python311\Lib\site-packages\django\shortcuts.py", line 24, in render
+    content = loader.render_to_string(template_name, context, request, using=using)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\daril\AppData\Local\Programs\Python\Python311\Lib\site-packages\django\template\loader.py", line 61, in render_to_string
+    template = get_template(template_name, using=using)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\daril\AppData\Local\Programs\Python\Python311\Lib\site-packages\django\template\loader.py", line 15, in get_template
+    return engine.get_template(template_name)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\daril\AppData\Local\Programs\Python\Python311\Lib\site-packages\django\template\backends\django.py", line 33, in get_template
+    return Template(self.engine.get_template(template_name), self)
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\daril\AppData\Local\Programs\Python\Python311\Lib\site-packages\django\template\engine.py", line 175, in get_template
+    template, origin = self.find_template(template_name)
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\daril\AppData\Local\Programs\Python\Python311\Lib\site-packages\django\template\engine.py", line 157, in find_template
+    template = loader.get_template(name, skip=skip)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\daril\AppData\Local\Programs\Python\Python311\Lib\site-packages\django\template\loaders\cached.py", line 57, in get_template
+    template = super().get_template(template_name, skip)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\daril\AppData\Local\Programs\Python\Python311\Lib\site-packages\django\template\loaders\base.py", line 28, in get_template
+    return Template(
+           ^^^^^^^^^
+  File "C:\Users\daril\AppData\Local\Programs\Python\Python311\Lib\site-packages\django\template\base.py", line 154, in __init__
+    self.nodelist = self.compile_nodelist()
+                    ^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\daril\AppData\Local\Programs\Python\Python311\Lib\site-packages\django\template\base.py", line 200, in compile_nodelist
+    return parser.parse()
+           ^^^^^^^^^^^^^^
+  File "C:\Users\daril\AppData\Local\Programs\Python\Python311\Lib\site-packages\django\template\base.py", line 513, in parse
+    raise self.error(token, e)
+  File "C:\Users\daril\AppData\Local\Programs\Python\Python311\Lib\site-packages\django\template\base.py", line 511, in parse
+    compiled_result = compile_func(self, token)
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\daril\AppData\Local\Programs\Python\Python311\Lib\site-packages\django\template\loader_tags.py", line 293, in do_extends
+    nodelist = parser.parse()
+               ^^^^^^^^^^^^^^
+  File "C:\Users\daril\AppData\Local\Programs\Python\Python311\Lib\site-packages\django\template\base.py", line 513, in parse
+    raise self.error(token, e)
+  File "C:\Users\daril\AppData\Local\Programs\Python\Python311\Lib\site-packages\django\template\base.py", line 511, in parse
+    compiled_result = compile_func(self, token)
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\daril\AppData\Local\Programs\Python\Python311\Lib\site-packages\django\template\loader_tags.py", line 232, in do_block
+    nodelist = parser.parse(("endblock",))
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\daril\AppData\Local\Programs\Python\Python311\Lib\site-packages\django\template\base.py", line 513, in parse
+    raise self.error(token, e)
+  File "C:\Users\daril\AppData\Local\Programs\Python\Python311\Lib\site-packages\django\template\base.py", line 511, in parse
+    compiled_result = compile_func(self, token)
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\daril\AppData\Local\Programs\Python\Python311\Lib\site-packages\django\template\defaulttags.py", line 853, in do_for
+    nodelist_loop = parser.parse(
+                    ^^^^^^^^^^^^^
+  File "C:\Users\daril\AppData\Local\Programs\Python\Python311\Lib\site-packages\django\template\base.py", line 484, in parse
+    raise self.error(token, e)
+  File "C:\Users\daril\AppData\Local\Programs\Python\Python311\Lib\site-packages\django\template\base.py", line 482, in parse
+    filter_expression = self.compile_filter(token.contents)
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\daril\AppData\Local\Programs\Python\Python311\Lib\site-packages\django\template\base.py", line 600, in compile_filter
+    return FilterExpression(token, self)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\daril\AppData\Local\Programs\Python\Python311\Lib\site-packages\django\template\base.py", line 698, in __init__
+    filter_func = parser.find_filter(filter_name)
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\daril\AppData\Local\Programs\Python\Python311\Lib\site-packages\django\template\base.py", line 606, in find_filter
+    raise TemplateSyntaxError("Invalid filter: '%s'" % filter_name)
+django.template.exceptions.TemplateSyntaxError: Invalid filter: 'int'
+2023-06-11 12:33:28,210 [WARNING] Not Found: /serviceworker.js
+2023-06-11 12:33:29,233 [WARNING] Not Found: /serviceworker.js
+2023-06-11 12:33:58,639 [WARNING] Not Found: /serviceworker.js
+2023-06-11 12:35:54,960 [DEBUG] Starting new HTTP connection (1): 127.0.0.1:8000
+2023-06-11 12:35:54,967 [DEBUG] http://127.0.0.1:8000 "GET /api/product/?is_rentable=true HTTP/1.1" 200 1341
+2023-06-11 12:35:55,286 [WARNING] Not Found: /favicon.ico
+2023-06-11 12:36:00,028 [DEBUG] Starting new HTTP connection (1): 127.0.0.1:8000
+2023-06-11 12:36:00,035 [DEBUG] http://127.0.0.1:8000 "GET /api/product/?is_rentable=true HTTP/1.1" 200 1341
+2023-06-11 12:36:00,082 [ERROR] Internal Server Error: /rental-service/
+Traceback (most recent call last):
+  File "C:\Users\daril\AppData\Local\Programs\Python\Python311\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\daril\AppData\Local\Programs\Python\Python311\Lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\daril\Desktop\conejofurioso\app\views.py", line 201, in rental_service
+    return render(request, 'app/rental_service.html', data)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\daril\AppData\Local\Programs\Python\Python311\Lib\site-packages\django\shortcuts.py", line 24, in render
+    content = loader.render_to_string(template_name, context, request, using=using)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\daril\AppData\Local\Programs\Python\Python311\Lib\site-packages\django\template\loader.py", line 61, in render_to_string
+    template = get_template(template_name, using=using)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\daril\AppData\Local\Programs\Python\Python311\Lib\site-packages\django\template\loader.py", line 15, in get_template
+    return engine.get_template(template_name)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\daril\AppData\Local\Programs\Python\Python311\Lib\site-packages\django\template\backends\django.py", line 33, in get_template
+    return Template(self.engine.get_template(template_name), self)
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\daril\AppData\Local\Programs\Python\Python311\Lib\site-packages\django\template\engine.py", line 175, in get_template
+    template, origin = self.find_template(template_name)
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\daril\AppData\Local\Programs\Python\Python311\Lib\site-packages\django\template\engine.py", line 157, in find_template
+    template = loader.get_template(name, skip=skip)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\daril\AppData\Local\Programs\Python\Python311\Lib\site-packages\django\template\loaders\cached.py", line 57, in get_template
+    template = super().get_template(template_name, skip)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\daril\AppData\Local\Programs\Python\Python311\Lib\site-packages\django\template\loaders\base.py", line 28, in get_template
+    return Template(
+           ^^^^^^^^^
+  File "C:\Users\daril\AppData\Local\Programs\Python\Python311\Lib\site-packages\django\template\base.py", line 154, in __init__
+    self.nodelist = self.compile_nodelist()
+                    ^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\daril\AppData\Local\Programs\Python\Python311\Lib\site-packages\django\template\base.py", line 200, in compile_nodelist
+    return parser.parse()
+           ^^^^^^^^^^^^^^
+  File "C:\Users\daril\AppData\Local\Programs\Python\Python311\Lib\site-packages\django\template\base.py", line 513, in parse
+    raise self.error(token, e)
+  File "C:\Users\daril\AppData\Local\Programs\Python\Python311\Lib\site-packages\django\template\base.py", line 511, in parse
+    compiled_result = compile_func(self, token)
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\daril\AppData\Local\Programs\Python\Python311\Lib\site-packages\django\template\loader_tags.py", line 293, in do_extends
+    nodelist = parser.parse()
+               ^^^^^^^^^^^^^^
+  File "C:\Users\daril\AppData\Local\Programs\Python\Python311\Lib\site-packages\django\template\base.py", line 513, in parse
+    raise self.error(token, e)
+  File "C:\Users\daril\AppData\Local\Programs\Python\Python311\Lib\site-packages\django\template\base.py", line 511, in parse
+    compiled_result = compile_func(self, token)
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\daril\AppData\Local\Programs\Python\Python311\Lib\site-packages\django\template\loader_tags.py", line 232, in do_block
+    nodelist = parser.parse(("endblock",))
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\daril\AppData\Local\Programs\Python\Python311\Lib\site-packages\django\template\base.py", line 513, in parse
+    raise self.error(token, e)
+  File "C:\Users\daril\AppData\Local\Programs\Python\Python311\Lib\site-packages\django\template\base.py", line 511, in parse
+    compiled_result = compile_func(self, token)
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\daril\AppData\Local\Programs\Python\Python311\Lib\site-packages\django\template\defaulttags.py", line 853, in do_for
+    nodelist_loop = parser.parse(
+                    ^^^^^^^^^^^^^
+  File "C:\Users\daril\AppData\Local\Programs\Python\Python311\Lib\site-packages\django\template\base.py", line 484, in parse
+    raise self.error(token, e)
+  File "C:\Users\daril\AppData\Local\Programs\Python\Python311\Lib\site-packages\django\template\base.py", line 482, in parse
+    filter_expression = self.compile_filter(token.contents)
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\daril\AppData\Local\Programs\Python\Python311\Lib\site-packages\django\template\base.py", line 600, in compile_filter
+    return FilterExpression(token, self)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\daril\AppData\Local\Programs\Python\Python311\Lib\site-packages\django\template\base.py", line 698, in __init__
+    filter_func = parser.find_filter(filter_name)
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\daril\AppData\Local\Programs\Python\Python311\Lib\site-packages\django\template\base.py", line 606, in find_filter
+    raise TemplateSyntaxError("Invalid filter: '%s'" % filter_name)
+django.template.exceptions.TemplateSyntaxError: Invalid filter: 'int'
+2023-06-11 12:36:00,273 [WARNING] Not Found: /favicon.ico
+2023-06-11 12:36:03,986 [DEBUG] Starting new HTTP connection (1): 127.0.0.1:8000
+2023-06-11 12:36:03,993 [DEBUG] http://127.0.0.1:8000 "GET /api/product/?is_rentable=true HTTP/1.1" 200 1341
+2023-06-11 12:36:04,042 [ERROR] Internal Server Error: /rental-service/
+Traceback (most recent call last):
+  File "C:\Users\daril\AppData\Local\Programs\Python\Python311\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\daril\AppData\Local\Programs\Python\Python311\Lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\daril\Desktop\conejofurioso\app\views.py", line 201, in rental_service
+    return render(request, 'app/rental_service.html', data)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\daril\AppData\Local\Programs\Python\Python311\Lib\site-packages\django\shortcuts.py", line 24, in render
+    content = loader.render_to_string(template_name, context, request, using=using)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\daril\AppData\Local\Programs\Python\Python311\Lib\site-packages\django\template\loader.py", line 61, in render_to_string
+    template = get_template(template_name, using=using)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\daril\AppData\Local\Programs\Python\Python311\Lib\site-packages\django\template\loader.py", line 15, in get_template
+    return engine.get_template(template_name)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\daril\AppData\Local\Programs\Python\Python311\Lib\site-packages\django\template\backends\django.py", line 33, in get_template
+    return Template(self.engine.get_template(template_name), self)
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\daril\AppData\Local\Programs\Python\Python311\Lib\site-packages\django\template\engine.py", line 175, in get_template
+    template, origin = self.find_template(template_name)
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\daril\AppData\Local\Programs\Python\Python311\Lib\site-packages\django\template\engine.py", line 157, in find_template
+    template = loader.get_template(name, skip=skip)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\daril\AppData\Local\Programs\Python\Python311\Lib\site-packages\django\template\loaders\cached.py", line 57, in get_template
+    template = super().get_template(template_name, skip)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\daril\AppData\Local\Programs\Python\Python311\Lib\site-packages\django\template\loaders\base.py", line 28, in get_template
+    return Template(
+           ^^^^^^^^^
+  File "C:\Users\daril\AppData\Local\Programs\Python\Python311\Lib\site-packages\django\template\base.py", line 154, in __init__
+    self.nodelist = self.compile_nodelist()
+                    ^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\daril\AppData\Local\Programs\Python\Python311\Lib\site-packages\django\template\base.py", line 200, in compile_nodelist
+    return parser.parse()
+           ^^^^^^^^^^^^^^
+  File "C:\Users\daril\AppData\Local\Programs\Python\Python311\Lib\site-packages\django\template\base.py", line 513, in parse
+    raise self.error(token, e)
+  File "C:\Users\daril\AppData\Local\Programs\Python\Python311\Lib\site-packages\django\template\base.py", line 511, in parse
+    compiled_result = compile_func(self, token)
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\daril\AppData\Local\Programs\Python\Python311\Lib\site-packages\django\template\loader_tags.py", line 293, in do_extends
+    nodelist = parser.parse()
+               ^^^^^^^^^^^^^^
+  File "C:\Users\daril\AppData\Local\Programs\Python\Python311\Lib\site-packages\django\template\base.py", line 513, in parse
+    raise self.error(token, e)
+  File "C:\Users\daril\AppData\Local\Programs\Python\Python311\Lib\site-packages\django\template\base.py", line 511, in parse
+    compiled_result = compile_func(self, token)
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\daril\AppData\Local\Programs\Python\Python311\Lib\site-packages\django\template\loader_tags.py", line 232, in do_block
+    nodelist = parser.parse(("endblock",))
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\daril\AppData\Local\Programs\Python\Python311\Lib\site-packages\django\template\base.py", line 513, in parse
+    raise self.error(token, e)
+  File "C:\Users\daril\AppData\Local\Programs\Python\Python311\Lib\site-packages\django\template\base.py", line 511, in parse
+    compiled_result = compile_func(self, token)
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\daril\AppData\Local\Programs\Python\Python311\Lib\site-packages\django\template\defaulttags.py", line 853, in do_for
+    nodelist_loop = parser.parse(
+                    ^^^^^^^^^^^^^
+  File "C:\Users\daril\AppData\Local\Programs\Python\Python311\Lib\site-packages\django\template\base.py", line 484, in parse
+    raise self.error(token, e)
+  File "C:\Users\daril\AppData\Local\Programs\Python\Python311\Lib\site-packages\django\template\base.py", line 482, in parse
+    filter_expression = self.compile_filter(token.contents)
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\daril\AppData\Local\Programs\Python\Python311\Lib\site-packages\django\template\base.py", line 600, in compile_filter
+    return FilterExpression(token, self)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\daril\AppData\Local\Programs\Python\Python311\Lib\site-packages\django\template\base.py", line 698, in __init__
+    filter_func = parser.find_filter(filter_name)
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\daril\AppData\Local\Programs\Python\Python311\Lib\site-packages\django\template\base.py", line 606, in find_filter
+    raise TemplateSyntaxError("Invalid filter: '%s'" % filter_name)
+django.template.exceptions.TemplateSyntaxError: Invalid filter: 'int'
+2023-06-11 12:36:04,178 [WARNING] Not Found: /favicon.ico
+2023-06-11 12:36:12,139 [DEBUG] Starting new HTTP connection (1): 127.0.0.1:8000
+2023-06-11 12:36:12,145 [DEBUG] http://127.0.0.1:8000 "GET /api/product/?is_rentable=true HTTP/1.1" 200 1341
+2023-06-11 12:36:12,300 [WARNING] Not Found: /favicon.ico
+2023-06-11 12:36:24,613 [INFO] C:\Users\daril\Desktop\conejofurioso\app\views.py changed, reloading.
+2023-06-11 12:36:25,211 [INFO] Watching for file changes with StatReloader
+2023-06-11 12:36:28,285 [DEBUG] Starting new HTTP connection (1): 127.0.0.1:8000
+2023-06-11 12:36:28,299 [DEBUG] http://127.0.0.1:8000 "GET /api/product/?is_rentable=true HTTP/1.1" 200 1341
+2023-06-11 12:36:28,568 [WARNING] Not Found: /favicon.ico
+2023-06-11 12:36:41,245 [WARNING] Not Found: /serviceworker.js
+2023-06-11 12:37:10,733 [WARNING] Not Found: /serviceworker.js

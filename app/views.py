@@ -13,6 +13,7 @@ from app.cart import Cart
 from rest_framework.response import Response
 from django.conf import settings
 from django.middleware.csrf import get_token
+import logging
 
 
 # Create your views here.
@@ -149,24 +150,33 @@ def catalogue(request):
 def rental_service(request):
     if request.method == 'POST':
         form = RentalOrderForm(request.POST)
-
         if form.is_valid():
             rental_order_data = form.cleaned_data
-            products_selected = [int(product_id) for product_id in request.POST.get('product_checkbox', '').split(',') if product_id.isdigit()]
 
-            # Crear la orden a través de la API
-            rental_order_response = requests.post(settings.API_BASE_URL + 'rental-orders/', json=rental_order_data)
-            if rental_order_response.status_code == 201:
-                rental_order = rental_order_response.json()
+            # Obtener la lista de productos seleccionados
+            products_selected = request.POST.getlist('products')
+            products_selected = [int(product_id) for product_id in products_selected if product_id.isdigit()]
 
-                # Agregar los productos a la orden a través de la API
-                for product_id in products_selected:
-                    product_data = {'product': product_id}
+            logging.info("Rental Order Data: %s", rental_order_data)
+            logging.info("Products Selected: %s", products_selected)
+
+            try:
+                # Crear la orden a través de la API
+                rental_order_response = requests.post(settings.API_BASE_URL + 'rental-orders/', json=rental_order_data)
+                if rental_order_response.status_code == 201:
+                    rental_order = rental_order_response.json()
+
+                    # Agregar los productos a la orden a través de la API
+                    product_data = {'products': products_selected}  # Pasar la lista de IDs de productos
                     requests.post(settings.API_BASE_URL + f'rental-orders/{rental_order["id"]}/add-product/', json=product_data)
 
-                return HttpResponse('El formulario ha sido enviado correctamente.')
-            else:
-                return HttpResponse('Error al enviar el formulario.')
+                    return HttpResponse('El formulario ha sido enviado correctamente.')
+                else:
+                    return HttpResponse('Error al enviar el formulario.')
+
+            except Exception as e:
+                logging.exception("Error en el servidor")
+                return HttpResponse('Error en el servidor.')
 
     else:
         form = RentalOrderForm()
@@ -181,13 +191,12 @@ def rental_service(request):
 
     data = {
         'form': form,
-        'products': product_response
+        'products': product_response,
+        'csrf_token': get_token(request)
     }
 
-    # Agregar el token CSRF al contexto
-    data['csrf_token'] = get_token(request)
-
     return render(request, 'app/rental_service.html', data)
+
 #CONTATO
 def contact(request):
     data = {

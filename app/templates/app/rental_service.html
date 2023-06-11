@@ -6,12 +6,12 @@
 
 {% block js %}
 <script>
-  document.addEventListener('DOMContentLoaded', function() {
+  document.addEventListener('DOMContentLoaded', function () {
     const checkbox = document.getElementById('termsCheckbox');
     const formContainer = document.getElementById('formContainer');
     const imageContainer = document.getElementById('imageContainer');
 
-    checkbox.addEventListener('change', function() {
+    checkbox.addEventListener('change', function () {
       if (checkbox.checked) {
         formContainer.style.display = 'block';
         imageContainer.style.display = 'none';
@@ -24,10 +24,10 @@
     const checkboxList = document.querySelectorAll('.product-checkbox');
     const form = document.getElementById('rentalForm');
 
-    form.addEventListener('submit', function(event) {
+    form.addEventListener('submit', function (event) {
       const selectedProducts = Array.from(checkboxList)
         .filter(checkbox => checkbox.checked)
-        .map(checkbox => parseInt(checkbox.value)); // Parsear a entero
+        .map(checkbox => parseInt(checkbox.dataset.productId)); // Obtener el ID del producto como entero
 
       if (selectedProducts.length === 0) {
         event.preventDefault();
@@ -36,8 +36,7 @@
         const productsInput = document.createElement('input');
         productsInput.setAttribute('type', 'hidden');
         productsInput.setAttribute('name', 'products');
-        productsInput.setAttribute('value', JSON.stringify(selectedProducts));
-
+        productsInput.setAttribute('value', selectedProducts.join()); // Eliminar la separación por comas
         form.appendChild(productsInput);
       }
     });
@@ -113,42 +112,45 @@
       </div>
     </div>
     <div class="col-md-6">
-        <div id="formContainer" style="display: none;">
-            <div class="card">
-              <div class="card-body">
-                <h5 class="card-title">Formulario de Arriendo</h5>
-                <form id="rentalForm" action="/api/rental-orders/" method="POST">
-                  {% csrf_token %}
-                  <div class="mb-3">
-                    <label for="rutInput" class="form-label">RUT</label>
-                    <input type="text" class="form-control" id="rutInput" name="rut" placeholder="Ingrese su RUT">
-                  </div>
-                  <div class="mb-3">
-                    <label for="nombreInput" class="form-label">Nombre Completo</label>
-                    <input type="text" class="form-control" id="nombreInput" name="name" placeholder="Ingrese su nombre completo">
-                  </div>
-                  <div class="mb-3">
-                    <label for="direccionInput" class="form-label">Dirección</label>
-                    <input type="text" class="form-control" id="direccionInput" name="address" placeholder="Ingrese su dirección">
-                  </div>
-                  <div class="mb-3">
-                    <label for="celularInput" class="form-label">Celular</label>
-                    <input type="text" class="form-control" id="celularInput" name="phone" placeholder="Ingrese su número de celular">
-                  </div>
-                  <div class="mb-3">
-                    <label for="fechaEntregaInput" class="form-label">Fecha de Entrega con Hora</label>
-                    <input type="datetime-local" class="form-control" id="fechaEntregaInput" name="deliver_date">
-                  </div>
-                  <button type="submit" class="btn btn-primary">Enviar</button>
-                </form>
+      <div id="formContainer" style="display: none;">
+        <div class="card">
+          <div class="card-body">
+            <h5 class="card-title">Formulario de Arriendo</h5>
+            <form id="rentalForm" action="/api/rental-orders/" method="POST">
+              {% csrf_token %}
+              <div class="mb-3">
+                <label for="rutInput" class="form-label">RUT</label>
+                <input type="text" class="form-control" id="rutInput" name="rut" placeholder="Ingrese su RUT">
               </div>
-            </div>
+              <div class="mb-3">
+                <label for="nombreInput" class="form-label">Nombre Completo</label>
+                <input type="text" class="form-control" id="nombreInput" name="name"
+                  placeholder="Ingrese su nombre completo">
+              </div>
+              <div class="mb-3">
+                <label for="direccionInput" class="form-label">Dirección</label>
+                <input type="text" class="form-control" id="direccionInput" name="address"
+                  placeholder="Ingrese su dirección">
+              </div>
+              <div class="mb-3">
+                <label for="celularInput" class="form-label">Celular</label>
+                <input type="text" class="form-control" id="celularInput" name="phone"
+                  placeholder="Ingrese su número de celular">
+              </div>
+              <div class="mb-3">
+                <label for="fechaEntregaInput" class="form-label">Fecha de Entrega con Hora</label>
+                <input type="datetime-local" class="form-control" id="fechaEntregaInput" name="deliver_date">
+              </div>
+              <button type="submit" class="btn btn-primary">Enviar</button>
+            </form>
           </div>
+        </div>
+      </div>
       <div id="imageContainer" class="text-center">
         <div style="display: flex;">
-            <img src="{% static 'app/img/quienes somos.webp' %}"
-              style="float: left; margin-right: 10px; margin-top: 12px; width: 630px; height: 530px;" alt="...">
-          </div>
+          <img src="{% static 'app/img/quienes somos.webp' %}"
+            style="float: left; margin-right: 10px; margin-top: 12px; width: 630px; height: 530px;" alt="...">
+        </div>
       </div>
     </div>
   </div>
