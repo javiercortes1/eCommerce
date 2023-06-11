@@ -6,7 +6,8 @@ from .views import home, rental_service, catalogue, contact,\
     clean_cart, cart_page, buy_confirm, add_category,\
     list_category, update_category, delete_category, admin_panel,\
     ContactViewSet,pago, list_contact,\
-    QueryTypeViewset, update_contact_status, add_query_type, list_query_type, update_query_type, delete_query_type
+    QueryTypeViewset, update_contact_status, add_query_type, list_query_type,\
+    update_query_type, delete_query_type, RentalOrderViewSet
 
 from rest_framework import routers
 
@@ -15,6 +16,7 @@ router.register('product', ProductViewset)
 router.register('category', CategoryViewset)
 router.register('contact', ContactViewSet, basename='contact')
 router.register('query-type', QueryTypeViewset, basename='query-type')
+router.register(r'rental-orders', RentalOrderViewSet)
 
 
 urlpatterns = [
