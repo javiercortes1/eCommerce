@@ -25,22 +25,54 @@
     const form = document.getElementById('rentalForm');
 
     form.addEventListener('submit', function (event) {
+      event.preventDefault(); // Evitar el envío del formulario
+
       const selectedProducts = Array.from(checkboxList)
         .filter(checkbox => checkbox.checked)
-        .map(checkbox => parseInt(checkbox.dataset.productId)); // Obtener el ID del producto como entero
+        .map(checkbox => parseInt(checkbox.dataset.productId)); // Convertir el ID del producto a entero
 
       if (selectedProducts.length === 0) {
-        event.preventDefault();
-        alert('Debes seleccionar al menos un producto');
+        Swal.fire('Error', 'Debes seleccionar al menos un producto', 'error');
       } else {
-        const productsInput = document.createElement('input');
-        productsInput.setAttribute('type', 'hidden');
-        productsInput.setAttribute('name', 'products');
-        productsInput.setAttribute('value', selectedProducts.join()); // Eliminar la separación por comas
-        form.appendChild(productsInput);
+        // Remover los campos ocultos existentes antes de agregar los nuevos
+        const existingProductInputs = document.querySelectorAll('input[name="products"]');
+        existingProductInputs.forEach(input => input.remove());
+
+        // Crear un campo oculto para cada producto seleccionado
+        selectedProducts.forEach(productId => {
+          const productInput = document.createElement('input');
+          productInput.setAttribute('type', 'hidden');
+          productInput.setAttribute('name', 'products');
+          productInput.setAttribute('value', productId);
+          form.appendChild(productInput);
+        });
+
+        // Enviar el formulario a través de AJAX
+        const formData = new FormData(form);
+        fetch(form.action, {
+          method: 'POST',
+          body: formData
+        })
+        .then(response => response.json())
+        .then(data => handleFormResponse(data))
+        .catch(error => {
+          console.error('Error en la solicitud:', error);
+          Swal.fire('Error', 'Error en el servidor', 'error');
+        });
       }
     });
   });
+
+  // Función para manejar las respuestas del formulario
+  function handleFormResponse(response) {
+    if (response.message) {
+      Swal.fire('Éxito', response.message, 'success').then(() => {
+        // Redirigir al usuario o hacer cualquier otra acción necesaria
+      });
+    } else if (response.error) {
+      Swal.fire('Error', response.error, 'error');
+    }
+  }
 </script>
 {% endblock %}
 
@@ -49,7 +81,7 @@
 <br><br><br>
 <div class="container my-5">
   <section class="pb-5">
-    <h1 class="text-center py-5">Arrienda un barril cervecero!</h1>
+    <h1 class="text-center py-5">ARRIENDA UN BARRIL CERVECERO!</h1>
     <div class="row justify-content-center">
       {% for p in products %}
       <div class="col-xxl-3 col-xl-3 col-lg-4 col-md-6">
@@ -63,7 +95,7 @@
             <div class="text-center">
               <h5 class="card-title custom-card-title">{{ p.name | capfirst }}</h5>
             </div>
-            <p class="card-text custom-card-description"></p>
+            <p class="card-text custom-card-description">Disponible:{{ p.stock}}</p>
             <div class="mt-auto text-center">
               <p class="card-text price"><b> ${{ p.price | intcomma }}</b></p>
               <div class="form-check">
@@ -116,7 +148,7 @@
         <div class="card">
           <div class="card-body">
             <h5 class="card-title">Formulario de Arriendo</h5>
-            <form id="rentalForm" action="/api/rental-orders/" method="POST">
+            <form id="rentalForm" action="{% url 'rental_service' %}" method="POST">
               {% csrf_token %}
               <div class="mb-3">
                 <label for="rutInput" class="form-label">RUT</label>

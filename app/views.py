@@ -4,7 +4,7 @@ from django.contrib import messages
 from django.contrib.auth import authenticate, login
 from .models import Product, Category, Contact, QueryType, RentalOrder
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
-from django.http import Http404, HttpResponse
+from django.http import Http404, HttpResponse, JsonResponse
 from rest_framework import viewsets, serializers
 from .serializers import ProductSerializer, CategorySerializer, ContactSerializer, QueryTypeSerializer, RentalOrderSerializer
 import requests
@@ -151,14 +151,24 @@ def rental_service(request):
     if request.method == 'POST':
         form = RentalOrderForm(request.POST)
         if form.is_valid():
-            rental_order_data = form.cleaned_data
+            # Obtener el objeto datetime del formulario
+            deliver_date = form.cleaned_data['deliver_date']
+            # Convertir el objeto datetime a una cadena de texto en formato ISO 8601
+            deliver_date_iso = deliver_date.strftime('%Y-%m-%dT%H:%M')
+
+            rental_order_data = {
+                'rut': form.cleaned_data['rut'],
+                'name': form.cleaned_data['name'],
+                'address': form.cleaned_data['address'],
+                'phone': form.cleaned_data['phone'],
+                'deliver_date': deliver_date_iso,  # Utilizar la cadena de texto en lugar del objeto datetime
+            }
 
             # Obtener la lista de productos seleccionados
             products_selected = request.POST.getlist('products')
             products_selected = [int(product_id) for product_id in products_selected if product_id.isdigit()]
 
-            logging.info("Rental Order Data: %s", rental_order_data)
-            logging.info("Products Selected: %s", products_selected)
+            rental_order_data['products'] = products_selected  # Agregar la lista de productos seleccionados
 
             try:
                 # Crear la orden a través de la API
@@ -167,16 +177,16 @@ def rental_service(request):
                     rental_order = rental_order_response.json()
 
                     # Agregar los productos a la orden a través de la API
-                    product_data = {'products': products_selected}  # Pasar la lista de IDs de productos
-                    requests.post(settings.API_BASE_URL + f'rental-orders/{rental_order["id"]}/add-product/', json=product_data)
+                    product_ids = [str(product_id) for product_id in products_selected]  # Convertir los IDs de productos a cadena de texto
+                    add_product_url = settings.API_BASE_URL + f'rental-orders/{rental_order["id"]}/add-product/?products={",".join(product_ids)}'
+                    requests.post(add_product_url)
 
-                    return HttpResponse('El formulario ha sido enviado correctamente.')
+                    return JsonResponse({'message': 'La solicitud de arriendo ha sido enviado correctamente'})
                 else:
-                    return HttpResponse('Error al enviar el formulario.')
+                    return JsonResponse({'error': 'Error al enviar la solicitud'})
 
             except Exception as e:
-                logging.exception("Error en el servidor")
-                return HttpResponse('Error en el servidor.')
+                return JsonResponse({'error': 'Error en el servidor'})
 
     else:
         form = RentalOrderForm()
@@ -196,6 +206,7 @@ def rental_service(request):
     }
 
     return render(request, 'app/rental_service.html', data)
+
 
 #CONTATO
 def contact(request):
