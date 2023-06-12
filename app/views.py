@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from .forms import ContactForm, ProductForm, CustomUserCreationForm, CategoryForm, QueryTypeForm
+from .forms import ContactForm, ProductForm, CustomUserCreationForm, CategoryForm, QueryTypeForm,RecuperarForm
 from django.contrib import messages
 from django.contrib.auth import authenticate, login
 from .models import Product, Category, Contact, QueryType
@@ -14,30 +14,22 @@ from rest_framework.response import Response
 from django.conf import settings
 
 from django.views.decorators.csrf import csrf_exempt
-
-
 from .models import Order,OrderItem
+from django.core.mail import send_mail
 
 
+from rest_framework_simplejwt.tokens import RefreshToken
+from .serializers import TokenSerializer
 
-# Create your views here.
-from telnetlib import LOGOUT
-from tokenize import group
-from turtle import delay
-from django import forms
-from unicodedata import name
-from .models import  Usuarios
 from .forms import  UsuariosForm, LoginForm
-from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth import authenticate, login
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.contrib import messages
 from rest_framework.decorators import permission_classes
 from django.contrib.auth.models import User
-from django.http import HttpRequest, HttpResponseRedirect
 from rest_framework.authentication import TokenAuthentication
 from rest_framework.permissions import IsAuthenticated
 from conejofurioso.viewsLogin import login as api_login
-import json
 import requests
 from rest_framework.authtoken.models import Token
 from rest_framework.response import Response as apiResponse
@@ -688,7 +680,8 @@ def buy_confirm(request):
     cart = Cart(request)
     cart.buy()
     cart.clean()
-    return redirect('cart')
+    messages.success(request, "Compra de prueba Completada")
+    return redirect('home')
 
 #VISTAS CATEGORY
 def get_object_category(id):
@@ -857,37 +850,65 @@ def admin_panel(request):
 def pago(request):
     return render(request, "app/pago.html")
 
+
+
 def user_login(request):
     global tok
-    datos={
-        'form':LoginForm()
+    datos = {
+        'form': LoginForm()
     }
-    if(request.method == 'POST'):
+    if request.method == 'POST':
         form = LoginForm(request.POST)
         if form.is_valid():
             usernameU = request.POST['usrN']
             passwordU = request.POST['pswrdN']
-            user = authenticate(username=usernameU,password=passwordU)
+            user = authenticate(username=usernameU, password=passwordU)
             if user is not None:
-                login(request,user)
-                body= {"username": usernameU ,"password" : passwordU} #se genera json con info de usuario creado
-                r = requests.post('http://127.0.0.1:8000/API/login',data=json.dumps(body)) # se realiza la creacion de token
-                tok=r.text
-                return render(request, "app/home.html")
-    return render(request,"registration/login.html",datos)
+                login(request, user)
+                refresh = RefreshToken.for_user(user)
+                token = str(refresh.access_token)
+
+                # Guardar el token en el modelo Tokens
+                token_data = {
+                    'token': token,
+                    'user': usernameU
+                }
+                token_serializer = TokenSerializer(data=token_data)
+                if token_serializer.is_valid():
+                    token_serializer.save()
+
+                tok = token
+                messages.success(request, "has iniciado sesión")
+                return redirect(to="home")           
+    return render(request, "registration/login.html", datos)
+
+
 
 def Recuperar(request):
-    return render(request,"registration/Recuperar.html")
-
+    form = RecuperarForm(request.POST or None)
+    if form.is_valid():
+        email = form.cleaned_data['email']
+        try:
+            user = User.objects.get(email=email)
+        except User.DoesNotExist:
+            user = None
+        if user:
+            # Enviar el correo electrónico con la contraseña
+            subject = 'Recuperación de contraseña'
+            message = f'Tu contraseña es: {user.password}'
+            from_email = settings.EMAIL_HOST_USER
+            recipient_list = [email]
+            send_mail(subject, message, from_email, recipient_list, fail_silently=False)
+    return render(request, 'registration/Recuperar.html', {'form': form})
 #se crea usuario nuevo y token
 def Registrar(request): 
-    global tok
-    datos={
-        'form':UsuariosForm()
+    data = {
+        'form': UsuariosForm()
     }
-    if(request.method == 'POST'):
-        form=UsuariosForm(request.POST)
+    if request.method == 'POST':
+        form = UsuariosForm(request.POST)
         if form.is_valid():
+            form.save()
             #obtiene los datos del usuario desde formulario
             usernameN = form.cleaned_data.get('usrN')
             passwordN = form.cleaned_data.get('pswrdN')
@@ -902,18 +923,10 @@ def Registrar(request):
                     user = authenticate(username=usernameN, password=passwordN) #autentifican las credenciales del usuario
                     #se logea al usuario nuevo
                     login(request,user)
-                    #comienzo de creacion de token
-                    body= {"username": usernameN ,"password" : passwordN} #se genera json con info de usuario creado
-                    r = requests.post('http://127.0.0.1:8000//API/login',data=json.dumps(body)) # se realiza la creacion de token
-                    tok=r.text #se imprime token en forma  de debug
-                    #fin creacion token
-                    return render(request, "app/home.html")
-    return render(request,"registration/Registrar.html",datos)
-
-
-def desconectar(request):
-    logout(request)
-    return redirect('login') 
+            messages.success(request, "Te has registrado correctamente")
+            return redirect(to="home")
+        data["form"] = form
+    return render(request, 'registration/Registrar.html', data)
 
 
 
@@ -953,10 +966,27 @@ def payment_success(request):
             order_item.save()
 
         # Lógica adicional, como enviar un correo electrónico de confirmación, generar una factura, etc.
-
+        messages.success(request, "Ahora debe completar la compra")
         return render(request, 'app/payment_success.html')
 
     return render(request, 'app/pago.html')
   
+from rest_framework_simplejwt.tokens import RefreshToken
+from rest_framework.decorators import api_view
+from rest_framework.response import Response
 
+@api_view(['POST'])
+def obtain_token(request):
+    username = request.data.get('username')
+    password = request.data.get('password')
+
+    if username and password:
+        user = authenticate(username=username, password=password)
+        if user is not None:
+            refresh = RefreshToken.for_user(user)
+            return Response({
+                'access_token': str(refresh.access_token),
+                'refresh_token': str(refresh),
+            })
+    return Response({'error': 'Credenciales inválidas.'}, status=400)
 

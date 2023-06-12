@@ -66,7 +66,7 @@ class Contact(models.Model):
 
 
 class Usuarios(models.Model):
-    usrN= models.CharField(max_length=30,verbose_name="Nombre de Usuario")
+    usrN= models.CharField(max_length=100,verbose_name="Nombre de Usuario")
     pswrdN= models.CharField(max_length=15, verbose_name="Contraseña")
     pswrdN2=models.CharField(max_length=15, verbose_name="Contraseña2")
 #fin modelos para usuarios

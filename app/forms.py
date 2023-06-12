@@ -146,3 +146,5 @@ class LoginForm(ModelForm):
     class Meta:
         model=Usuarios
         fields= ['usrN','pswrdN']
+class RecuperarForm(forms.Form):
+    email = forms.EmailField(label='Correo electrónico')

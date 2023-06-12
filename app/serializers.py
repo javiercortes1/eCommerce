@@ -105,3 +105,10 @@ class QueryTypeSerializer(serializers.ModelSerializer):
         model = QueryType
         fields = '__all__'
     
+from rest_framework import serializers
+from .models import Tokens
+
+class TokenSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Tokens
+        fields = '__all__'
