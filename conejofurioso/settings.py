@@ -121,6 +121,7 @@ DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
 
 # Configuracion API URL
 API_BASE_URL = 'http://darioveramunoz.pythonanywhere.com/api/'
+# API_BASE_URL = 'http://127.0.0.1:8000/api/'
 
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
