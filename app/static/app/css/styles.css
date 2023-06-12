@@ -2,7 +2,7 @@
 
 :root {
   /* color navbar y footer */
-  --color-primary: #96d6ef;
+  --color-primary: #ce8619;
 
   /* fondo body*/
   --color-primary-2: rgb(246, 241, 241);
@@ -233,7 +233,7 @@ footer {
 
 #cart-toggle{
 
-  background-color: #ce8619 !important;
+  background-color: var(--color-primary-3) !important;
   border-width: 2px;
   border-color: #000000;
 
