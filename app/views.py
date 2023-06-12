@@ -1,12 +1,12 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from .forms import ContactForm, ProductForm, CustomUserCreationForm, CategoryForm, QueryTypeForm
+from .forms import ContactForm, ProductForm, CustomUserCreationForm, CategoryForm, QueryTypeForm, RentalOrderForm
 from django.contrib import messages
 from django.contrib.auth import authenticate, login
-from .models import Product, Category, Contact, QueryType
+from .models import Product, Category, Contact, QueryType, RentalOrder
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
-from django.http import Http404
+from django.http import Http404, HttpResponse, JsonResponse
 from rest_framework import viewsets, serializers
-from .serializers import ProductSerializer, CategorySerializer, ContactSerializer, QueryTypeSerializer
+from .serializers import ProductSerializer, CategorySerializer, ContactSerializer, QueryTypeSerializer, RentalOrderSerializer
 import requests
 from django.contrib.auth.decorators import login_required, permission_required
 from app.cart import Cart
@@ -18,6 +18,8 @@ from django.views.decorators.csrf import csrf_exempt
 
 from .models import Order,OrderItem
 
+from django.middleware.csrf import get_token
+import logging
 
 
 # Create your views here.
@@ -115,59 +117,129 @@ class QueryTypeViewset(viewsets.ModelViewSet):
     queryset = QueryType.objects.all()
     serializer_class = QueryTypeSerializer
 
+class RentalOrderViewSet(viewsets.ModelViewSet):
+    queryset = RentalOrder.objects.all()
+    serializer_class = RentalOrderSerializer
+    
+
 #VISTAS INICIALES
 def home(request):
-    #Definimos los parametros para filtrar productos
+    # Definimos los parámetros para filtrar productos
     params = {
-        'is_featured__in': 'true',
-        'is_new__in': 'true'
+        'is_new__in': 'true,false',
+        'is_featured__in': 'true,false',
     }
-    #obtenemos los productos y categorias desde la API
+    # Obtenemos los productos desde la API aplicando los filtros
     product_response = requests.get(settings.API_BASE_URL + 'product/', params=params).json()
+    # Filtrar los productos para excluir los que tienen is_rentable=True
+    filtered_products = [product for product in product_response if not product['is_rentable']]
+    
     categories_response = requests.get(settings.API_BASE_URL + 'category/').json()
     
     data = {
-        'products': product_response,
+        'products': filtered_products,
         'categories': categories_response
     }
     
     return render(request, 'app/home.html', data)
 
 def catalogue(request):
-    #Obtenemos los filtros desde el html
+    # Obtenemos los filtros desde el html
     name_filter = request.GET.get('name', '')
     category_filter = request.GET.get('category', '')
     min_price_filter = request.GET.get('min_price_filter', '')
     max_price_filter = request.GET.get('max_price_filter', '')
 
-    #Definimos los parametros para filtrar
+    # Definimos los parámetros para filtrar productos
     params = {
         'name': name_filter,
         'category': category_filter,
         'min_price_filter': min_price_filter,
         'max_price_filter': max_price_filter,
     }
-    #Obtenemos los productos desde la API 
+
+    # Obtenemos los productos desde la API aplicando los filtros
     response = requests.get(settings.API_BASE_URL + 'product/', params=params)
     products = response.json()
+    # Filtrar los productos para excluir los que tienen is_rentable=True
+    filtered_products = [product for product in products if not product['is_rentable']]
 
-    #Obtenemos las categorias desde la API
+    # Obtenemos las categorías desde la API
     categories = requests.get(settings.API_BASE_URL + 'category/').json()
-    #Para limpiar los filtros
+    
+    # Para limpiar los filtros
     if 'clear_filters' in request.GET:
         response = requests.get(settings.API_BASE_URL + 'product/').json()
         products = response
 
     data = {
-        'products': products,
+        'products': filtered_products,
         'categories': categories,
     }
 
     return render(request, 'app/catalogue.html', data)
 
-def services(request):
+def rental_service(request):
+    if request.method == 'POST':
+        form = RentalOrderForm(request.POST)
+        if form.is_valid():
+            # Obtener el objeto datetime del formulario
+            deliver_date = form.cleaned_data['deliver_date']
+            # Convertir el objeto datetime a una cadena de texto en formato ISO 8601
+            deliver_date_iso = deliver_date.strftime('%Y-%m-%dT%H:%M')
 
-    return render(request, 'app/services.html')
+            rental_order_data = {
+                'rut': form.cleaned_data['rut'],
+                'name': form.cleaned_data['name'],
+                'address': form.cleaned_data['address'],
+                'phone': form.cleaned_data['phone'],
+                'deliver_date': deliver_date_iso,  # Utilizar la cadena de texto en lugar del objeto datetime
+            }
+
+            # Obtener la lista de productos seleccionados
+            products_selected = request.POST.getlist('products')
+            products_selected = [int(product_id) for product_id in products_selected if product_id.isdigit()]
+
+            rental_order_data['products'] = products_selected  # Agregar la lista de productos seleccionados
+
+            try:
+                # Crear la orden a través de la API
+                rental_order_response = requests.post(settings.API_BASE_URL + 'rental-orders/', json=rental_order_data)
+                if rental_order_response.status_code == 201:
+                    rental_order = rental_order_response.json()
+
+                    # Agregar los productos a la orden a través de la API
+                    product_ids = [str(product_id) for product_id in products_selected]  # Convertir los IDs de productos a cadena de texto
+                    add_product_url = settings.API_BASE_URL + f'rental-orders/{rental_order["id"]}/add-product/?products={",".join(product_ids)}'
+                    requests.post(add_product_url)
+
+                    return JsonResponse({'message': 'La solicitud de arriendo ha sido enviado correctamente'})
+                else:
+                    return JsonResponse({'error': 'Error al enviar la solicitud'})
+
+            except Exception as e:
+                return JsonResponse({'error': 'Error en el servidor'})
+
+    else:
+        form = RentalOrderForm()
+
+    # Definimos los parámetros para filtrar productos
+    params = {
+        'is_rentable': 'true',
+    }
+
+    # Obtenemos los productos desde la API aplicando los filtros
+    product_response = requests.get(settings.API_BASE_URL + 'product/', params=params).json()
+
+    data = {
+        'form': form,
+        'products': product_response,
+        'csrf_token': get_token(request)
+    }
+
+    return render(request, 'app/rental_service.html', data)
+
+
 #CONTATO
 def contact(request):
     data = {
@@ -994,3 +1066,20 @@ def order_list(request):
         'top_products': top_products
     }
     return render(request, 'app/order_list.html', data)
+
+def list_rental_order(request):
+    response = requests.get(settings.API_BASE_URL + 'rental-orders/')
+    rental_orders = response.json()
+    page = request.GET.get('page', 1)
+
+    try:
+        paginator = Paginator(rental_orders, 5)
+        rental_orders = paginator.page(page)
+    except:
+        raise Http404
+
+    data = {
+        'entity': rental_orders,
+        'paginator': paginator
+    }
+    return render(request, "app/rental_order/list.html", data)

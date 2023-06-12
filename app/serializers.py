@@ -1,4 +1,4 @@
-from .models import Product, Category, Contact, QueryType
+from .models import Product, Category, Contact, QueryType, RentalOrder
 from rest_framework import serializers
 from django.core.mail import send_mail
 from django.utils import timezone
@@ -103,5 +103,10 @@ class QueryTypeSerializer(serializers.ModelSerializer):
     
     class Meta:
         model = QueryType
+        fields = '__all__'
+
+class RentalOrderSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = RentalOrder
         fields = '__all__'
     
