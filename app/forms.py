@@ -10,6 +10,13 @@ from django.core.exceptions import ValidationError
 from django.contrib.admin.widgets import AdminDateWidget
 
 
+from dataclasses import fields
+from django import forms
+from django.forms import ModelForm
+from .models import  Usuarios
+from allauth.account.forms import LoginForm
+
+
 class ContactForm(forms.ModelForm):
     name = forms.CharField(min_length=8, max_length=50,
                            required=True, label='Nombre completo')
@@ -85,6 +92,7 @@ class ProductForm(forms.ModelForm):
     name = forms.CharField(min_length=3, max_length=50)
     price = forms.IntegerField(min_value=1, max_value=1500000)
     stock = forms.IntegerField(validators=[MinValueValidator(0)])
+    category = forms.ModelChoiceField(queryset=Category.objects.all(), required=True)
 
 
     class Meta:
@@ -121,3 +129,21 @@ class CategoryForm(forms.ModelForm):
             'image': 'Imagen'
         }
 
+
+
+class UsuariosForm(ModelForm):
+    #se da formato a cada uno de los campos dentro de la forma
+    usrN = forms.CharField(widget=forms.EmailInput(attrs={'class':'login-username','placeholder':'Email'}),label='')
+    pswrdN = forms.CharField(widget=forms.PasswordInput(attrs={'class':'login-password','placeholder':'Contraseña'}),label='')
+    pswrdN2= forms.CharField(widget=forms.PasswordInput(attrs={'class':'login-password','placeholder':'Repetir Contraseña'}),label='')
+    class Meta:
+        #se asigna modelo y orden de aparicion en html
+        model = Usuarios
+        fields= ['usrN','pswrdN','pswrdN2']
+
+class LoginForm(ModelForm):
+    usrN = forms.CharField(widget=forms.TextInput(attrs={'class':'login-username','placeholder':'Username'}),label='')
+    pswrdN = forms.CharField(widget=forms.PasswordInput(attrs={'class':'login-password','placeholder':'Contraseña'}),label='')
+    class Meta:
+        model=Usuarios
+        fields= ['usrN','pswrdN']

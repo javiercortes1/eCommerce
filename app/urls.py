@@ -8,6 +8,27 @@ from .views import home, services, catalogue, contact,\
     ContactViewSet,pago, list_contact,\
     QueryTypeViewset, update_contact_status, add_query_type, list_query_type, update_query_type, delete_query_type
 
+
+from unicodedata import name
+from . import views
+#from .views import index
+
+from .views import Registrar, order_list
+
+from .views import Recuperar
+from .views import user_login
+from django.views.generic import TemplateView
+from django.contrib.auth.views import LogoutView
+from django.conf import settings
+from django.conf.urls.static import static
+
+
+
+
+from .views import payment_success
+
+
+
 from rest_framework import routers
 
 router = routers.DefaultRouter()
@@ -48,5 +69,13 @@ urlpatterns = [
     path("buy-confirm/", buy_confirm, name="buy_confirm"),
     path("admin-panel/", admin_panel, name="admin_panel"),
     # path("success-payment/", pago_exitoso, name="pago_exitoso"),
+    path('accounts/', include('django.contrib.auth.urls')),
     path('pago/', pago, name="pago"),
+    path('login/', user_login, name='login'),
+    path('accounts/', include('allauth.urls')),
+    path('Recuperar/', Recuperar, name='Recuperar'),
+    path('Registrar/', Registrar, name='Registrar'),
+    path('payment_success/', payment_success, name='payment_success'),
+    path('payment_success/', views.update_last_order_paid_status, name='update_last_order_paid_status'),
+    path('orders/', order_list, name='order_list'),
 ]

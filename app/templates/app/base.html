@@ -21,7 +21,7 @@
 <body>
   <div class="header">
     <header>
-      <nav class="navbar navbar-expand-lg fixed-top bg-primary text-white">
+      <nav class="navbar navbar-expand-lg fixed-top bg-primary">
         <div class="container">
           <a class="navbar-brand" href="{% url 'home' %}">
             <img src="{% static 'app/img/logo.png' %}" alt="Bootstrap" width="75" height="60">
@@ -56,6 +56,7 @@
                 <li><a class="dropdown-item" href="{% url 'list_category' %}">Categorías</a></li>
                 <li><a class="dropdown-item" href="{% url 'list_contact' %}">Contactos</a></li>
                 <li><a class="dropdown-item" href="{% url 'list_query_type' %}">Tipo Consulta</a></li>
+                <li><a class="dropdown-item" href="{% url 'order_list' %}">Ordenes</a></li>
               </ul>
             </div>
 
@@ -125,12 +126,12 @@
               <th>$ {{cart_total}}</th>
             </tr>
           </tbody>
-          
+
         </table>
         <hr>
         <div class="row text-center">
-          <div class="col-6"><a href="{% url 'Clean' %}" class="btn btn-danger">Limpiar</a></div>
-          <div class="col-6"><a href="{% url 'pago' %}" class="btn btn-warning">Pagar</a></div>
+          <div class="col-6"><a href="{% url 'Clean' %}" class="btn btn-default bg-primary-3">Limpiar</a></div>
+          <div class="col-6"><a href="{% url 'pago' %}" class="btn btn-default bg-primary-3 add-to-cart-btn">Pagar</a></div>
         </div>
       </div>
     </div>
@@ -140,17 +141,17 @@
 
     <!-- Aquí todo lo correspondiente al footer -->
   </main>
-  <footer class="bg-primary text-dark mt-auto">
+  <footer class="text-light mt-auto">
     <div class="container">
       <div class="row py-2">
         <div class="col-1 col-sm-12">
-          <div class="nav-item">
-            <a class="nav-link" href="https://www.instagram.com/cervezaconejofurioso/">Instagram</a>
+          <div class="ft-item">
+            <a class="ft-link" href="https://www.instagram.com/cervezaconejofurioso/">Instagram</a>
           </div>
         </div>
         <div class="col-1 col-sm-12">
-          <div class="nav-item">
-            <a class="nav-link" href="https://www.facebook.com/CervezaConejoFurioso">Facebook</a>
+          <div class="ft-item">
+            <a class="ft-link" href="https://www.facebook.com/CervezaConejoFurioso">Facebook</a>
           </div>
         </div>
         <div class="row mt-2" style="font-weight: bold;">

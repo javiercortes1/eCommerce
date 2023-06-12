@@ -14,7 +14,7 @@
 <!-- container para el carrousel -->
 <div class="container-fluid mt-3">
   <div class="carrousel">
-    <div id="carouselExampleCaptions" class="carousel slide">
+    <div id="carouselExampleCaptions" class="carousel slide" data-bs-ride="carousel">
       <div class="carousel-indicators">
         <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="0" class="active"
           aria-current="true" aria-label="Slide 1"></button>
@@ -76,6 +76,9 @@
               {% if p.stock > 0 %}
               <a href="#" class="btn btn-default bg-primary-3 view-detail-btn" data-product-id="{{ p.id }}">Ver
                 Detalle</a>
+                <a href="{% url 'Add' p.id %}"
+                class="btn btn-default bg-primary-3 view-detail-btn add-to-cart-btn">Agregar al Carrito</a>
+              
               {% else %}
               <h4 class="text-center"><b>Sin Stock</b></h4>
               {% endif %}
@@ -88,7 +91,6 @@
     </div>
   </section>
 </div>
-
 <!-- seccion quienes somos -->
 <div class="container">
   <section class="pb-5 mt-5">
@@ -103,21 +105,15 @@
       <div class="col-xxl-6 col-xl-6 col-lg-6 col-md-12 col-sm-12 ">
         <h1>Cervecería artesanal Conejo Furioso</h1>
         <div class="about-us">
-          <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Odio voluptate eveniet repellat similique
-            dolore veritatis corporis non nesciunt quisquam alias asperiores odit minima ipsa pariatur corrupti,
-            quaerat itaque sapiente suscipit!
-            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Odio voluptate eveniet repellat similique dolore
-            veritatis corporis non nesciunt quisquam alias asperiores odit minima ipsa pariatur corrupti, quaerat
-            itaque sapiente suscipit!
-            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Odio voluptate eveniet repellat similique dolore
-            veritatis corporis non nesciunt quisquam alias asperiores odit minima ipsa pariatur corrupti, quaerat
-            itaque sapiente suscipit!
-            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Odio voluptate eveniet repellat similique dolore
-            veritatis corporis non nesciunt quisquam alias asperiores odit minima ipsa pariatur corrupti, quaerat
-            itaque sapiente suscipit!
-            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Odio voluptate eveniet repellat similique dolore
-            veritatis corporis non nesciunt quisquam alias asperiores odit minima ipsa pariatur corrupti, quaerat
-            itaque sapiente suscipit!
+          <p>Conejo Furioso es una empresa establecida en Villa Alemana en la región de Valparaíso. 
+            Cuenta con productos propios elaborados en nuestro hogar. Cervezas artesanales de alta calidad 
+            porque sabemos qué es lo que quieres en una cerveza... Partiendo por el placentero sonido al 
+            momento de abrir un botellín hasta el último sorbo de tu cerveza... Pero no te preocupes
+            aquí estaremos para tí y mantener tu refrigerador lleno de exquisita cerveza!</p>
+            <p>
+            Esperamos que pronto tengas en tus manos uno de nuestros muchos productos que tenemos para ofrecerte.
+            Recuerda que el consumo de alcohol en exceso puede ser dañino para tu salud. Así que procura consumir
+            nuestros productos con moderación. O Conejo Furioso se pondrá más furioso todavía...
           </p>
         </div>
       </div>
@@ -146,8 +142,8 @@
     <div class="row justify-content-center">
       <div class="col-md-4">
         <div class="categorycard text-center" style="padding: 20px; border-radius: 5px; background-color: #f8f9fa;">
-          <a href="ruta/destino_cerveza.html">
-            <img src="ruta/imagen_cerveza.jpg" alt="Cerveza Artesanal" style="width: 100%; height: auto;">
+          <a href="{% url 'catalogue' %}">
+            <img src="{% static 'app/img/cerveza.jpg' %}" alt="Cerveza Artesanal" style="width: 100%; height: 350px;">
             <h2 style="font-family: impact, sans-serif; font-weight: bold;">Cerveza Artesanal</h2>
             <p>Cerveza artesanal Conejo Furioso</p>
           </a>
@@ -155,8 +151,8 @@
       </div>
       <div class="col-md-4">
         <div class="categorycard text-center" style="padding: 20px; border-radius: 5px; background-color: #f8f9fa;">
-          <a href="ruta/destino_poleras.html">
-            <img src="ruta/imagen_poleras.jpg" alt="Poleras" style="width: 100%; height: auto;">
+          <a href="{% url 'catalogue' %}">
+            <img src="{% static 'app/img/polera.png' %}" alt="Poleras" style="width: 100%; height: 350px;">
             <h2 style="font-family: impact, sans-serif; font-weight: bold;">Poleras</h2>
             <p>Poleras Conejo Furioso</p>
           </a>
@@ -165,7 +161,7 @@
       <div class="col-md-4">
         <div class="categorycard text-center" style="padding: 20px; border-radius: 5px; background-color: #f8f9fa;">
           <a href="{% url 'services' %}">
-            <img src="ruta/imagen_barril.jpg" alt="Barril Cervecero" style="width: 100%; height: auto;">
+            <img src="{% static 'app/img/barril.png' %}" alt="Barril Cervecero" style="width: 100%; height: 350px;">
             <h2 style="font-family: impact, sans-serif; font-weight: bold;">Barril Cervecero</h2>
             <p>Arrienda un barril cervecero 20L Conejo Furioso</p>
           </a>
@@ -198,6 +194,9 @@
               {% if p.stock > 0 %}
               <a href="#" class="btn btn-default bg-primary-3 view-detail-btn" data-product-id="{{ p.id }}">Ver
                 Detalle</a>
+                <a href="{% url 'Add' p.id %}"
+                class="btn btn-default bg-primary-3 view-detail-btn add-to-cart-btn">Agregar al Carrito</a>
+              
               {% else %}
               <h4 class="text-center"><b>Sin Stock</b></h4>
               {% endif %}
