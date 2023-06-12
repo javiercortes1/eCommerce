@@ -69,13 +69,12 @@ urlpatterns = [
     path("buy-confirm/", buy_confirm, name="buy_confirm"),
     path("admin-panel/", admin_panel, name="admin_panel"),
     # path("success-payment/", pago_exitoso, name="pago_exitoso"),
-
+    path('accounts/', include('django.contrib.auth.urls')),
     path('pago/', pago, name="pago"),
     path('login/', user_login, name='login'),
     path('accounts/', include('allauth.urls')),
     path('Recuperar/', Recuperar, name='Recuperar'),
     path('Registrar/', Registrar, name='Registrar'),
-    path('accounts/', include('django.contrib.auth.urls')),
     path('payment_success/', payment_success, name='payment_success'),
     path('payment_success/', views.update_last_order_paid_status, name='update_last_order_paid_status'),
 ]
