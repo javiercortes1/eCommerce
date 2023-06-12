@@ -16,6 +16,9 @@ from django.db.models import Sum, Count
 from django.views.decorators.csrf import csrf_exempt
 from .models import Order,OrderItem
 from django.core.mail import send_mail
+from rest_framework_simplejwt.tokens import RefreshToken
+from rest_framework.decorators import api_view
+from rest_framework.response import Response
 
 from django.middleware.csrf import get_token
 import logging
@@ -1057,26 +1060,9 @@ def order_list(request):
     end_date = request.GET.get('end_date')
     if start_date and end_date:
         orders = orders.filter(fecha__range=[start_date, end_date])
-from rest_framework_simplejwt.tokens import RefreshToken
-from rest_framework.decorators import api_view
-from rest_framework.response import Response
 
-@api_view(['POST'])
-def obtain_token(request):
-    username = request.data.get('username')
-    password = request.data.get('password')
 
-    if username and password:
-        user = authenticate(username=username, password=password)
-        if user is not None:
-            refresh = RefreshToken.for_user(user)
-            return Response({
-                'access_token': str(refresh.access_token),
-                'refresh_token': str(refresh),
-            })
-    return Response({'error': 'Credenciales inválidas.'}, status=400)
-
-    # Filtro por nombre de OrderItem
+        # Filtro por nombre de OrderItem
     order_item_name = request.GET.get('order_item_name')
     if order_item_name:
         orders = orders.filter(orderitem__product_name__icontains=order_item_name)
@@ -1106,6 +1092,22 @@ def obtain_token(request):
     }
     return render(request, 'app/order_list.html', data)
 
+@api_view(['POST'])
+def obtain_token(request):
+    username = request.data.get('username')
+    password = request.data.get('password')
+
+    if username and password:
+        user = authenticate(username=username, password=password)
+        if user is not None:
+            refresh = RefreshToken.for_user(user)
+            return Response({
+                'access_token': str(refresh.access_token),
+                'refresh_token': str(refresh),
+            })
+    return Response({'error': 'Credenciales inválidas.'}, status=400)
+
+
 def list_rental_order(request):
     response = requests.get(settings.API_BASE_URL + 'rental-orders/')
     rental_orders = response.json()
@@ -1122,3 +1124,7 @@ def list_rental_order(request):
         'paginator': paginator
     }
     return render(request, "app/rental_order/list.html", data)
+
+from rest_framework_simplejwt.tokens import RefreshToken
+from rest_framework.decorators import api_view
+from rest_framework.response import Response
