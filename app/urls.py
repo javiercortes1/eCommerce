@@ -13,7 +13,7 @@ from unicodedata import name
 from . import views
 #from .views import index
 
-from .views import Registrar
+from .views import Registrar, order_list
 
 from .views import Recuperar
 from .views import user_login
@@ -77,4 +77,5 @@ urlpatterns = [
     path('Registrar/', Registrar, name='Registrar'),
     path('payment_success/', payment_success, name='payment_success'),
     path('payment_success/', views.update_last_order_paid_status, name='update_last_order_paid_status'),
+    path('orders/', order_list, name='order_list'),
 ]
