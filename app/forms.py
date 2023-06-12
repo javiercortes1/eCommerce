@@ -1,11 +1,11 @@
 from django import forms
-from .models import Contact, Product, Category, QueryType, Rental
+from .models import Contact, Product, Category, QueryType
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Layout, Submit
 from django.contrib.auth.forms import UserCreationForm
 from .validators import MaxSizeFileValidator
 from django.forms import ValidationError
-from django.core.validators import validate_email
+from django.core.validators import validate_email, MinValueValidator
 from django.core.exceptions import ValidationError
 from django.contrib.admin.widgets import AdminDateWidget
 
@@ -16,19 +16,19 @@ class ContactForm(forms.ModelForm):
     email = forms.EmailField(required=True, label='Correo electrónico')
     phone = forms.IntegerField(
         label='Teléfono', min_value=100000000, max_value=999999999)
-    message = forms.CharField(max_length=200, label='Mensaje')
-    queryType = forms.ModelChoiceField(
+    message = forms.CharField(required=True, max_length=200, label='Mensaje', widget=forms.Textarea)
+    query_type = forms.ModelChoiceField(
         queryset=QueryType.objects.all(), required=True, label='Tipo de consulta')
 
     class Meta:
         model = Contact
-        fields = ["name", "email", "phone", "message", "queryType"]
+        fields = ["name", "email", "phone", "message", "query_type"]
         labels = {
             'name': 'Nombre completo',
             'email': 'Correo electrónico',
             'phone': 'Teléfono',
             'message': 'Mensaje',
-            'queryType': 'Tipo de consulta'
+            'query_type': 'Tipo de consulta'
         }
 
     def clean_email(self):
@@ -68,46 +68,42 @@ class ContactForm(forms.ModelForm):
             except forms.ValidationError as e:
                 self.add_error('phone', e.message)
 
-
-class ProductForm(forms.ModelForm):
-
-    image = forms.ImageField(required=False, validators=[
-                             MaxSizeFileValidator(20)])
+class QueryTypeForm(forms.ModelForm):
     name = forms.CharField(min_length=3, max_length=50)
-    price = forms.IntegerField(min_value=1, max_value=1500000)
 
-    def clean_name(self):
-        name = self.cleaned_data["name"]
-        instance = self.instance  # Obtener la instancia actual del producto
-
-        # Verificar si existe otro producto con el mismo nombre
-        exists = Product.objects.filter(
-            name__iexact=name).exclude(pk=instance.pk).exists()
-
-        if exists:
-            raise ValidationError("Este producto ya existe")
-        return name
 
     class Meta:
-        model = Product
-        # fields = ["name", "price", "description", "new", "category", "stock", "featured", "image"]
+        model = QueryType
         fields = '__all__'
         labels = {
             'name': 'Nombre',
             'description': 'Descripcion',
-            'price': 'Precio',
-            'category': 'Categoria',
-            'stock': 'Unidades',
-            'new': '¿Nuevo?',
-            'featured': '¿Destacado?',
-            'rental_product': '¿Arrendable?',
-            'image': 'Imagen'
         }
 
+class ProductForm(forms.ModelForm):
+    image = forms.ImageField(required=False, validators=[MaxSizeFileValidator(20)])
+    name = forms.CharField(min_length=3, max_length=50)
+    price = forms.IntegerField(min_value=1, max_value=1500000)
+    stock = forms.IntegerField(validators=[MinValueValidator(0)])
+
+
+    class Meta:
+        model = Product
+        fields = '__all__'
+        labels = {
+            'name': 'Nombre',
+            'description': 'Descripción',
+            'price': 'Precio',
+            'category': 'Categoría',
+            'stock': 'Unidades',
+            'is_new': '¿Nuevo?',
+            'is_featured': '¿Destacado?',
+            'image': 'Imagen',
+            'is_rentable': '¿Arrendable?'
+        }
 
 class CustomUserCreationForm(UserCreationForm):
     pass
-
 
 class CategoryForm(forms.ModelForm):
 
@@ -115,21 +111,9 @@ class CategoryForm(forms.ModelForm):
                              MaxSizeFileValidator(20)])
     name = forms.CharField(min_length=3, max_length=50)
 
-    def clean_name(self):
-        name = self.cleaned_data["name"]
-        instance = self.instance  # Obtener la instancia actual de la categoría
-
-        # Verificar si existe otra categoría con el mismo nombre
-        exists = Category.objects.filter(
-            name__iexact=name).exclude(pk=instance.pk).exists()
-
-        if exists:
-            raise ValidationError("Esta categoría ya existe")
-        return name
 
     class Meta:
         model = Category
-        # fields = ["name", "price", "description", "new", "category","cc", "stock", "featured", "image"]
         fields = '__all__'
         labels = {
             'name': 'Nombre',
@@ -137,26 +121,3 @@ class CategoryForm(forms.ModelForm):
             'image': 'Imagen'
         }
 
-
-class RentalForm(forms.ModelForm):
-    start_date = forms.DateField(widget=AdminDateWidget)
-    end_date = forms.DateField(widget=AdminDateWidget)
-
-    class Meta:
-        model = Rental
-        fields = ['user', 'rentables', 'start_date',
-                  'end_date', 'status', 'deposit_paid']
-        labels = {
-            'user': 'Usuario',
-            'rentables': 'Arrendables',
-            'start_date': 'Fecha de inicio',
-            'end_date': 'Fecha de finalización',
-            'status': 'Estado',
-            'deposit_paid': 'Depósito pagado'
-        }
-        widgets = {
-            'user': forms.HiddenInput(),
-            'rentables': forms.CheckboxSelectMultiple(),
-            'status': forms.HiddenInput(),
-            'deposit_paid': forms.HiddenInput()
-        }

@@ -47,16 +47,18 @@
               </li>
             </ul>
 
-            {% if user|has_group:"Administrador" %}
+
             <div class="nav-item dropdown">
               <a class="nav-link dropdown-toggle" href="#" id="adminDropdown" role="button" data-bs-toggle="dropdown"
                 aria-expanded="false">ADMINISTRACIÓN</a>
               <ul class="dropdown-menu" aria-labelledby="adminDropdown">
                 <li><a class="dropdown-item" href="{% url 'list_product' %}">Productos</a></li>
                 <li><a class="dropdown-item" href="{% url 'list_category' %}">Categorías</a></li>
+                <li><a class="dropdown-item" href="{% url 'list_contact' %}">Contactos</a></li>
+                <li><a class="dropdown-item" href="{% url 'list_query_type' %}">Tipo Consulta</a></li>
               </ul>
             </div>
-            {% endif %}
+
 
             {% if user.is_authenticated %}
             <input type="hidden" id="is-authenticated" value="{{ user.is_authenticated }}">
@@ -72,9 +74,8 @@
               <a class="nav-link" aria-current="page" href="{% url 'login' %}">INICIAR SESIÓN | REGISTRARSE</a>
             </div>
           </div>
-
-          <button id="cart-toggle">Mostrar Carrito</button>
           {% endif %}
+          <button id="cart-toggle">Mostrar Carrito</button>
         </div>
   </div>
   </nav>
@@ -128,11 +129,8 @@
         </table>
         <hr>
         <div class="row text-center">
-          <div class="col-4"><a href="{% url 'Clean' %}" class="btn btn-danger">Limpiar</a></div>
-          <div class="col-4"><a href="#" class="btn btn-success">Guardar</a></div>
-          <div class=" col-4 nav-item cart">
-            <a class="nav-link" aria-current="page" href="{% url 'Cart' %}">CARRITO</a>
-          </div>
+          <div class="col-6"><a href="{% url 'Clean' %}" class="btn btn-danger">Limpiar</a></div>
+          <div class="col-6"><a href="{% url 'pago' %}" class="btn btn-warning">Pagar</a></div>
         </div>
       </div>
     </div>

@@ -1,6 +1,11 @@
 {% extends 'app/base.html' %}
 {% load static %}
 {% load crispy_forms_tags %}
+{% if error_message %}
+    <div class="alert alert-danger mt-3">
+        {{ error_message }}
+    </div>
+{% endif %}
 
 {% block content %}
 <div class="container my-5" style="max-width: 600px;">

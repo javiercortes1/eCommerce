@@ -49,55 +49,60 @@
     </div>
   </div>
 </div>
-  <!-- aca termina el carrousel -->
+<!-- aca termina el carrousel -->
 
-  <!-- seccion cards/productos destacados -->
-  {% load humanize %}
-  <div class="container">
-    <section class="pb-5">
-      <h1 class="text-center py-5">PRODUCTOS DESTACADOS</h1>
-      <div class="row justify-content-center">
-        {% for p in products %}
-        {% if p.featured %}
-        <div class="col-xxl-3 col-xl-3 col-lg-4 col-md-6">
-          <div class="card card-home">
-            <img src="{{ p.image.url }}" class="card-img-top" alt="...">
-            <div class="card-body d-flex flex-column align-items-center">
-              <div class="text-center">
-                <h5 class="card-title">{{ p.name | capfirst }}</h5>
-              </div>
-              {% comment %} <p class="card-text description">{{ p.description }}</p> {% endcomment %}
-              <div class="mt-auto text-center">
-                <p class="card-text price"><b> ${{ p.price | intcomma }}</b></p>
-                {% if p.stock > 0 %}
-                <a href="#" class="btn btn-default bg-primary-3 view-detail-btn" data-product-id="{{ p.id }}">Ver Detalle</a>
-                {% else %}
-                <h4 class="text-center"><b>Sin Stock</b></h4>
-                {% endif %}
-              </div>
+<!-- seccion cards/productos destacados -->
+{% load humanize %}
+<div class="container">
+  <section class="pb-5">
+    <h1 class="text-center py-5">PRODUCTOS DESTACADOS</h1>
+    <div class="row justify-content-center">
+      {% for p in products %}
+      {% if p.is_featured %}
+      <div class="col-xxl-3 col-xl-3 col-lg-4 col-md-6">
+        <div class="card card-home">
+          {% if p.image %}
+          <img src="{{ p.image }}" class="card-img-top" alt="...">
+          {% else %}
+          <div class="missing-image">Imagen no disponible</div>
+          {% endif %}
+          <div class="card-body d-flex flex-column align-items-center">
+            <div class="text-center">
+              <h5 class="card-title custom-card-title">{{ p.name | capfirst }}</h5>
+            </div>
+            <p class="card-text custom-card-description"></p>
+            <div class="mt-auto text-center">
+              <p class="card-text price"><b> ${{ p.price | intcomma }}</b></p>
+              {% if p.stock > 0 %}
+              <a href="#" class="btn btn-default bg-primary-3 view-detail-btn" data-product-id="{{ p.id }}">Ver
+                Detalle</a>
+              {% else %}
+              <h4 class="text-center"><b>Sin Stock</b></h4>
+              {% endif %}
             </div>
           </div>
         </div>
-        {% endif %}
-        {% endfor %}
       </div>
-    </section>
-  </div>
+      {% endif %}
+      {% endfor %}
+    </div>
+  </section>
+</div>
 
-  <!-- seccion quienes somos -->
-  <div class="container">
-    <section class="pb-5 mt-5">
-      <h1 class="text-center pb-4 mb-5">QUIÉNES SOMOS</h1>
-      <div class="row">
-        <div class="col-xxl-6 col-xl-6 col-lg-6 col-md-12 col-sm-12">
-          <div style="display: flex;">
-            <img src="{% static 'app/img/quienes somos.webp' %}"
-              style="float: left; margin-right: 10px; width: 450px; height: 450px;" alt="...">
-          </div>
+<!-- seccion quienes somos -->
+<div class="container">
+  <section class="pb-5 mt-5">
+    <h1 class="text-center pb-4 mb-5">QUIÉNES SOMOS</h1>
+    <div class="row">
+      <div class="col-xxl-6 col-xl-6 col-lg-6 col-md-12 col-sm-12">
+        <div style="display: flex;">
+          <img src="{% static 'app/img/quienes somos.webp' %}"
+            style="float: left; margin-right: 10px; width: 450px; height: 450px;" alt="...">
         </div>
-        <div class="col-xxl-6 col-xl-6 col-lg-6 col-md-12 col-sm-12 ">
-          <h1>Cervecería artesanal Conejo Furioso</h1>
-          <div class="about-us">
+      </div>
+      <div class="col-xxl-6 col-xl-6 col-lg-6 col-md-12 col-sm-12 ">
+        <h1>Cervecería artesanal Conejo Furioso</h1>
+        <div class="about-us">
           <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Odio voluptate eveniet repellat similique
             dolore veritatis corporis non nesciunt quisquam alias asperiores odit minima ipsa pariatur corrupti,
             quaerat itaque sapiente suscipit!
@@ -115,37 +120,58 @@
             itaque sapiente suscipit!
           </p>
         </div>
+      </div>
+    </div>
+  </section>
+</div>
+
+<div class="container">
+  <section class="pb-5 mt-5" style="display: flex; justify-content: center; align-items: center;">
+    <img src="{% static 'app/img/logo.png' %}" alt="..." style="width: 20%;">
+
+  </section>
+
+</div>
+<!-- sección categorías -->
+<style>
+  .categorycard a {
+    color: inherit;
+    text-decoration: none;
+  }
+</style>
+
+<div class="container">
+  <section class="pb-5 mt-5">
+    <h1 class="text-center pb-4 mb-5">EXPLORA NUESTROS PRINCIPALES PRODUCTOS</h1>
+    <div class="row justify-content-center">
+      <div class="col-md-4">
+        <div class="categorycard text-center" style="padding: 20px; border-radius: 5px; background-color: #f8f9fa;">
+          <a href="ruta/destino_cerveza.html">
+            <img src="ruta/imagen_cerveza.jpg" alt="Cerveza Artesanal" style="width: 100%; height: auto;">
+            <h2 style="font-family: impact, sans-serif; font-weight: bold;">Cerveza Artesanal</h2>
+            <p>Cerveza artesanal Conejo Furioso</p>
+          </a>
         </div>
       </div>
-    </section>
-  </div>
-
-  <div class="container">
-    <section class="pb-5 mt-5" style="display: flex; justify-content: center; align-items: center;">
-      <img src="{% static 'app/img/logo.png' %}" alt="..." style="width: 20%;">
-
-    </section>
-
-  </div>
-  <!-- sección categorías -->
-  <div class="container">
-    <section class="pb-5 mt-5">
-      <h1 class="text-center pb-4 mb-5">EXPLORA NUESTRAS DISTINTAS CATEGORÍAS</h1>
-      <div class="categorycard" style="display: flex; justify-content: space-between;">
-        <div style="width: 30%; padding: 20px; border-radius: 5px;">
-          <h2 style="font-family: impact, sans-serif; font-weight: bold;">Lager</h2>
-          <p>Chela depana, la misma de siempre</p>
-        </div>
-        <div style="width: 30%; padding: 20px; border-radius: 5px;">
-          <h2 style="font-family: impact, sans-serif; font-weight: bold;">American Lager</h2>
-          <p>Very good beer</p>
-        </div>
-        <div style="width: 30%; padding: 20px; border-radius: 5px;">
-          <h2 style="font-family: impact, sans-serif; font-weight: bold;">Stout</h2>
-          <p>Esta cerveza te volará la cabeza</p>
+      <div class="col-md-4">
+        <div class="categorycard text-center" style="padding: 20px; border-radius: 5px; background-color: #f8f9fa;">
+          <a href="ruta/destino_poleras.html">
+            <img src="ruta/imagen_poleras.jpg" alt="Poleras" style="width: 100%; height: auto;">
+            <h2 style="font-family: impact, sans-serif; font-weight: bold;">Poleras</h2>
+            <p>Poleras Conejo Furioso</p>
+          </a>
         </div>
       </div>
-  </div>
+      <div class="col-md-4">
+        <div class="categorycard text-center" style="padding: 20px; border-radius: 5px; background-color: #f8f9fa;">
+          <a href="{% url 'services' %}">
+            <img src="ruta/imagen_barril.jpg" alt="Barril Cervecero" style="width: 100%; height: auto;">
+            <h2 style="font-family: impact, sans-serif; font-weight: bold;">Barril Cervecero</h2>
+            <p>Arrienda un barril cervecero 20L Conejo Furioso</p>
+          </a>
+        </div>
+      </div>
+    </div>
   </section>
 </div>
 <!-- sección productos nuevos -->
@@ -154,18 +180,24 @@
     <h1 class="text-center py-5">PRODUCTOS NUEVOS</h1>
     <div class="row justify-content-center">
       {% for p in products %}
-      {% if p.new %}
+      {% if p.is_new %}
       <div class="col-xxl-3 col-xl-3 col-lg-4 col-md-6">
         <div class="card card-home">
-          <img src="{{ p.image.url }}" class="card-img-top" alt="...">
+          {% if p.image %}
+          <img src="{{ p.image }}" class="card-img-top" alt="...">
+          {% else %}
+          <div class="missing-image">Imagen no disponible</div>
+          {% endif %}
           <div class="card-body d-flex flex-column align-items-center">
             <div class="text-center">
-              <h5 class="card-title">{{ p.name | capfirst }}</h5>
+              <h5 class="card-title custom-card-title">{{ p.name | capfirst }}</h5>
             </div>
+            <p class="card-text custom-card-description"></p>
             <div class="mt-auto text-center">
               <p class="card-text price"><b> ${{ p.price | intcomma }}</b></p>
               {% if p.stock > 0 %}
-              <a href="#" class="btn btn-default bg-primary-3 view-detail-btn" data-product-id="{{ p.id }}">Ver Detalle</a>
+              <a href="#" class="btn btn-default bg-primary-3 view-detail-btn" data-product-id="{{ p.id }}">Ver
+                Detalle</a>
               {% else %}
               <h4 class="text-center"><b>Sin Stock</b></h4>
               {% endif %}

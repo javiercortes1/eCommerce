@@ -19,7 +19,7 @@
         <!-- IMAGEN-->
         <div class="col-xxl-6 col-xl-6 col-lg-6 col-md-12 col-sm-12">
             <div style="display: flex;">
-                <img src="{{ product.image.url }}" class="card-img-top" style="float: left; margin-right: 10px; width: 450px; height: 450px;" alt="...">
+                <img src="{{ product.image }}" class="card-img-top" style="float: left; margin-right: 10px; width: 450px; height: 450px;" alt="...">
             </div>
         </div>
         <!-- INFO PRODUCTO-->
@@ -32,18 +32,19 @@
                         <br>
                         <h2>Descripción del producto</h2>
                         <h3>{{ product.description }}</h3>
-                        <h3>Categoría: {{ product.category}}</h3>
-                        <h3>Volumen: {{ product.cc}} cc.</h3>
+                        <h3>Categoría: {{ product.category.name }}</h3>
+                        <h3>Volumen: 330 cc.</h3>
                         <h2><b>${{ product.price | intcomma }}</b></h2>
                     </div>
                     {% if product.stock > 0 %}
                     <div>
                         <a href="{% url  'Add' product.id %}" class="btn btn-primary">Agregar al Carrito</a>
-
-                        {% else %}
-                        <h4 class="text-center"><b>Sin Stock</b></h4>
-                        {% endif %}
                     </div>
+                    {% else %}
+                    <div>
+                        <h4 class="text-center"><b>Sin Stock</b></h4>
+                    </div>
+                    {% endif %}
                 </div>
             </div>
         </div>
