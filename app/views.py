@@ -957,9 +957,6 @@ def payment_success(request):
         return render(request, 'app/payment_success.html')
 
     return render(request, 'app/pago.html')
-
-
-
   
 
 
