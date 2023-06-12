@@ -12,7 +12,7 @@ from django.contrib.auth.decorators import login_required, permission_required
 from app.cart import Cart
 from rest_framework.response import Response
 from django.conf import settings
-
+from django.db.models import Sum, Count
 from django.views.decorators.csrf import csrf_exempt
 
 
@@ -910,12 +910,9 @@ def Registrar(request):
                     return render(request, "app/home.html")
     return render(request,"registration/Registrar.html",datos)
 
-
 def desconectar(request):
     logout(request)
     return redirect('login') 
-
-
 
 @csrf_exempt
 def update_last_order_paid_status(user):
@@ -924,7 +921,8 @@ def update_last_order_paid_status(user):
         last_order.pagado = True
         last_order.save()
     except Order.DoesNotExist:
-        pass    
+        pass 
+
 def payment_success(request):
     if request.method == 'POST':
         # Obtener el usuario conectado actualmente
@@ -933,10 +931,9 @@ def payment_success(request):
         address = request.POST.get('address')
         phone = request.POST.get('phone')
         accumulated = request.POST.get('accumulated')
-        pagado = request.POST.get('pagado')
 
         # Crear la instancia de la orden
-        order = Order(user=user, name=name, address=address, phone=phone, accumulated=accumulated, pagado=pagado)
+        order = Order(user=user, name=name, address=address, phone=phone, accumulated=accumulated)
         order.save()
 
         # Obtener los productos del carro de compras
@@ -958,5 +955,42 @@ def payment_success(request):
 
     return render(request, 'app/pago.html')
   
+def order_list(request):
+    orders = Order.objects.prefetch_related('orderitem_set').all()
+    page = request.GET.get('page', 1)
 
+    # Filtros por rango de fecha
+    start_date = request.GET.get('start_date')
+    end_date = request.GET.get('end_date')
+    if start_date and end_date:
+        orders = orders.filter(fecha__range=[start_date, end_date])
 
+    # Filtro por nombre de OrderItem
+    order_item_name = request.GET.get('order_item_name')
+    if order_item_name:
+        orders = orders.filter(orderitem__product_name__icontains=order_item_name)
+
+    total_accumulated = orders.aggregate(total_accumulated=Sum('accumulated'))['total_accumulated']
+
+    # Obtener el total de productos vendidos
+    total_products_sold = OrderItem.objects.filter(order__in=orders).aggregate(total_sold=Sum('amount'))['total_sold']
+
+    # Obtener los 4 productos más vendidos considerando los filtros
+    top_products = OrderItem.objects.filter(order__in=orders).values('product_name').annotate(total_amount=Count('product_name')).order_by('-total_amount')[:4]
+
+    paginator = Paginator(orders, 5)
+    try:
+        orders = paginator.page(page)
+    except PageNotAnInteger:
+        orders = paginator.page(1)
+    except EmptyPage:
+        orders = paginator.page(paginator.num_pages)
+
+    data = {
+        'entity': orders,
+        'paginator': paginator,
+        'total_accumulated': total_accumulated,
+        'total_products_sold': total_products_sold,
+        'top_products': top_products
+    }
+    return render(request, 'app/order_list.html', data)

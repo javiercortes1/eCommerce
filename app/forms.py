@@ -92,6 +92,7 @@ class ProductForm(forms.ModelForm):
     name = forms.CharField(min_length=3, max_length=50)
     price = forms.IntegerField(min_value=1, max_value=1500000)
     stock = forms.IntegerField(validators=[MinValueValidator(0)])
+    category = forms.ModelChoiceField(queryset=Category.objects.all(), required=True)
 
 
     class Meta:
