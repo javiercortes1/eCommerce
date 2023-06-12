@@ -278,3 +278,7 @@ footer {
   cursor: pointer;
   /* Otros estilos adicionales para el botón "X" */
 }
+
+.card-terms{
+  height: 534px;
+}
