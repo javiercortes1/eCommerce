@@ -96,3 +96,14 @@ class OrderItem(models.Model):
 
     def __str__(self):
         return f"{self.product_name} - Amount: {self.amount}"  
+    
+class RentalOrder(models.Model):
+    rut = models.CharField(max_length=100)
+    name = models.CharField(max_length=100)
+    address = models.CharField(max_length=200)
+    phone = models.CharField(max_length=20)
+    deliver_date = models.DateTimeField()
+    products = models.ManyToManyField(Product)
+
+    def __str__(self):
+        return self.name

@@ -1,12 +1,13 @@
 from django.urls import path, include
-from .views import home, services, catalogue, contact,\
+from .views import home, rental_service, catalogue, contact,\
     add_product, list_product, update_product, delete_product,\
     ProductViewset, CategoryViewset, register, product_detail,\
     add_prod_cart, del_prod_cart, subtract_product_cart,\
     clean_cart, cart_page, buy_confirm, add_category,\
     list_category, update_category, delete_category, admin_panel,\
     ContactViewSet,pago, list_contact,\
-    QueryTypeViewset, update_contact_status, add_query_type, list_query_type, update_query_type, delete_query_type
+    QueryTypeViewset, update_contact_status, add_query_type, list_query_type,\
+    update_query_type, delete_query_type, RentalOrderViewSet, list_rental_order
 
 
 from unicodedata import name
@@ -36,12 +37,13 @@ router.register('product', ProductViewset)
 router.register('category', CategoryViewset)
 router.register('contact', ContactViewSet, basename='contact')
 router.register('query-type', QueryTypeViewset, basename='query-type')
+router.register(r'rental-orders', RentalOrderViewSet)
 
 
 urlpatterns = [
     path('', home, name="home"),
     path('catalogue/', catalogue, name="catalogue"),
-    path('services/', services, name="services"),
+    path('rental-service/', rental_service, name="rental_service"),
     path('contact/', contact, name="contact"),
     path('list-contact/', list_contact, name="list_contact"),
     path('update-status/<int:contact_id>/', update_contact_status, name='update_status'),
@@ -78,4 +80,5 @@ urlpatterns = [
     path('payment_success/', payment_success, name='payment_success'),
     path('payment_success/', views.update_last_order_paid_status, name='update_last_order_paid_status'),
     path('orders/', order_list, name='order_list'),
+    path('list-rental-order/', list_rental_order, name="list_rental_order"),
 ]

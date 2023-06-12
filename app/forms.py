@@ -1,5 +1,5 @@
 from django import forms
-from .models import Contact, Product, Category, QueryType
+from .models import Contact, Product, Category, QueryType, RentalOrder
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Layout, Submit
 from django.contrib.auth.forms import UserCreationForm
@@ -129,8 +129,6 @@ class CategoryForm(forms.ModelForm):
             'image': 'Imagen'
         }
 
-
-
 class UsuariosForm(ModelForm):
     #se da formato a cada uno de los campos dentro de la forma
     usrN = forms.CharField(widget=forms.EmailInput(attrs={'class':'login-username','placeholder':'Email'}),label='')
@@ -147,3 +145,18 @@ class LoginForm(ModelForm):
     class Meta:
         model=Usuarios
         fields= ['usrN','pswrdN']
+class RentalOrderForm(forms.ModelForm):
+    name = forms.CharField(min_length=3, max_length=50)
+
+
+    class Meta:
+        model = RentalOrder
+        fields = '__all__'
+        labels = {
+            'rut': 'Rut',
+            'name': 'Nombre',
+            'address': 'Direccion',
+            'phone': 'Celular',
+            'deliver_date': 'Fecha de entrega'
+        }
+
