@@ -14,9 +14,9 @@
         {% if request.session.cart.items %}
         <div class="row text-center">
             {% comment %}
-            <div class="col-6"><a href="{% url 'Clean' %}" class="btn btn-danger">Limpiar</a></div>
+            <div class="col-6"><a href="{% url 'Clean' %}" class="btn btn-default bg-primary-3">Limpiar</a></div>
 
-            <div class="col-6"><a href="{% url 'Checkout' %}" class="btn btn-success">Ir al pago</a></div>
+            <div class="col-6"><a href="{% url 'Checkout' %}" class="btn btn-default bg-primary-3 add-to-cart-btn">Ir al pago</a></div>
             {% endcomment %}
         </div>
         {% else %}

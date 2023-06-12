@@ -75,11 +75,10 @@
               <p class="card-text price"><b> ${{ p.price | intcomma }}</b></p>
               {% if p.stock > 0 %}
               <div class="card-footer" style="text-align: center;">
-              <a href="#" class="btn btn-default bg-primary-3 view-detail-btn" data-product-id="{{ p.id }}">Ver
-                Detalle</a>
-                <a href="{% url 'Add' p.id %}"
-                class="btn btn-default bg-primary-3 view-detail-btn add-to-cart-btn">Agregar al Carrito</a>
-              </div>
+                <a href="#" class="btn btn-default bg-primary-3 view-detail-btn" data-product-id="{{ p.id }}">Ver
+                  Detalle</a>
+                  <a href="{% url 'Add' p.id %}"
+                  class="btn btn-default bg-primary-3 view-detail-btn add-to-cart-btn">Agregar al Carrito</a>
               {% else %}
               <h4 class="text-center"><b>Sin Stock</b></h4>
               {% endif %}
@@ -107,21 +106,15 @@
       <div class="col-xxl-6 col-xl-6 col-lg-6 col-md-12 col-sm-12 ">
         <h1>Cervecería artesanal Conejo Furioso</h1>
         <div class="about-us">
-          <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Odio voluptate eveniet repellat similique
-            dolore veritatis corporis non nesciunt quisquam alias asperiores odit minima ipsa pariatur corrupti,
-            quaerat itaque sapiente suscipit!
-            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Odio voluptate eveniet repellat similique dolore
-            veritatis corporis non nesciunt quisquam alias asperiores odit minima ipsa pariatur corrupti, quaerat
-            itaque sapiente suscipit!
-            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Odio voluptate eveniet repellat similique dolore
-            veritatis corporis non nesciunt quisquam alias asperiores odit minima ipsa pariatur corrupti, quaerat
-            itaque sapiente suscipit!
-            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Odio voluptate eveniet repellat similique dolore
-            veritatis corporis non nesciunt quisquam alias asperiores odit minima ipsa pariatur corrupti, quaerat
-            itaque sapiente suscipit!
-            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Odio voluptate eveniet repellat similique dolore
-            veritatis corporis non nesciunt quisquam alias asperiores odit minima ipsa pariatur corrupti, quaerat
-            itaque sapiente suscipit!
+          <p>Conejo Furioso es una empresa establecida en Villa Alemana en la región de Valparaíso. 
+            Cuenta con productos propios elaborados en nuestro hogar. Cervezas artesanales de alta calidad 
+            porque sabemos qué es lo que quieres en una cerveza... Partiendo por el placentero sonido al 
+            momento de abrir un botellín hasta el último sorbo de tu cerveza... Pero no te preocupes
+            aquí estaremos para tí y mantener tu refrigerador lleno de exquisita cerveza!</p>
+            <p>
+            Esperamos que pronto tengas en tus manos uno de nuestros muchos productos que tenemos para ofrecerte.
+            Recuerda que el consumo de alcohol en exceso puede ser dañino para tu salud. Así que procura consumir
+            nuestros productos con moderación. O Conejo Furioso se pondrá más furioso todavía...
           </p>
         </div>
       </div>
@@ -202,6 +195,9 @@
               {% if p.stock > 0 %}
               <a href="#" class="btn btn-default bg-primary-3 view-detail-btn" data-product-id="{{ p.id }}">Ver
                 Detalle</a>
+                <a href="{% url 'Add' p.id %}"
+                class="btn btn-default bg-primary-3 view-detail-btn add-to-cart-btn">Agregar al Carrito</a>
+              
               {% else %}
               <h4 class="text-center"><b>Sin Stock</b></h4>
               {% endif %}

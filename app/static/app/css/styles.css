@@ -227,6 +227,20 @@ footer {
   background-color: #ce8619 !important;
 }
 
+#cart-toggle{
+
+  background-color: #ce8619 !important;
+  border-width: 2px;
+  border-color: #000000;
+
+}
+
+.delete-btn{
+
+  background-color: #ce1919fb !important;
+}
+
+
 /* FORMS */
 .form button {
     color: #ffffff;
