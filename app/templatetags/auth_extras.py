@@ -7,3 +7,4 @@ register = template.Library()
 def has_group(user, group_name):
     group = Group.objects.get(name=group_name)
     return group in user.groups.all()
+

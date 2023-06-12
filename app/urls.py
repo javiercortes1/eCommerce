@@ -7,7 +7,7 @@ from .views import home, rental_service, catalogue, contact,\
     list_category, update_category, delete_category, admin_panel,\
     ContactViewSet,pago, list_contact,\
     QueryTypeViewset, update_contact_status, add_query_type, list_query_type,\
-    update_query_type, delete_query_type, RentalOrderViewSet
+    update_query_type, delete_query_type, RentalOrderViewSet, list_rental_order
 
 from rest_framework import routers
 
@@ -51,4 +51,5 @@ urlpatterns = [
     path("admin-panel/", admin_panel, name="admin_panel"),
     # path("success-payment/", pago_exitoso, name="pago_exitoso"),
     path('pago/', pago, name="pago"),
+    path('list-rental-order/', list_rental_order, name="list_rental_order"),
 ]

@@ -67,7 +67,7 @@
   function handleFormResponse(response) {
     if (response.message) {
       Swal.fire('Éxito', response.message, 'success').then(() => {
-        // Redirigir al usuario o hacer cualquier otra acción necesaria
+        location.reload(); // Recargar la página después de mostrar el mensaje
       });
     } else if (response.error) {
       Swal.fire('Error', response.error, 'error');

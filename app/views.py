@@ -89,6 +89,7 @@ class QueryTypeViewset(viewsets.ModelViewSet):
 class RentalOrderViewSet(viewsets.ModelViewSet):
     queryset = RentalOrder.objects.all()
     serializer_class = RentalOrderSerializer
+    
 
 #VISTAS INICIALES
 def home(request):
@@ -896,3 +897,20 @@ def admin_panel(request):
 
 def pago(request):
     return render(request, "app/pago.html")
+
+def list_rental_order(request):
+    response = requests.get(settings.API_BASE_URL + 'rental-orders/')
+    rental_orders = response.json()
+    page = request.GET.get('page', 1)
+
+    try:
+        paginator = Paginator(rental_orders, 5)
+        rental_orders = paginator.page(page)
+    except:
+        raise Http404
+
+    data = {
+        'entity': rental_orders,
+        'paginator': paginator
+    }
+    return render(request, "app/rental_order/list.html", data)
