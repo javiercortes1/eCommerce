@@ -74,8 +74,12 @@
             <div class="mt-auto text-center">
               <p class="card-text price"><b> ${{ p.price | intcomma }}</b></p>
               {% if p.stock > 0 %}
+              <div class="card-footer" style="text-align: center;">
               <a href="#" class="btn btn-default bg-primary-3 view-detail-btn" data-product-id="{{ p.id }}">Ver
                 Detalle</a>
+                <a href="{% url 'Add' p.id %}"
+                class="btn btn-default bg-primary-3 view-detail-btn add-to-cart-btn">Agregar al Carrito</a>
+              </div>
               {% else %}
               <h4 class="text-center"><b>Sin Stock</b></h4>
               {% endif %}

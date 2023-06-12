@@ -3,7 +3,7 @@ from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
 from django.utils import timezone
 
-# Create your models here.
+
 
 #categorias para producto
 class Category(models.Model):
@@ -101,3 +101,27 @@ class Usuarios(models.Model):
 class Tokens(models.Model):
     token= models.CharField(max_length=256)
     user = models.CharField(max_length=256)    
+
+
+
+class Order(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)
+    order_id = models.AutoField(primary_key=True)
+    name = models.CharField(max_length=100, null=True)
+    address = models.CharField(max_length=100, null=True)
+    phone = models.CharField(max_length=20, null=True)
+    accumulated = models.DecimalField(max_digits=10, decimal_places=2)
+    pagado = models.BooleanField(null=True, default=False)
+    fecha = models.DateField(default=timezone.now)  # Agregar el campo fecha con la fecha actual por defecto
+
+    def __str__(self):
+        return f"Order {self.order_id} - User: {self.user.username if self.user else 'None'}"
+    
+class OrderItem(models.Model):
+    order = models.ForeignKey(Order, on_delete=models.CASCADE)
+    product_name = models.CharField(max_length=100)
+    product_price = models.DecimalField(max_digits=10, decimal_places=2)
+    amount = models.IntegerField()
+
+    def __str__(self):
+        return f"{self.product_name} - Amount: {self.amount}"  

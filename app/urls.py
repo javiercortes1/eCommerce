@@ -24,6 +24,9 @@ from django.conf.urls.static import static
 
 
 
+from .views import payment_success
+
+
 
 from rest_framework import routers
 
@@ -70,5 +73,8 @@ urlpatterns = [
     path('accounts/', include('allauth.urls')),
     path('Recuperar/', Recuperar, name='Recuperar'),
     path('Registrar/', Registrar, name='Registrar'),
-    
+
+
+    path('payment_success/', payment_success, name='payment_success'),
+    path('payment_success/', views.update_last_order_paid_status, name='update_last_order_paid_status'),
 ]
