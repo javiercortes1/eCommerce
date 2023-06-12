@@ -152,7 +152,7 @@ footer {
 .card-img-top {
     /* border-top-left-radius: 1rem;
     border-top-right-radius: 1rem; */
-    height: 180px;
+    height: 200px;
 }
 
 .card-form {
@@ -221,6 +221,25 @@ footer {
     text-align: center;
     width: 50px;
 }
+
+.add-to-cart-btn{
+
+  background-color: #ce8619 !important;
+}
+
+#cart-toggle{
+
+  background-color: #ce8619 !important;
+  border-width: 2px;
+  border-color: #000000;
+
+}
+
+.delete-btn{
+
+  background-color: #ce1919fb !important;
+}
+
 
 /* FORMS */
 .form button {
