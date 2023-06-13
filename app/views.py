@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from .forms import ContactForm, ProductForm, CustomUserCreationForm, CategoryForm, QueryTypeForm, RentalOrderForm
+from .forms import ContactForm, ProductForm, CustomUserCreationForm, CategoryForm, QueryTypeForm, RentalOrderForm, RecuperarForm
 from django.contrib import messages
 from django.contrib.auth import authenticate, login
 from .models import Product, Category, Contact, QueryType, RentalOrder
@@ -16,6 +16,9 @@ from django.db.models import Sum, Count
 from django.views.decorators.csrf import csrf_exempt
 from .models import Order,OrderItem
 from django.core.mail import send_mail
+from rest_framework_simplejwt.tokens import RefreshToken
+from rest_framework.decorators import api_view
+from rest_framework.response import Response
 from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
@@ -1016,10 +1019,6 @@ def Registrar(request):
                     return render(request, "app/home.html")
     return render(request,"registration/Registrar.html",data)
 
-def desconectar(request):
-    logout(request)
-    return redirect('login') 
-
 @csrf_exempt
 def update_last_order_paid_status(user):
     try:
@@ -1135,6 +1134,3 @@ def list_rental_order(request):
     }
     return render(request, "app/rental_order/list.html", data)
 
-from rest_framework_simplejwt.tokens import RefreshToken
-from rest_framework.decorators import api_view
-from rest_framework.response import Response
