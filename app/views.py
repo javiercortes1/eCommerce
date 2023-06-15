@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from .forms import ContactForm, ProductForm, CustomUserCreationForm, CategoryForm, QueryTypeForm, RentalOrderForm
+from .forms import ContactForm, ProductForm, CustomUserCreationForm, CategoryForm, QueryTypeForm, RentalOrderForm, RecuperarForm
 from django.contrib import messages
 from django.contrib.auth import authenticate, login
 from .models import Product, Category, Contact, QueryType, RentalOrder
@@ -19,9 +19,12 @@ from django.core.mail import send_mail
 from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
+from rest_framework_simplejwt.tokens import RefreshToken
+from rest_framework.decorators import api_view
+from rest_framework.response import Response
 
 from django.middleware.csrf import get_token
-import logging
+import logging, json
 
 from rest_framework_simplejwt.tokens import RefreshToken
 from .serializers import TokenSerializer
@@ -696,19 +699,29 @@ def product_detail(request, id):
 #VISTA DE REGISTRO NO API
 def register(request):
     data = {
-        'form': CustomUserCreationForm()
+        'form': UsuariosForm()
     }
     if request.method == 'POST':
-        formulario = CustomUserCreationForm(data=request.POST)
-        if formulario.is_valid():
-            formulario.save()
-            user = authenticate(
-                username=formulario.cleaned_data["username"], password=formulario.cleaned_data["password1"])
-            login(request, user)
+        form = UsuariosForm(request.POST)
+        if form.is_valid():
+            form.save()
+            #obtiene los datos del usuario desde formulario
+            usernameN = form.cleaned_data.get('usrN')
+            passwordN = form.cleaned_data.get('pswrdN')
+            passwordN2= form.cleaned_data.get('pswrdN2')
+            try:
+                #se verifica existencia del usuario
+                user = User.objects.get(username = usernameN)
+            except User.DoesNotExist:
+                #si no existe se genera un nuevo usuario validando si es que las pswrd son identicas
+                if(passwordN == passwordN2):
+                    user = User.objects.create_user(username=usernameN,email=usernameN,password=passwordN)
+                    user = authenticate(username=usernameN, password=passwordN) #autentifican las credenciales del usuario
+                    #se logea al usuario nuevo
+                    login(request,user)
             messages.success(request, "Te has registrado correctamente")
-            # redirigir al home
             return redirect(to="home")
-        data["form"] = formulario
+        data["form"] = form
     return render(request, 'registration/register.html', data)
 
 #METODOS DEL CARRITO NO API
@@ -1004,11 +1017,7 @@ def Registrar(request):
                     tok=r.text #se imprime token en forma  de debug
                     #fin creacion token
                     return render(request, "app/home.html")
-    return render(request,"registration/Registrar.html",datos)
-
-def desconectar(request):
-    logout(request)
-    return redirect('login') 
+    return render(request,"registration/Registrar.html",data)
 
 @csrf_exempt
 def update_last_order_paid_status(user):
@@ -1125,6 +1134,3 @@ def list_rental_order(request):
     }
     return render(request, "app/rental_order/list.html", data)
 
-from rest_framework_simplejwt.tokens import RefreshToken
-from rest_framework.decorators import api_view
-from rest_framework.response import Response
