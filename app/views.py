@@ -993,7 +993,7 @@ def Recuperar(request):
             from_email = settings.EMAIL_HOST_USER
             recipient_list = [email]
             send_mail(subject, message, from_email, recipient_list, fail_silently=False)
-            messages.success(request, "Se a enviado un Correo con tu contraseña")
+            messages.success(request, "Se ha enviado un correo con tu contraseña")
     return render(request, 'registration/Recuperar.html', {'form': form})
 #se crea usuario nuevo y token
 
