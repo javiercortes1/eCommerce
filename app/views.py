@@ -51,6 +51,7 @@ tok = None
 
 def is_staff(user):
     return (user.is_authenticated and user.is_superuser)
+
 #VIEWSETS PARA APIS
 class CategoryViewset(viewsets.ModelViewSet):
     queryset = Category.objects.all()
@@ -123,7 +124,6 @@ class RentalOrderViewSet(viewsets.ModelViewSet):
     queryset = RentalOrder.objects.all()
     serializer_class = RentalOrderSerializer
     
-
 #VISTAS INICIALES
 def home(request):
     # Definimos los parámetros para filtrar productos
@@ -242,7 +242,6 @@ def rental_service(request):
     }
 
     return render(request, 'app/rental_service.html', data)
-
 
 #CONTATO
 def contact(request):
@@ -944,8 +943,6 @@ def admin_panel(request):
 def pago(request):
     return render(request, "app/pago.html")
 
-
-
 def user_login(request):
     global tok
     datos = {
@@ -976,8 +973,6 @@ def user_login(request):
                 return redirect(to="home")           
     return render(request, "registration/login.html", datos)
 
-
-
 def Recuperar(request):
     form = RecuperarForm(request.POST or None)
     if form.is_valid():
@@ -997,8 +992,6 @@ def Recuperar(request):
     return render(request, 'registration/Recuperar.html', {'form': form})
 #se crea usuario nuevo y token
 
-
-
 class LoginView(APIView):
     def post(self, request, format=None):
         django_request = HttpRequest()
@@ -1011,7 +1004,6 @@ class LoginView(APIView):
         user = serializer.validated_data['user']
         token, created = Token.objects.get_or_create(user=user)
         return Response({'token': token.key})
-
 
 def Registrar(request):
     datos = {
@@ -1048,8 +1040,6 @@ def Registrar(request):
                         return redirect('home')
 
     return render(request, "registration/Registrar.html", datos)
-
-
 
 @csrf_exempt
 def update_last_order_paid_status(user):
@@ -1146,7 +1136,6 @@ def obtain_token(request):
                 'refresh_token': str(refresh),
             })
     return Response({'error': 'Credenciales inválidas.'}, status=400)
-
 
 def list_rental_order(request):
     response = requests.get(settings.API_BASE_URL + 'rental-orders/')
