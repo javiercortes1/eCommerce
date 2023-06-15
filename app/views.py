@@ -6,7 +6,7 @@ from .models import Product, Category, Contact, QueryType, RentalOrder
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.http import Http404, HttpResponse, JsonResponse
 from rest_framework import viewsets, serializers
-from .serializers import ProductSerializer, CategorySerializer, ContactSerializer, QueryTypeSerializer, RentalOrderSerializer
+from .serializers import ProductSerializer, CategorySerializer, ContactSerializer, QueryTypeSerializer, RentalOrderSerializer,LoginSerializer
 import requests
 from django.contrib.auth.decorators import login_required, permission_required
 from app.cart import Cart
@@ -22,13 +22,10 @@ from rest_framework.response import Response
 from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
-
 from django.middleware.csrf import get_token
 import logging, json
-
 from rest_framework_simplejwt.tokens import RefreshToken
 from .serializers import TokenSerializer
-
 from .forms import  UsuariosForm, LoginForm
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.decorators import login_required, user_passes_test
@@ -41,6 +38,13 @@ from conejofurioso.viewsLogin import login as api_login
 import requests
 from rest_framework.authtoken.models import Token
 from rest_framework.response import Response as apiResponse
+from rest_framework.views import APIView
+from .models import Tokens
+from rest_framework.authtoken.views import ObtainAuthToken
+from django.http import HttpRequest
+from rest_framework.views import APIView
+
+from django.http import HttpRequest
 from rest_framework.views import APIView
 
 tok = None
@@ -140,7 +144,9 @@ def home(request):
     }
     
     return render(request, 'app/home.html', data)
-
+@csrf_exempt
+@api_view(['GET','POST'])
+@permission_classes((IsAuthenticated,))
 def catalogue(request):
     # Obtenemos los filtros desde el html
     name_filter = request.GET.get('name', '')
@@ -987,37 +993,63 @@ def Recuperar(request):
             from_email = settings.EMAIL_HOST_USER
             recipient_list = [email]
             send_mail(subject, message, from_email, recipient_list, fail_silently=False)
+            messages.success(request, "Se ha enviado un correo con tu contraseña")
     return render(request, 'registration/Recuperar.html', {'form': form})
 #se crea usuario nuevo y token
-def Registrar(request): 
-    data = {
+
+
+
+class LoginView(APIView):
+    def post(self, request, format=None):
+        django_request = HttpRequest()
+        django_request.method = request.method
+        django_request.POST = request.data
+        django_request._request = request._request
+        
+        serializer = LoginSerializer(data=django_request.POST)
+        serializer.is_valid(raise_exception=True)
+        user = serializer.validated_data['user']
+        token, created = Token.objects.get_or_create(user=user)
+        return Response({'token': token.key})
+
+
+def Registrar(request):
+    datos = {
         'form': UsuariosForm()
     }
     if request.method == 'POST':
         form = UsuariosForm(request.POST)
         if form.is_valid():
-            form.save()
-            #obtiene los datos del usuario desde formulario
+            # Obtiene los datos del usuario desde el formulario
             usernameN = form.cleaned_data.get('usrN')
             passwordN = form.cleaned_data.get('pswrdN')
-            passwordN2= form.cleaned_data.get('pswrdN2')
+            passwordN2 = form.cleaned_data.get('pswrdN2')
             try:
-                #se verifica existencia del usuario
-                user = User.objects.get(username = usernameN)
+                # Verifica la existencia del usuario
+                user = User.objects.get(username=usernameN)
             except User.DoesNotExist:
-                #si no existe se genera un nuevo usuario validando si es que las pswrd son identicas
-                if(passwordN == passwordN2):
-                    user = User.objects.create_user(username=usernameN,email=usernameN,password=passwordN)
-                    user = authenticate(username=usernameN, password=passwordN) #autentifican las credenciales del usuario
-                    #se logea al usuario nuevo
-                    login(request,user)
-                    #comienzo de creacion de token
-                    body= {"username": usernameN ,"password" : passwordN} #se genera json con info de usuario creado
-                    r = requests.post('http://127.0.0.1:8000//API/login',data=json.dumps(body)) # se realiza la creacion de token
-                    tok=r.text #se imprime token en forma  de debug
-                    #fin creacion token
-                    return render(request, "app/home.html")
-    return render(request,"registration/Registrar.html",data)
+                # Si no existe, se genera un nuevo usuario validando si las contraseñas son idénticas
+                if passwordN == passwordN2:
+                    user = User.objects.create_user(username=usernameN, email=usernameN, password=passwordN)
+                    user = authenticate(username=usernameN, password=passwordN)  # Autentifica las credenciales del usuario
+                    if user is not None:
+                        login(request, user)
+                        refresh = RefreshToken.for_user(user)
+                        token = str(refresh.access_token)
+
+                        # Guardar el token en el modelo Tokens
+                        token_data = {
+                            'token': token,
+                            'user': usernameN
+                        }
+                        token_instance = Tokens.objects.create(**token_data)
+
+                        messages.success(request, "Te has registrado correctamente")
+                        return redirect('home')
+
+    return render(request, "registration/Registrar.html", datos)
+
+
 
 @csrf_exempt
 def update_last_order_paid_status(user):
@@ -1055,7 +1087,6 @@ def payment_success(request):
             order_item.save()
 
         # Lógica adicional, como enviar un correo electrónico de confirmación, generar una factura, etc.
-        messages.success(request, "Ahora debe completar la compra")
         return render(request, 'app/payment_success.html')
 
     return render(request, 'app/pago.html')
@@ -1133,4 +1164,3 @@ def list_rental_order(request):
         'paginator': paginator
     }
     return render(request, "app/rental_order/list.html", data)
-

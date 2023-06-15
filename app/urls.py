@@ -15,8 +15,8 @@ from . import views
 #from .views import index
 
 from .views import Registrar, order_list
-
-from .views import Recuperar
+from django.contrib.auth.views import LoginView
+from .views import Recuperar,login
 from .views import user_login
 from django.views.generic import TemplateView
 from django.contrib.auth.views import LogoutView
@@ -25,9 +25,8 @@ from django.conf.urls.static import static
 
 
 
-
 from .views import payment_success
-
+from .views import obtain_token
 
 
 from rest_framework import routers
@@ -41,6 +40,7 @@ router.register(r'rental-orders', RentalOrderViewSet)
 
 
 urlpatterns = [
+    
     path('accounts/', include('django.contrib.auth.urls')),
     path('', home, name="home"),
     path('catalogue/', catalogue, name="catalogue"),
@@ -69,8 +69,6 @@ urlpatterns = [
     path("cart/", cart_page, name="Cart"),
     path("buy-confirm/", buy_confirm, name="buy_confirm"),
     path("admin-panel/", admin_panel, name="admin_panel"),
-    # path("success-payment/", pago_exitoso, name="pago_exitoso"),
-    path('accounts/', include('django.contrib.auth.urls')),
     path('pago/', pago, name="pago"),
     path('Recuperar/', Recuperar, name='Recuperar'),
     path('payment_success/', payment_success, name='payment_success'),
@@ -82,5 +80,7 @@ urlpatterns = [
     path('payment_success/', views.update_last_order_paid_status, name='update_last_order_paid_status'),
     path('api/token/', views.obtain_token, name='obtain_token'),
     path('login/', user_login, name='login'),
-    
+    path('api/token/', obtain_token, name='obtain_token'),
+    path('login/', LoginView.as_view(template_name='login.html'), name='login'),
+    path('api/login', login, name='login_api'),
 ]
