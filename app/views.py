@@ -1087,7 +1087,6 @@ def payment_success(request):
             order_item.save()
 
         # Lógica adicional, como enviar un correo electrónico de confirmación, generar una factura, etc.
-        messages.success(request, "Ahora debe completar la compra")
         return render(request, 'app/payment_success.html')
 
     return render(request, 'app/pago.html')
