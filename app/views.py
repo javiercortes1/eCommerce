@@ -108,6 +108,17 @@ class ContactViewSet(viewsets.ModelViewSet):
     queryset = Contact.objects.all()
     serializer_class = ContactSerializer
 
+    def get_queryset(self):
+        queryset = Contact.objects.all()
+
+        # Obtener el parámetro de consulta 'status' de la URL
+        status = self.request.query_params.get('status', None)
+        if status is not None and status != '':
+            # Filtrar los contactos por estado
+            queryset = queryset.filter(status=status)
+
+        return queryset
+
     def partial_update(self, request, *args, **kwargs):
         instance = self.get_object()
         status = request.data.get('status')
@@ -144,9 +155,10 @@ def home(request):
     }
     
     return render(request, 'app/home.html', data)
+
 @csrf_exempt
 @api_view(['GET','POST'])
-@permission_classes((IsAuthenticated,))
+# @permission_classes((IsAuthenticated,))
 def catalogue(request):
     # Obtenemos los filtros desde el html
     name_filter = request.GET.get('name', '')
@@ -263,7 +275,13 @@ def update_contact_status(request, contact_id):
 
 @permission_required('app.view_contact')
 def list_contact(request):
-    response = requests.get(settings.API_BASE_URL + 'contact/')
+    status = request.GET.get('status')
+
+    params = {}
+    if status is not None and status != 'Todos':
+        params['status'] = status
+
+    response = requests.get(settings.API_BASE_URL + 'contact/', params=params)
     contacts = response.json()
     page = request.GET.get('page', 1)
 
