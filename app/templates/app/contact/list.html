@@ -66,6 +66,17 @@
                                 </select>
                             </form>
                         </div>
+                        <div class="filter-section">
+                            <form method="GET" action="{% url 'list_contact' %}">
+                                <label for="query_type">Filtrar por tipo de contacto:</label>
+                                <select name="query_type" id="query_type" onchange="this.form.submit()">
+                                    <option value="">Todos</option>
+                                    {% for query_type_obj in query_types %}
+                                    <option value="{{ query_type_obj.name }}" {% if request.GET.query_type == query_type_obj.name %}selected{% endif %}>{{ query_type_obj.name }}</option>
+                                    {% endfor %}
+                                </select>
+                            </form>
+                        </div>
                         <tr>
                             <th>Nombre</th>
                             <th>Email</th>

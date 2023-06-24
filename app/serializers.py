@@ -54,13 +54,20 @@ class ProductSerializer(serializers.ModelSerializer):
 
 class ContactSerializer(serializers.ModelSerializer):
     query_type_name = serializers.CharField(read_only=True, source="query_type.name")
+    query_type = serializers.PrimaryKeyRelatedField(
+        queryset=QueryType.objects.all(),
+        write_only=True,
+    )
 
     class Meta:
         model = Contact
         fields = '__all__'
 
     def create(self, validated_data):
-        # Guardar los datos en la base de datos
+        query_type = validated_data.pop('query_type', None)
+        if query_type is not None:
+            validated_data['query_type'] = query_type
+
         contact = Contact.objects.create(**validated_data)
 
         # Obtener los datos del formulario

@@ -117,6 +117,12 @@ class ContactViewSet(viewsets.ModelViewSet):
             # Filtrar los contactos por estado
             queryset = queryset.filter(status=status)
 
+        # Obtener el parámetro de consulta 'query_type_id' de la URL
+        query_type_id = self.request.query_params.get('query_type_id', None)
+        if query_type_id is not None and query_type_id != '':
+            # Filtrar los contactos por ID del tipo de consulta
+            queryset = queryset.filter(query_type_id=query_type_id)
+
         return queryset
 
     def partial_update(self, request, *args, **kwargs):
@@ -275,11 +281,27 @@ def update_contact_status(request, contact_id):
 
 @permission_required('app.view_contact')
 def list_contact(request):
-    status = request.GET.get('status')
-
     params = {}
+    status = request.GET.get('status')
+    query_type = request.GET.get('query_type')
+
     if status is not None and status != 'Todos':
         params['status'] = status
+
+    response_query_types = requests.get(settings.API_BASE_URL + 'query-type/')
+    query_types = response_query_types.json()
+
+    if query_type is not None and query_type != 'Todos':
+        # Buscar el ID del tipo de consulta seleccionado
+        query_type_id = None
+        for query_type_obj in query_types:
+            if query_type_obj['name'] == query_type:
+                query_type_id = query_type_obj['id']
+                break
+
+        # Agregar el filtro por tipo de consulta solo si se encontró el ID
+        if query_type_id is not None:
+            params['query_type_id'] = query_type_id
 
     response = requests.get(settings.API_BASE_URL + 'contact/', params=params)
     contacts = response.json()
@@ -293,8 +315,10 @@ def list_contact(request):
 
     data = {
         'entity': contacts,
-        'paginator': paginator
+        'paginator': paginator,
+        'query_types': query_types,
     }
+
     return render(request, 'app/contact/list.html', data)
 
 #VISTAS DE QUERYTYPE
