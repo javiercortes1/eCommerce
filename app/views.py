@@ -281,42 +281,44 @@ def update_contact_status(request, contact_id):
 
 @permission_required('app.view_contact')
 def list_contact(request):
-    params = {}
-    status = request.GET.get('status')
-    query_type = request.GET.get('query_type')
-
-    if status is not None and status != 'Todos':
-        params['status'] = status
+    status = request.GET.get('status', '')
+    query_type = request.GET.get('query_type', '')
 
     response_query_types = requests.get(settings.API_BASE_URL + 'query-type/')
     query_types = response_query_types.json()
 
-    if query_type is not None and query_type != 'Todos':
-        # Buscar el ID del tipo de consulta seleccionado
-        query_type_id = None
-        for query_type_obj in query_types:
-            if query_type_obj['name'] == query_type:
-                query_type_id = query_type_obj['id']
-                break
-
-        # Agregar el filtro por tipo de consulta solo si se encontró el ID
-        if query_type_id is not None:
-            params['query_type_id'] = query_type_id
+    params = {}
+    if status and status != 'Todos':
+        params['status'] = status
+    if query_type and query_type != 'Todos':
+        params['query_type'] = query_type
 
     response = requests.get(settings.API_BASE_URL + 'contact/', params=params)
-    contacts = response.json()
-    page = request.GET.get('page', 1)
+    if response.status_code == 200:
+        contacts = response.json()
+    else:
+        contacts = []
+
+    # Filtrar los contactos localmente en función del tipo de contacto seleccionado
+    if query_type and query_type != 'Todos':
+        contacts = [contact for contact in contacts if contact['query_type_name'] == query_type]
+
+    paginator = Paginator(contacts, 5)
+    page = request.GET.get('page')
 
     try:
-        paginator = Paginator(contacts, 5)
         contacts = paginator.page(page)
-    except:
-        raise Http404
+    except PageNotAnInteger:
+        contacts = paginator.page(1)
+    except EmptyPage:
+        contacts = paginator.page(paginator.num_pages)
 
     data = {
         'entity': contacts,
         'paginator': paginator,
         'query_types': query_types,
+        'selected_status': status,
+        'selected_query_type': query_type,
     }
 
     return render(request, 'app/contact/list.html', data)
