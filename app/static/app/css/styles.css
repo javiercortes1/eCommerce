@@ -2,19 +2,19 @@
 
 :root {
   /* color navbar y footer */
-  --color-primary: #ce8619;
+  --color-primary: #000000;
 
   /* fondo body*/
   --color-primary-2: rgb(246, 241, 241);
 
   /* color para buttons */
-  --color-primary-3: #19a7ce;
+  --color-primary-3: #942b2b;
 
   /* color hover y navbar toggler */
   --color-secondary: #ffffff;
 
   /* fondo cards */
-  --color-tres: #b7dae7ad;
+  --color-tres: #e7b7b700;
 
   --color-footer: rgb(39, 39, 39);
 }
@@ -72,7 +72,7 @@ h5.noStock {
 /* NAVBAR */
 
 .nav-item a {
-  color: #000000 !important;
+  color: #ffffff !important;
   margin-right: calc(8px * 2);
   font-weight: bold;
 }
@@ -82,7 +82,7 @@ h5.noStock {
 }
 
 .nav-link:hover {
-  color: var(--color-secondary) !important;
+  color: #942b2b !important;
 }
 
 .navbar-toggler {
@@ -228,7 +228,7 @@ footer {
 
 .add-to-cart-btn{
 
-  background-color: #ce8619 !important;
+  background-color: #cecb19 !important;
 }
 
 #cart-toggle{
